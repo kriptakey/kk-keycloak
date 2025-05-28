@@ -1,0 +1,423 @@
+Kripta Key management overview
+==============================
+
+Users
+-----
+
+Kripta Key recognizes two types of users, namely, administrators and recovery accounts.
+
+**Administrators**
+    This type of user authenticates using a password and an administrator card. Administrators perform most,
+    if not all, of the management operations of Kripta Key via CLIKK. This includes object creation, update,
+    and deletion. Administrators can also review the KK-Auditor logs of all administrator actions.
+
+**Recovery account**
+    This type of user authenticates using recovery cards. Note that this does not refer to each participant
+    holding a recovery card --- the collective, capable of authenticating commands with an EMERGENCY
+    privilege level, is considered as the recovery account.
+
+.. note::
+
+    *   This document is intended for administrators and recovery card holders.
+
+    *   Users do not perform cryptographic operations. KK-Cryptoservice performs cryptographic operations
+        for applications.
+
+
+Applications
+------------
+
+An application that intends to use cryptographic services must first be registered to Kripta Key. Afterwards,
+it may use objects in the partitions it is authorized to access for cryptographic operations. Here, objects include
+keys, certificats, and secrets.
+
+The cryptographic services may be accessed via REST API or SDK API, if available for the application's
+development environment
+
+
+Command line interface
+----------------------
+
+Authentication and privileges
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+An administrator must use Kripta Key Command Line Interface (CLIKK) to perform management operations
+on a KK-Manager instance. Each command has a privilege level, and the authentication attributes required
+for each privilege level are detailed as follows:
+
+*   **LOW**: None.
+*   **NORMAL**: Administrator password.
+*   **HIGH**: Administrator password and administrator card.
+*   **CRITICAL**: Dual control --- password and administrator card from two administrators.
+*   **EMERGENCY**: Recovery cards. Requires a majority of the recovery card holders to participate.
+
+The administrator password is initialized during account creation. However, administrators created
+during key ceremony must change their password so that the system can bind an administrator card
+to that administrator. Additional administrators created using ``clikk admin add`` will have a card bound
+during the creation process.
+
+Additionally, each partition also has a password that is set during creation. This password is required
+for applications accessing the partition. Both the administrator and partition passwords are subject
+to these requirements:
+
+*   Password length must be between 8 and 64 characters, inclusive.
+*   Password must contain upper case, lower case, numeric, and special characters.
+*   Password must not have repeated characters (e.g. AA, aa, 11).
+*   Password must not have more than two consecutive characters (e.g. 123, abc).
+*   Password must not contain the admin ID.
+
+Kripta Key also implements some restrictions on administrator login:
+
+*   After three consecutive failed attempts, the account will be locked. Locked accounts cannot log in,
+    nor perform any administrative actions.
+*   A locked account will be automatically unlocked after 30 minutes have elapsed.
+*   A locked account may be manually unlocked by another administrator using the ``clikk admin unlock`` command.
+
+The recovery cards are initialized during key ceremony. Two sets of recovery cards are initialized,
+and a total number of cards equal to the number of participants are prepared in each set. These cards must be kept
+safely and securely, as they are necessary for commands with EMERGENCY privilege level. To execute emergency commands,
+a majority of cards from one set must be gathered. To be precise, half of the number of participants
+(as specified during key ceremony) plus one, rounded down.
+
+
+Commands
+~~~~~~~~
+
+For explanation on CLIKK commands, see :doc:`/sys-admin-guide/kripta-key-management`.
+
+
+Attributes
+----------
+
+Each object in Kripta Key possesses one or more attributes, detailed in each section.
+
+
+User
+~~~~
+
+**Admin ID**
+    The identifier of the administrator. Must be alphanumeric and not more than 20 characters in length.
+
+**Admin name**
+    The name of the administrator. It is an additional descriptive label that is shown
+    in the output of ``clikk user info``. Must be alphanumeric and not more than 20 characters in length.
+
+
+Partition
+~~~~~~~~~
+
+**Partition ID**
+    The identifier of the partition. Must be a number between 1 and 10000, inclusive.
+
+**Partition label**
+    The descriptive label of the partition. Must be alphanumeric and not more than 20 characters
+    in length.
+
+**Creation date**
+    The date and time when the partition was created.
+
+**Application IDs**
+    The list of applications that are registered to this partition.
+
+**KK-Cryptoservices**
+    The list of KK-Cryptoservice instances that this partition is registered to.
+
+
+Key
+~~~
+
+**Partition ID**
+    The identifier of the partition that is associated with the key.
+
+**Key ID**
+    The identifier of the key. Must be alphanumeric and not more than 20 characters in length.
+
+**Key ID (percent-encoded)**
+    The identifier of the key, percent-encoded. This is intended for interoperability with PKCS#11 URI format.
+
+**Key label**
+    The descriptive label of the key.
+
+**Algorithm**
+    The cryptographic algorithm used with the key.
+
+**Key length**
+    The length of the key, in bits.
+
+**Creation date**
+    The date and time when the key was created.
+
+**Expiry date**
+    The date and time when the key will expire. It is based on the key’s lifetime that you specify when creating the key.
+
+**Key purpose**
+    The purpose of the key. Certain purposes are only compatible with certain key algorithms.
+    Kripta Key regulates the availability of keys based on their purpose. A key that the purpose 
+    is encryption, wrapping, signing, or MAC generation can be used to protect more than one data. 
+    Meanwhile, certificate signing key is only applicable to signing one piece of data.
+
+**Extractable**
+    The extractable state of the key. Extractable keys may be exported out of the system.
+    Defaults to unset. Refer to :ref:`sys-admin-guide/kripta-key-structure:updatable key attributes`.
+
+**Revoked**
+    The revocation status of the key.
+
+**Rotatable**
+    The rotatable state of the key. Rotatable keys may be rotated, generating a new key material
+    under the same key ID with a newer version. The default value is NOT ROTATABLE. Refer to :ref:`sys-admin-guide/kripta-key-structure:updatable key attributes`.
+
+**Public key**
+    The public key of the key pair, in PEM format. Only applicable to asymmetric keys.
+
+**Key version**
+    The version of the key. New key versions are created when the key is rotated. Only applicable to
+    AES keys whose key purpose is encryption.
+
+**Key check value**
+    The checksum of the key, as defined by PKCS#11.
+
+**Elliptic curve**
+    The underlying elliptic curve of the key. Only applicable to ECDSA and EdDSA keys.
+
+**Key lifetime**
+    The duration for which the key is valid for cryptographic operations that generate new data.
+    When a key expires, it may only be used for these operations:
+
+        * Decryption
+        * Unsealing
+        * Detokenization
+        * Signature verification
+        * MAC verification
+        * Certificate verification
+        * Application-stored counterparts of the above
+
+    AES keys whose key purpose are encryption may be rotated, either manually or automatically, to renew the key
+    and make it available for all cryptographic operations. Since key rotation is not available for all other keys,
+    ensure that if set, the key lifetime is set to the correct value.
+
+**Extension file**
+    A JSON file that serves as an extension of either a CSR or a
+    certificate.
+
+
+Key algorithms
+^^^^^^^^^^^^^^
+
+The following list shows the available key algorithms, and the valid key lengths and key purposes for each.
+The number in brackets indicates the value that needs to be passed in to CLIKK commands.
+
+**AES [1]**
+    Symmetric key. Uses GCM as mode of operation.
+
+    Key lengths: 256 bits.
+
+    Key purposes: Encryption, wrapping, MAC generation, Format Preserving Encryption (FPE).
+
+**RSA [2]**
+    Asymmetric key.
+
+    Key lengths: 2048, 3072, 4096 bits.
+
+    Key purposes: Encryption, wrapping, signing, certificate signing.
+
+**ECDSA P-256 [3]**
+    Asymmetric key.
+
+    Key lengths: N/A.
+
+    Key purposes: Signing, certificate signing.
+
+**ECDSA P-384 [4]**
+    Asymmetric key.
+
+    Key lengths: N/A.
+
+    Key purposes: Signing, certificate signing.
+
+**ECDSA P-521 [5]**
+    Asymmetric key.
+
+    Key lengths: N/A.
+
+    Key purposes: Signing, certificate signing.
+
+**EdDSA Ed25519 [6]**
+    Asymmetric key.
+
+    Key lengths: N/A.
+
+    Key purposes: Signing, certificate signing.
+
+**ML-DSA-44 [7]**
+    Asymmetric key.
+
+    Key lengths: N/A.
+
+    Key purposes: Signing, certificate signing.  
+
+**ML-DSA-65 [8]**
+    Asymmetric key.
+
+    Key lengths: N/A.
+
+    Key purposes: Signing, certificate signing.  
+
+**ML-DSA-87 [9]**
+    Asymmetric key.
+
+    Key lengths: N/A.
+
+    Key purposes: Signing, certificate signing.
+
+
+Key purposes
+^^^^^^^^^^^^
+
+The following list details and describes the available key purposes. The number in brackets indicates the value
+that needs to be passed in to CLIKK commands.
+
+**Encryption [1]**
+    Used to encrypt and decrypt data. Encryption, decryption, sealing, unsealing, tokenization and detokenization
+    require this key purpose.
+
+**Wrapping [2]**
+    Used to wrap and unwrap keys. Key import, application-stored services, and E2EE services require this key purpose.
+    That key also can be used to sign a certificate.
+
+**Signing [3]**
+    Used to sign and verify data. Signature generation and verification require this key purpose.
+
+**Certificate signing [4]**
+    Used to sign and verify certificates. Certificate signing and verification require this key purpose.
+
+**MAC generation [5]**
+    Used to generate and verify MACs. MAC generation and verification require this key purpose.
+
+**Format Preserving Encryption (FPE) [6]**
+    Used to tokenize and detokenize input that with format preserving encryption (FPE). FPE tokenization and detokenization require this key purpose. 
+
+
+Certificate
+~~~~~~~~~~~
+
+**Partition ID**
+    The identifier of the partition that is associated with the certificate.
+
+**Key ID**
+    The identifier of the key that is associated with the certificate.
+
+**Key version**
+    The version of the key that is associated with the certificate.
+
+**Issue date**
+    The date and time when the certificate was issued.
+
+**Expiry date**
+    The date and time when the certificate will expire.
+
+**Subject**
+    The Distinguished Name (DN) associated with the certificate.
+
+**Extension file**
+    A JSON file that serves as an extension of either a CSR or a
+    certificate.   
+
+
+Secret
+~~~~~~
+
+**Secret ID**
+    The identifier of the secret. Must be alphanumeric and not more than 20 characters in length.
+
+**Secret label**
+    The descriptive label of the secret. Must be alphanumeric and not more than 20 characters in length.
+
+
+Application
+~~~~~~~~~~~
+
+**Application ID**
+    The identifier of the application.  Must be alphanumeric and not more than 20 characters in length.
+
+**Subject**
+    The Distinguished Name (DN) associated with the application's certificate.
+
+**Encoded public key hash**
+    The hash of the application's certificate's public key encoded in Base64.
+
+**Registration date**
+    The date and time when the application was registered. It is based on the specified validity period during registration.
+
+**Expiry date**
+    The date and time of the application's certificate expiration.
+
+**Partition IDs**
+    The list of partitions that this application is registered to.
+
+
+KK-Manager-DR
+~~~~~~~~~~~~~
+
+**KK-Manager-DR ID**
+    The QE ID of the machine that is running the KK-Manager-DR instance.
+
+**KK-Manager-DR name**
+    The friendly name of the KK-Manager-DR instance. This is used to refer
+    to the KK-Manager-DR instance.
+
+**Registration date**
+    The date and time when the instance was registered.
+
+
+KK-Cryptoservice
+~~~~~~~~~~~~~~~~
+
+**KK-Cryptoservice ID**
+    The QE ID of the machine that is running the KK-Cryptoservice instance.
+
+**KK-Cryptoservice name**
+    The friendly name of the KK-Cryptoservice instance. This is used to refer
+    to the KK-Cryptoservice instance.
+
+**Registration date**
+    The date and time when the instance was registered.
+
+**Partition IDs**
+    The list of partitions that is registered to the KK-Cryptoservice instance.
+
+
+Updatable Key Attributes
+------------------------
+
+**Extractable**
+    Using command ``clikk key update``, you can change the extractable state 
+    based on the extractable_code below:
+
+    +-----------------------------+------------------+
+    | Extractable State           | extractable code |
+    +=============================+==================+
+    | NO (disable to be exported) | 0                |
+    +-----------------------------+------------------+
+    | YES (enable to be exported) | 1                |
+    +-----------------------------+------------------+
+
+    Once this attribute is set to NO, it can’t be set to YES
+
+**Rotatable**
+    The rotatable 
+    flag is optional in command ``clikk key update`` and applicable only for AES key with purpose encryption. 
+    Using command ``clikk key update``, you can set the rotatable state based on the rotatable_code below:
+
+    +---------------------------+----------------+
+    | Rotatable State           | rotatable code |
+    +===========================+================+
+    | Manually Rotatable        | 0              |
+    +---------------------------+----------------+
+    | Automatically Rotatable   | 1              |
+    +---------------------------+----------------+
+
+    Manually rotatable means the key will be rotated manually using command ``clikk key rotate``. While automatically 
+    otatable means the key will be rotated automatically by the system based on the key’s lifetime. The version of 
+    AES encryption key that is rotated manually or automatically will increase 1 version in every rotation. The first 
+    version before rotation is 0 (zero).

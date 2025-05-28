@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KK-Tokenization Service Backup and Restore &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Apache Cassandra Setting Consideration" href="cassandra-setting-consideration.html" />
+    <link rel="prev" title="KK-Tokenization Service Setup and Configuration" href="kkts-installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">KK-TS Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design-motivation.html">Design motivation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kkts-installation.html">KK-Tokenization Service Setup and Configuration</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">KK-Tokenization Service Backup and Restore</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#backup">Backup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#restore">Restore</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#restore-on-the-same-cluster">Restore on the Same Cluster</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#restore-on-the-different-cluster">Restore on the Different Cluster</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cassandra-setting-consideration.html">Apache Cassandra Setting Consideration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cassandra-setting-recommendation.html">Apache Cassandra Setting Recommendation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domain-configuration.html">Domain configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kkts-license.html">KK-TS License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command-line-interface.html">KK-TS command line interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kms-tokenization-services.html">Tokenization services</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">KK-TS Guide</a></li>
+      <li class="breadcrumb-item active">KK-Tokenization Service Backup and Restore</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/kkts-guide/kkts-backuprestore.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="kk-tokenization-service-backup-and-restore">
+<h1>KK-Tokenization Service Backup and Restore<a class="headerlink" href="#kk-tokenization-service-backup-and-restore" title="Link to this heading"></a></h1>
+<section id="backup">
+<h2>Backup<a class="headerlink" href="#backup" title="Link to this heading"></a></h2>
+<p>In Cassandra, there are two types of backups: <strong>snapshot</strong> and <strong>incremental backup</strong>. KK-TS only supports snapshot backup, which is a full backup.
+A snapshot first flushes all in-memory writes to disk and then creates a hard
+link to the SSTable files for each keyspace. You must have enough free disk space on the node to accommodate the creation of snapshots for
+your data files. A single snapshot requires minimal disk space. However, snapshots can cause your disk usage to grow more quickly over time
+because they prevent old, obsolete data files from being deleted. After the snapshot is complete, you can move the backup files to another
+location if needed, or leave them in place.</p>
+<p>To do backup with snapshot , follow these steps:</p>
+<ol class="arabic">
+<li><p>Run nodetool cleanup to ensure that invalid replicas are removed.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>nodetool<span class="w"> </span>cleanup<span class="w"> </span>kkts
+</pre></div>
+</div>
+</li>
+<li><p>Run the nodetool snapshot command. Please note that this command will output the snapshot directory name.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>nodetool<span class="w"> </span>snapshot<span class="w"> </span>kkts
+<span class="go">Requested creating snapshot(s) for [kkts] with snapshot name [xxxxxxxxxxxxx] and options {skipFlush=false}</span>
+<span class="go">Snapshot directory: xxxxxxxxxxxxx</span>
+</pre></div>
+</div>
+</li>
+<li><p>In cassandra snapshot will be created for each table. For this case (KK-TS) , snapshot will be created for
+<cite>appconfig</cite>, <cite>appconfigacl</cite>, <cite>appname</cite>, <cite>dataconfig</cite>, and each table representing <cite>configId</cite> created by the user.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ls<span class="w"> </span>/var/lib/cassandra/data/kkts/
+</pre></div>
+</div>
+</li>
+<li><p>The snapshot is created in <cite>data_directory/keyspace_name/table_nmae-UUID/snapshots/snapshot_name</cite> directory.
+Each snapshot directory contains numerous .db files that contain the data at the time of the snapshot. User need to back up
+this folder safely.</p></li>
+</ol>
+</section>
+<section id="restore">
+<h2>Restore<a class="headerlink" href="#restore" title="Link to this heading"></a></h2>
+<section id="restore-on-the-same-cluster">
+<h3>Restore on the Same Cluster<a class="headerlink" href="#restore-on-the-same-cluster" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Make sure the table schema exists. Cassandra can only restore data from a snapshot when the table schema exists.
+If the schema does not exist and has not been backed up, you must recreate the schema.</p></li>
+<li><p>Locate the most recent snapshot folder. For example: <cite>/var/lib/cassandra/data/kkts/table_name-UUID/snapshots/snapshot_name</cite>.</p></li>
+<li><p>Copy the most recent snapshot SSTable directory to the <cite>/var/lib/cassandra/data/kkts/table_name-UUID</cite> directory.</p></li>
+<li><p>Run <cite>nodetool refresh</cite> and restart your nodes.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>nodetool<span class="w"> </span>refresh
+<span class="gp">$ </span>systemctl<span class="w"> </span>start<span class="w"> </span>cassandra
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="restore-on-the-different-cluster">
+<h3>Restore on the Different Cluster<a class="headerlink" href="#restore-on-the-different-cluster" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>From the old cluster, retrieve the list of tokens associated with each node’s IP:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>nodetool<span class="w"> </span>ring<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-w<span class="w"> </span>ip_address_of_node<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $NF &quot;,&quot;}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>xrags
+</pre></div>
+</div>
+</li>
+<li><p>Since KK-TS have 3 nodes for Cassandra, the user is required to get 16 tokens from each node
+using the command in step 1.</p></li>
+<li><p>In the cassandra.yaml file for each node in the new cluster, add the list of tokens you obtained
+in the previous step to the <cite>initial_token</cite> parameter, using the same <cite>num_tokens</cite> setting as in the old
+cluster.
+Example of cassandra.yaml:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">num_tokens: 16</span>
+<span class="go">initial_token: -8606783460167362704, -7628638007651248628, -5850003706827661499, -4753961806592723210, -3662664695900510950, -2818288048409349194, -1378019818506765954, -306519202166733142, 711332202575693873, 1529004135188044667, 2604760016413624206, 3340675709124517847, 4420048516572119505, 5663568522252711477, 6630932765331246976, 8220937317845145614,</span>
+</pre></div>
+</div>
+</li>
+<li><p>Get keyspace information from the old cluster.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cqlsh 10.100.108.3 -u cassandra --ssl -e &quot;DESC KEYSPACE kkts;&quot; &gt; keyspace_schema.cql</span>
+</pre></div>
+</div>
+<p>Example of keyspace_schema.cql</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">CREATE KEYSPACE kkts WITH replication = {&#39;class&#39;: &#39;NetworkTopologyStrategy&#39;, &#39;dc1&#39;: &#39;3&#39;}  AND durable_writes = true;</span>
+
+<span class="go">CREATE TABLE kkts.appconfig (</span>
+<span class="go">    m_appski text PRIMARY KEY,</span>
+<span class="go">    m_keyid text,</span>
+<span class="go">    m_partitionid bigint</span>
+<span class="go">) WITH additional_write_policy = &#39;99p&#39;</span>
+<span class="go">    AND bloom_filter_fp_chance = 0.1</span>
+<span class="go">    AND caching = {&#39;keys&#39;: &#39;ALL&#39;, &#39;rows_per_partition&#39;: &#39;ALL&#39;}</span>
+<span class="go">    AND cdc = false</span>
+<span class="go">    AND comment = &#39;&#39;</span>
+<span class="go">    AND compaction = {&#39;class&#39;: &#39;org.apache.cassandra.db.compaction.LeveledCompactionStrategy&#39;, &#39;max_threshold&#39;: &#39;32&#39;, &#39;min_threshold&#39;: &#39;4&#39;}</span>
+<span class="go">    AND compression = {&#39;chunk_length_in_kb&#39;: &#39;4&#39;, &#39;class&#39;: &#39;org.apache.cassandra.io.compress.LZ4Compressor&#39;}</span>
+<span class="go">    AND memtable = &#39;default&#39;</span>
+<span class="go">    AND crc_check_chance = 1.0</span>
+<span class="go">    AND default_time_to_live = 0</span>
+<span class="go">    AND extensions = {}</span>
+<span class="go">    AND gc_grace_seconds = 864000</span>
+<span class="go">    AND max_index_interval = 2048</span>
+<span class="go">    AND memtable_flush_period_in_ms = 0</span>
+<span class="go">    AND min_index_interval = 128</span>
+<span class="go">    AND read_repair = &#39;BLOCKING&#39;</span>
+<span class="go">    AND speculative_retry = &#39;99p&#39;;</span>
+
+<span class="go">CREATE TABLE kkts.appconfigacl (</span>
+<span class="go">    m_masterappski text,</span>
+<span class="go">    m_slaveappski text,</span>
+<span class="go">    PRIMARY KEY ((m_masterappski, m_slaveappski))</span>
+<span class="go">) WITH additional_write_policy = &#39;99p&#39;</span>
+<span class="go">    AND bloom_filter_fp_chance = 0.1</span>
+<span class="go">    AND caching = {&#39;keys&#39;: &#39;ALL&#39;, &#39;rows_per_partition&#39;: &#39;ALL&#39;}</span>
+<span class="go">    AND cdc = false</span>
+<span class="go">    AND comment = &#39;&#39;</span>
+<span class="go">    AND compaction = {&#39;class&#39;: &#39;org.apache.cassandra.db.compaction.LeveledCompactionStrategy&#39;, &#39;max_threshold&#39;: &#39;32&#39;, &#39;min_threshold&#39;: &#39;4&#39;}</span>
+<span class="go">    AND compression = {&#39;chunk_length_in_kb&#39;: &#39;16&#39;, &#39;class&#39;: &#39;org.apache.cassandra.io.compress.LZ4Compressor&#39;}</span>
+<span class="go">    AND memtable = &#39;default&#39;</span>
+<span class="go">    AND crc_check_chance = 1.0</span>
+<span class="go">    AND default_time_to_live = 0</span>
+<span class="go">    AND extensions = {}</span>
+<span class="go">    AND gc_grace_seconds = 864000</span>
+<span class="go">    AND max_index_interval = 2048</span>
+<span class="go">    AND memtable_flush_period_in_ms = 0</span>
+<span class="go">    AND min_index_interval = 128</span>
+<span class="go">    AND read_repair = &#39;BLOCKING&#39;</span>
+<span class="go">    AND speculative_retry = &#39;99p&#39;;</span>
+
+<span class="go">CREATE TABLE kkts.appname (</span>
+<span class="go">    m_appname text PRIMARY KEY,</span>
+<span class="go">    m_appski text</span>
+<span class="go">) WITH additional_write_policy = &#39;99p&#39;</span>
+<span class="go">    AND bloom_filter_fp_chance = 0.1</span>
+<span class="go">    AND caching = {&#39;keys&#39;: &#39;ALL&#39;, &#39;rows_per_partition&#39;: &#39;ALL&#39;}</span>
+<span class="go">    AND cdc = false</span>
+<span class="go">    AND comment = &#39;&#39;</span>
+<span class="go">    AND compaction = {&#39;class&#39;: &#39;org.apache.cassandra.db.compaction.LeveledCompactionStrategy&#39;, &#39;max_threshold&#39;: &#39;32&#39;, &#39;min_threshold&#39;: &#39;4&#39;}</span>
+<span class="go">    AND compression = {&#39;chunk_length_in_kb&#39;: &#39;4&#39;, &#39;class&#39;: &#39;org.apache.cassandra.io.compress.LZ4Compressor&#39;}</span>
+<span class="go">    AND memtable = &#39;default&#39;</span>
+<span class="go">    AND crc_check_chance = 1.0</span>
+<span class="go">    AND default_time_to_live = 0</span>
+<span class="go">    AND extensions = {}</span>
+<span class="go">    AND gc_grace_seconds = 864000</span>
+<span class="go">    AND max_index_interval = 2048</span>
+<span class="go">    AND memtable_flush_period_in_ms = 0</span>
+<span class="go">    AND min_index_interval = 128</span>
+<span class="go">    AND read_repair = &#39;BLOCKING&#39;</span>
+<span class="go">    AND speculative_retry = &#39;99p&#39;;</span>
+
+<span class="go">CREATE TABLE kkts.dataconfig (</span>
+<span class="go">    m_appski text,</span>
+<span class="go">    m_configid text,</span>
+<span class="go">    m_formattingcharacters text,</span>
+<span class="go">    m_minimumlength bigint,</span>
+<span class="go">    m_tokenizedwith bigint,</span>
+<span class="go">    m_tokentype bigint,</span>
+<span class="go">    PRIMARY KEY (m_appski, m_configid)</span>
+<span class="go">) WITH CLUSTERING ORDER BY (m_configid ASC)</span>
+<span class="go">    AND additional_write_policy = &#39;99p&#39;</span>
+<span class="go">    AND bloom_filter_fp_chance = 0.1</span>
+<span class="go">    AND caching = {&#39;keys&#39;: &#39;ALL&#39;, &#39;rows_per_partition&#39;: &#39;ALL&#39;}</span>
+<span class="go">    AND cdc = false</span>
+<span class="go">    AND comment = &#39;&#39;</span>
+<span class="go">    AND compaction = {&#39;class&#39;: &#39;org.apache.cassandra.db.compaction.LeveledCompactionStrategy&#39;, &#39;max_threshold&#39;: &#39;32&#39;, &#39;min_threshold&#39;: &#39;4&#39;}</span>
+<span class="go">    AND compression = {&#39;chunk_length_in_kb&#39;: &#39;4&#39;, &#39;class&#39;: &#39;org.apache.cassandra.io.compress.LZ4Compressor&#39;}</span>
+<span class="go">    AND memtable = &#39;default&#39;</span>
+<span class="go">    AND crc_check_chance = 1.0</span>
+<span class="go">    AND default_time_to_live = 0</span>
+<span class="go">    AND extensions = {}</span>
+<span class="go">    AND gc_grace_seconds = 864000</span>
+<span class="go">    AND max_index_interval = 2048</span>
+<span class="go">    AND memtable_flush_period_in_ms = 0</span>
+<span class="go">    AND min_index_interval = 128</span>
+<span class="go">    AND read_repair = &#39;BLOCKING&#39;</span>
+<span class="go">    AND speculative_retry = &#39;99p&#39;;</span>
+
+<span class="go">CREATE TABLE kkts.mt_371aae006c01a0e9d3421e46de59a41b19cc4a3a_config1 (</span>
+<span class="go">    m_token text PRIMARY KEY,</span>
+<span class="go">    m_metadata blob</span>
+<span class="go">) WITH additional_write_policy = &#39;99p&#39;</span>
+<span class="go">    AND bloom_filter_fp_chance = 0.1</span>
+<span class="go">    AND caching = {&#39;keys&#39;: &#39;ALL&#39;, &#39;rows_per_partition&#39;: &#39;NONE&#39;}</span>
+<span class="go">    AND cdc = false</span>
+<span class="go">    AND comment = &#39;&#39;</span>
+<span class="go">    AND compaction = {&#39;class&#39;: &#39;org.apache.cassandra.db.compaction.LeveledCompactionStrategy&#39;, &#39;max_threshold&#39;: &#39;32&#39;, &#39;min_threshold&#39;: &#39;4&#39;}</span>
+<span class="go">    AND compression = {&#39;chunk_length_in_kb&#39;: &#39;4&#39;, &#39;class&#39;: &#39;org.apache.cassandra.io.compress.LZ4Compressor&#39;}</span>
+<span class="go">    AND memtable = &#39;default&#39;</span>
+<span class="go">    AND crc_check_chance = 1.0</span>
+<span class="go">    AND default_time_to_live = 0</span>
+<span class="go">    AND extensions = {}</span>
+<span class="go">    AND gc_grace_seconds = 864000</span>
+<span class="go">    AND max_index_interval = 2048</span>
+<span class="go">    AND memtable_flush_period_in_ms = 0</span>
+<span class="go">    AND min_index_interval = 128</span>
+<span class="go">    AND read_repair = &#39;BLOCKING&#39;</span>
+<span class="go">    AND speculative_retry = &#39;99p&#39;;</span>
+
+<span class="go">CREATE TABLE kkts.mt_d4f495a93dafa5791c1d1f7be3d41897b336d991_config1 (</span>
+<span class="go">    m_token text PRIMARY KEY,</span>
+<span class="go">    m_metadata blob</span>
+<span class="go">) WITH additional_write_policy = &#39;99p&#39;</span>
+<span class="go">    AND bloom_filter_fp_chance = 0.1</span>
+<span class="go">    AND caching = {&#39;keys&#39;: &#39;ALL&#39;, &#39;rows_per_partition&#39;: &#39;NONE&#39;}</span>
+<span class="go">    AND cdc = false</span>
+<span class="go">    AND comment = &#39;&#39;</span>
+<span class="go">    AND compaction = {&#39;class&#39;: &#39;org.apache.cassandra.db.compaction.LeveledCompactionStrategy&#39;, &#39;max_threshold&#39;: &#39;32&#39;, &#39;min_threshold&#39;: &#39;4&#39;}</span>
+<span class="go">    AND compression = {&#39;chunk_length_in_kb&#39;: &#39;4&#39;, &#39;class&#39;: &#39;org.apache.cassandra.io.compress.LZ4Compressor&#39;}</span>
+<span class="go">    AND memtable = &#39;default&#39;</span>
+<span class="go">    AND crc_check_chance = 1.0</span>
+<span class="go">    AND default_time_to_live = 0</span>
+<span class="go">    AND extensions = {}</span>
+<span class="go">    AND gc_grace_seconds = 864000</span>
+<span class="go">    AND max_index_interval = 2048</span>
+<span class="go">    AND memtable_flush_period_in_ms = 0</span>
+<span class="go">    AND min_index_interval = 128</span>
+<span class="go">    AND read_repair = &#39;BLOCKING&#39;</span>
+<span class="go">    AND speculative_retry = &#39;99p&#39;;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Clear the system table data from each new node.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>/var/lib/cassandra/data/system/*
+</pre></div>
+</div>
+</li>
+<li><p>Start each node on the new cluster.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>systemctl<span class="w"> </span>start<span class="w"> </span>cassandra
+</pre></div>
+</div>
+</li>
+<li><p>On a new node in a new cluster, create KK-TS keyspace using keyspace information
+from step 4.</p></li>
+<li><p>Stop each node in a new cluster.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>systemctl<span class="w"> </span>stop<span class="w"> </span>cassandra
+</pre></div>
+</div>
+</li>
+<li><p>Restore the data inside backup snapshot folder <cite>backup_folder/table_name/snapshots/snapshot_name/</cite>
+to current node data folder in <cite>/var/lib/cassandra/data/kkts/table_name-UUID</cite>. Please do this for
+every table the snapshotes created.
+Example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>cp<span class="w"> </span>appconfig-5747648698797987/hdkhu6579/snapshots/hflkshlfhlifh/<span class="w"> </span>/var/lib/cassandra/data/kkts/appconfig-69370247047659
+</pre></div>
+</div>
+</li>
+<li><p>Change the ownership of the restored file to the Cassandra user.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span>cassandra:cassandra<span class="w"> </span>/var/lib/cassandra/data/
+</pre></div>
+</div>
+</li>
+<li><p>Start each node again.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>cassandra
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="kkts-installation.html" class="btn btn-neutral float-left" title="KK-Tokenization Service Setup and Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cassandra-setting-consideration.html" class="btn btn-neutral float-right" title="Apache Cassandra Setting Consideration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

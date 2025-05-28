@@ -1,0 +1,444 @@
+Installing KK-Cryptoservice on cloud
+====================================
+
+.. important::
+
+    Before running the installer, perform :ref:`an integrity check <appendix:performing integrity checks>` first.
+    Also, make sure that the installer is appropriate for the machine's OS.
+
+.. note::
+
+    If errors were encountered during installation, details will be logged to ``/var/log/kriptakey``.
+
+.. note::
+
+    Please contact support@klaviskripta.com if any problems were encountered during installation.
+
+
+Accessing the ECS instance
+--------------------------
+
+First, the administrator must access the ECS instance and upload the KK-Cryptoservice installer via SSH.
+Have the SSH key file ready (``kk-keypair.pem``), and get the instance's public IP address
+from the ECS Instance page. This example assumes that the instance's public IP address is ``149.129.213.7`` ---
+replace this value with your instance's public IP address.
+
+#.  Set the key file's permission, or SSH will refuse to use the key file.
+
+    .. code-block:: console
+
+        $ sudo chmod 400 kk-keypair.pem
+
+#.  Upload the KK-Cryptoservice installer and its dependencies.
+
+    .. code-block:: console
+
+        $ scp -i kk-keypair.pem kk-cs-2.0-0000.el8.x86_64.rpm sgx_rpm_local_repo.tgz root@149.129.213.7:/root/
+
+#.  Log in to the ECS instance with the key file.
+
+    .. code-block:: console
+
+        $ ssh -i kk-keypair.pem root@149.129.213.7
+
+
+Enabling SELinux
+----------------
+
+Security-Enhanced Linux (SELinux) is a security architecture for Linux systems that allows administrators
+to have more control over who can access the system. SELinux defines access controls for the applications,
+processes, and files on a system. It uses security policies, which are a set of rules that tell SELinux
+what can or can’t be accessed, to enforce the access allowed by a policy.
+
+Kripta Key leverages SELinux to add another layer of security to the files stored on the system.
+
+#.  Run command below on the ECS instance to modify the config file of SELinux.
+
+    .. code-block:: console
+
+        $ sudo vi /etc/selinux/config
+
+#.  Find the line ``SELINUX=disabled``, press the ``i`` key to enter edit mode, and then modify this line
+    to ``SELINUX=enforcing``. The configuration file should be similar to this:
+
+    .. code-block:: ini
+
+        # This file controls the state of SELinux on the system.
+        # SELINUX= can take one of these three values:
+        #     enforcing - SELinux security policy is enforced.
+        #     permissive - SELinux prints warnings instead of enforcing.
+        #     disabled - No SELinux policy is loaded.
+        SELINUX=enforcing
+        # SELINUXTYPE= can take one of these three values:
+        #     targeted - Targeted processes are protected,
+        #     minimum - Modification of targeted policy. Only selected processes are protected.
+        #     mls - Multi Level Security protection.
+        SELINUXTYPE=targeted
+
+#.  Create a file named ``.autorelabel`` file in the root directory, and ensure the file is successfully created.
+
+    .. code-block:: console
+
+        $ touch /.autorelabel
+        $ ll /.autorelabel
+
+        -rw-r--r-- 1 root root 0 Jul 24 15:18 /.autorelabel
+
+#.  Restart the ECS instance. After the instance is restarted, SELinux will automatically relabel all system files.
+
+    .. code-block:: console
+
+        $ sudo shutdown -r now
+
+#.  Run ``getenforce`` and ``sestatus`` to check if the SELinux is enabled and the current mode is ``enforcing``.
+
+    .. code-block:: console
+
+        $ getenforce
+        $ sestatus
+
+        SELinux status:                 enabled
+        SELinuxfs mount:                /sys/fs/selinux
+        SELinux root directory:         /etc/selinux
+        Loaded policy name:             targeted
+        Current mode:                   enforcing
+        Mode from config file:          enforcing
+        Policy MLS status:              enabled
+        Policy deny_unknown status:     allowed
+        Memory protection checking:     actual (secure)
+        Max kernel policy version:      33
+
+
+Setting up VPN between Kripta Key instances
+-------------------------------------------
+
+In order to set up VPN on the ECS instance, the SSL client certificate obtained in the configuration step
+(``certs.zip``) must be uploaded to the ECS instance. Follow these steps to upload the certificate and set up VPN
+on the ECS instance.
+
+#.  Upload the VPN SSL client certificate archive to the ECS instance.
+
+    .. code-block:: console
+
+        $ scp -i kk-keypair.pem certs.zip root@149.129.213.7:/root/
+
+#.  Upgrade the ``epel-release`` package.
+
+    .. code-block:: console
+
+        $ sudo rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+
+#.  Install the ``epel-release`` package.
+
+    .. code-block:: console
+
+        $ sudo dnf install epel-release
+
+#.  Install the OpenVPN client and the unzip package.
+
+    .. code-block:: console
+
+        $ sudo dnf install openvpn
+        $ sudo dnf install unzip
+
+#.  Extract the certificate archive, and then run the OpenVPN client daemon using the configuration.
+
+    .. code-block:: console
+
+        $ sudo unzip certs.zip
+        $ sudo openvpn --config config.ovpn --daemon
+
+#.  Run ``ifconfig`` to check if the VPN tunnel has been created successfully.
+
+    .. code-block:: console
+
+        $ ifconfig
+
+        tun0: flags=4305<UP,POINTOPOINT,RUNNING,NOARP,MULTICAST>  mtu 1500
+        inet 192.168.0.6  netmask 255.255.255.255  destination 192.168.0.5
+        inet6 fe80::1c70:bb56:9e37:16a8  prefixlen 64  scopeid 0x20<link>
+        unspec 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00  txqueuelen 100  (UNSPEC)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 12  bytes 734 (734.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+    The IP address after ``inet`` is the KK-Cryptoservice instance's host. Use this IP address
+    when registering the KK-Cryptoservice instance.
+
+#.  Repeat steps 3 to 6 on the KK-Manager instance's machine. Ensure that the VPN tunnel
+    has been created successfully.
+
+    .. code-block:: console
+
+        $ ifconfig
+
+        tun0: flags=4305<UP,POINTOPOINT,RUNNING,NOARP,MULTICAST>  mtu 1500
+        inet 192.168.0.10  netmask 255.255.255.255  destination 192.168.0.9
+        inet6 fe80::1c70:bb56:9e37:16a8  prefixlen 64  scopeid 0x20<link>
+        unspec 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00  txqueuelen 100  (UNSPEC)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 12  bytes 734 (734.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+    The IP address after ``inet`` is the KK-Manager instance's host. Use this IP address as the KK-Manager
+    host address in the KK-Cryptoservice configuration file.
+
+
+Setting up KK-Cryptoservice dependencies
+----------------------------------------
+
+Before proceeding with KK-Cryptoservice's installation, its dependencies must be installed first. Hence,
+this step may be skipped if the dependencies have already been installed.
+
+The administrator must download `Intel SGX Platform Software`__ and upload the ``sgx_rpm_local_repo.tgz`` archive
+to the ECS instance. Then, follow these steps:
+
+__ https://download.01.org/intel-sgx/sgx-linux/2.23/distro/rhel9.2-server/sgx_rpm_local_repo.tgz
+
+#.  Extract the packages.
+
+    .. code-block:: console
+
+        $ tar -xvf sgx_rpm_local_repo.tgz
+
+#.  Navigate to the ``sgx_rpm_local_repo`` directory, and enable the repository.
+
+    .. code-block:: console
+
+        $ cd sgx_rpm_local_repo
+        $ sudo dnf config-manager --add-repo $(pwd)
+
+        Updating Subscription Management repositories.
+        Adding repo from: file:///home/user/sgx_rpm_local_repo
+
+
+Installing KK-Cryptoservice
+---------------------------
+
+Once everything is all set, the administrator may begin installation of KK-Cryptoservice on the ECS instance.
+
+#.  Install KK-Cryptoservice from the RPM package. Note that KK-Cryptoservice depends on the packages
+    in ``sgx_rpm_local_repo``. However, these packages are not signed with GPG. Hence, it must be installed
+    without performing the GPG check.
+
+    .. code-block:: console
+
+        $ sudo dnf --nogpgcheck install kk-cs-2.0-0000.el8.x86_64.rpm
+
+    .. note::
+
+        *   The installer automatically creates the user ``kripta``.
+        *   The user ``kripta`` can only read files from the working directory.
+        *   The administrator, using their usual user account, **cannot** write directly to the working directory.
+            Files must be moved as the user ``kripta`` to the working directory.
+        *   During the installation process, the location of the working directory must be specified.
+            It is highly recommended to use the default value.
+
+    .. todo::
+
+        TODO: What happens if there's no configuration file?
+
+#.  After successfully installing KK-Cryptoservice, it must be configured by running its configuration script.
+    This will configure settings such as port, log level, SNMP server, and so on. Do note the following
+    when running the configuration script:
+
+    *   Make sure to use the host IP address obtained while setting up the VPN.
+    *   The port may be any port from 1024 to 49151, inclusive.
+    *   Configuring the SNMP server is optional --- errors are still recorded to the log file. However, it is
+        strongly recommended to configure the SNMP server so that critical alerts from Kripta Key can be
+        noticed promptly. To configure the SNMP server, the administrator must prepare the SNMP host and port,
+        SNMP username, SNMP authentication passphrase, and SNMP privacy passphrase.
+    *   For some configuration fields, the script will set a default value if value is omitted when prompted.
+    *   The working directory must be writable by the ``kripta`` user. For this reason, it is recommended
+        to use the default value, ``/var/local/kriptakey/kk-cryptoservice``.
+
+    Execute this command to set or change the KK-Cryptoservice instance's configuration.
+
+    .. code-block:: console
+        :caption: Sample output if SNMP server has not been configured.
+
+        $ sudo /opt/kriptakey/kk-cryptoservice/kk-cs.sh
+
+        KK-Manager instance host address []: 192.168.0.10
+        KK-Manager instance port []: 8086
+        KK-Cryptoservice port for REST API endpoint [7003]: 8087
+        KK-Cryptoservice port for SDK API endpoint [7004]: 8088
+        SNMP server host and port in xxx.xxx.xxx.xxx:xxxx format []:
+        WARNING: SNMP server address is empty. KK-Cryptoservice will not send SNMP alerts.
+        KK-Cryptoservice log level (Option: ERROR/INFO/DEBUG) [ERROR]: ERROR
+        KK-Cryptoservice working directory path [/var/local/kriptakey/kk-cryptoservice]: /var/local/kriptakey/kk-cryptoservice
+
+        Relabeled /var/local/kriptakey/kk-cryptoservice from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_csd_var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/db from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_csd_var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/txncount from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_csd_var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/backup from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_csd_var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/sgxdata from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_csd_var_t:s0
+        Relabeled /etc/kriptakey/kk-csd.conf from unconfined_u:object_r:etc_t:s0 to system_u:object_r:kk_csd_var_t:s0
+
+        WARNING: Configure your firewall to allow the KK-Cryptoservice service.
+
+        Configuration file has been written successfully to /etc/kriptakey/kk-csd.conf.
+
+    .. code-block:: console
+        :caption: Sample output if SNMP server has been configured.
+
+        $ sudo /opt/kriptakey/kk-cryptoservice/kk-cs.sh
+
+        KK-Manager instance host address []: 192.168.0.10
+        KK-Manager instance port []: 8086
+        KK-Cryptoservice port for REST API endpoint [7003]: 8087
+        KK-Cryptoservice port for SDK API endpoint [7004]: 8088
+        SNMP server host and port in xxx.xxx.xxx.xxx:xxxx format []: 192.168.0.5:1337
+        SNMP username []: klavis
+        SNMP authentication passphrase []: klavisauth
+        SNMP privacy passphrase []: klavisencrypt
+        KK-Cryptoservice log level (Option: ERROR/INFO/DEBUG) [ERROR]: ERROR
+        KK-Cryptoservice working directory path [/var/local/kriptakey/kk-cryptoservice]: /var/local/kriptakey/kk-cryptoservice
+
+        Relabeled /var/local/kriptakey/kk-cryptoservice from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_csd_var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/db from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_csd_var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/txncount from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_csd_var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/backup from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_csd_var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/sgxdata from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_csd_var_t:s0
+        Relabeled /etc/kriptakey/kk-csd.conf from unconfined_u:object_r:etc_t:s0 to system_u:object_r:kk_csd_var_t:s0
+
+        WARNING: Configure your firewall to allow the KK-Cryptoservice service.
+        Configuration file has been written successfully to /etc/kriptakey/kk-csd.conf.
+
+    .. note::
+
+        To unset the SNMP configuration, omit the SNMP destination when prompted by the script.
+
+    .. important::
+
+        The configuration file for KK-Cryptoservice is stored in ``/etc/kriptakey/kk-csd.conf``. Do not move
+        or remove the file to ensure the smooth operation of the service.
+
+#.  If you choose to enable SNMP, there is an additional step.
+    Kripta Key appliance is accompanied by script that will send crucial system information (CPU, Memory and 
+    Disk utilization) using SNMP if SNMP is configured. The script will automatically send SNMP message every minute. 
+    To enable this script, execute command below:
+
+    .. code-block:: console
+
+        $ /opt/kriptakey/kk-sys_snmp.sh install
+
+#.  Install and enable firewall using ``firewalld``.
+
+    .. code-block:: console
+
+        $ sudo dnf install firewalld
+
+        Last metadata expiration check: 3:36:25 ago on Mon 24 Jul 2023 11:22:58 AM CST.
+        Package firewalld-0.9.3-13.0.1.al8.noarch is already installed.
+        Dependencies resolved.
+        Nothing to do.
+        Complete!
+
+        $ sudo systemctl enable firewalld --now
+
+        Created symlink /etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service → /usr/lib/systemd/system/firewalld.service.
+        Created symlink /etc/systemd/system/multi-user.target.wants/firewalld.service → /usr/lib/systemd/system/firewalld.service.
+
+#.  Reload the firewall service and set the zone as shown below. You can set the zone to public or private.
+
+    .. code-block:: console
+
+        $ sudo firewall-cmd --permanent --zone=public --add-service=kk-csd
+
+        success
+
+        $ sudo firewall-cmd --reload
+
+        success
+
+
+Registering the KK-Cryptoservice instance
+-----------------------------------------
+
+Once the KK-Cryptoservice instance is set up, the administrator may proceed with registering it
+to the KK-Manager instance.
+
+#.  Get the machine platform information. The output file will stored in the ``sgxdata`` directory.
+    On the ECS instance, run the following:
+
+    .. code-block:: console
+
+        $ sudo -u kripta kk-csd --get-pck-id
+
+        Platform information has been written successfully to /var/local/kriptakey/kk-cryptoservice/sgxdata/8F0FFCDCXXXXXXXXXXXXXXXXXXXXXXXX.json.
+
+    Copy the platform information to the machine that has CLIKK installed on it. The machine platform information
+    will be used to request the platform collateral from Intel.
+
+#.  Request the platform collateral from Intel. On the machine with CLIKK on it, run the following:
+
+    .. code-block:: console
+
+        $ clikk conf get-collateral --intel-api-key=39949131XXXXXXXXXXXXXXXXXXXXXXX --platform-info-path=/home/user/documents/8F0FFCDCXXXXXXXXXXXXXXXXXXXXXXXX.json --output-dir-path=/home/user/documents
+
+        This will fetch attestation material from Intel's trusted web service:
+            https://api.trustedservices.intel.com/sgx/certification/v4
+        Type `:.rzv` to continue, or press Enter to cancel.
+        > :.rzv
+
+        PCK certificate has been saved successfully to /home/user/documents/pck_cert_0323BC80XXXXXXXXXXXXXXXXXXXXXXXX.pem.
+        Quote collateral has been saved successfully to /home/user/documents/collateral_00906EXXXXXX.json.
+
+    To get the Intel API key, check :ref:`appendix:obtaining intel api key` in the appendix.
+
+    Copy the PCK certificate and collateral to the ECS instance, and then from within the ECS instance, copy it
+    to the ``sgxdata`` directory within the working directory. Also, copy the latest backup from the KK-Manager instance
+    to the KK-Cryptoservice instance as well.
+
+#.  Run KK-Cryptoservice in registration mode on the ECS instance. Make sure that the latest backup is present.
+
+    .. code-block:: console
+
+        $ sudo -u kripta kk-csd --kk-cryptoservice-pck-cert=/var/local/kriptakey/kk-c/sgxdata/pck_cert_8F0FFCDCXXXXXXXXXXXXXXXXXXXXXXXX.pem --database-backup-path=/path-to-backup-file/backup.db
+
+        Commencing the KK-Cryptoservice registration process.
+        This will initialize a KK-Cryptoservice instance on this machine and register it to the KK-Manager instance.
+        Any existing KK-Cryptoservice database file will be OVERWRITTEN.
+        Do not interrupt the process until the message "KK-Cryptoservice has been registered successfully to KK-Manager.".
+        Are you sure you want to continue? Type `'Q\y2` to continue, or press Enter to cancel.
+        > 'Q\y2
+
+        [-] Ready for initialization and registration.
+        [-] Listening on port 8086...
+        [-] Waiting for connection from KK-Manager...
+
+#.  Register the KK-Cryptoservice using CLIKK with the collateral obtained above. Make sure to use the host
+    IP address obtained while setting up the VPN.
+
+    .. code-block:: console
+
+        $ clikk kk-cryptoservice add --kk-manager-collateral-path=/home/user/documents/collateral_00A065XXXXXX.json --kk-cryptoservice-collateral-path=/home/user/documents/collateral_00A065XXXXXX.json --kk-cryptoservice-host=192.168.0.6 --kk-cryptoservice-port=8086 --kk-cryptoservice-name=KK-CSOne
+
+        Enter admin ID: Admin1
+        Enter password:
+        Insert the administrator card of Admin1 for two-factor authentication.
+
+        Dual control authentication -- credential of second user is required.
+        Admin1 is currently logged in.
+
+        Enter admin ID: Admin2
+        Enter password:
+        Insert the administrator card of Admin2 for two-factor authentication.
+
+        KK-Cryptoservice `KK-CSOne` at 192.168.0.6 has been registered successfully.
+
+    The KK-Cryptoservice instance will show this message after registration is complete.
+
+    .. code-block:: console
+
+        [v] KK-Cryptoservice has been registered successfully to KK-Manager.
+
+#.  Enable and run the KK-Cryptoservice service on the ECS instance. Ensure that the service is running successfully.
+
+    .. code-block:: console
+
+        $ sudo systemctl enable kk-csd.service --now
+        $ sudo systemctl status kk-csd.service

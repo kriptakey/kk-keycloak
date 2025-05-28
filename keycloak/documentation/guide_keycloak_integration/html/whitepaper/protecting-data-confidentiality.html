@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Protecting Data Confidentiality with Encryption, Tokenization, and Masking &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Appendix" href="../appendix.html" />
+    <link rel="prev" title="Whitepaper" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kkts-guide/index.html">KK-TS Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Whitepaper</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Protecting Data Confidentiality with Encryption, Tokenization, and Masking</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#definition">Definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#format-and-length">Format and length</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cryptographic-process">Cryptographic Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#recommendation-of-usage">Recommendation of Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deployment-options">Deployment Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#summary">Summary</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#encryption">Encryption</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vaulted-tokenization">Vaulted Tokenization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vaultless-tokenization">Vaultless Tokenization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#masking">Masking</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Whitepaper</a></li>
+      <li class="breadcrumb-item active">Protecting Data Confidentiality with Encryption, Tokenization, and Masking</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/whitepaper/protecting-data-confidentiality.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="protecting-data-confidentiality-with-encryption-tokenization-and-masking">
+<h1>Protecting Data Confidentiality with Encryption, Tokenization, and Masking<a class="headerlink" href="#protecting-data-confidentiality-with-encryption-tokenization-and-masking" title="Link to this heading"></a></h1>
+<p>Kripta Key provides options to cater various scenarios to protect data confidentiality, i.e., encryption, tokenization and masking. Despite of having same purpose,
+they use different approaches, and sometimes can be very subtle.</p>
+<section id="definition">
+<h2>Definition<a class="headerlink" href="#definition" title="Link to this heading"></a></h2>
+<p><strong>Data encryption</strong> is a process to transform sensitive data (plaintext) to unreadable form (ciphertext) by using a mathematical mapping (algorithm) and a secret key.</p>
+<p><strong>Data tokenization</strong> is a process to substitute sensitive data with benign ones (tokens). The substitution process can be <strong>vaulted</strong> or <strong>vaultless</strong>.</p>
+<ul class="simple">
+<li><p>Vaulted tokenization generates tokens randomly and uses a vault (database) to store the mapping between sensitive data and the tokens. Since the tokens are generated
+randomly, there is no mathematical relationship between the sensitive data and its token.</p></li>
+<li><p>Vaultless tokenization generates the token by transforming the sensitive data using an encryption algorithm.</p></li>
+</ul>
+<p><strong>Data masking</strong> is a process to hide some characters in a sensitive data by replacing them with a masking character (*). While data encryption and tokenization are reversible,
+data masking is not.</p>
+</section>
+<section id="format-and-length">
+<h2>Format and length<a class="headerlink" href="#format-and-length" title="Link to this heading"></a></h2>
+<p>Kripta Key <strong>encryption</strong> uses AES-256-GCM algorithm (authenticated encryption). It generates ciphertext, initialization vector (IV) and authentication tag in binary format despite
+the plaintext in ASCII, hence longer than its plaintext.</p>
+<p>Kripta Key <strong>tokenization</strong> generates the tokens in the same format and length with the sensitive data.</p>
+<p>Kripta Key <strong>masking</strong> also generates masked data in the same format and length.</p>
+</section>
+<section id="cryptographic-process">
+<h2>Cryptographic Process<a class="headerlink" href="#cryptographic-process" title="Link to this heading"></a></h2>
+<p>In Kripta Key, <strong>encryption</strong> is performed in a hardware-based secure environment using AES <strong>(†)</strong> algorithm with key length 256 bits and GCM mode of operation (AES-256-GCM), leveraging
+Intel SGX as the root of trust. While in-use, the encryption keys never leave the secure environment. At-rest, the encryption keys are protected with a key derived from combination of
+unique Intel root sealing key and Kripta Key digital certificate. While in-transit, the encryption keys are protected with TLS 1.3 where the TLS session key is generated and only used in
+the secure environment.</p>
+<p>For <strong>tokenization</strong>, Kripta Key provides both vaulted and vaultless tokenization service.</p>
+<ul class="simple">
+<li><p>Vaulted Tokenization Service: Kripta Key stores the mapping between the sensitive data and the tokens in its vault, which is an Apache Cassandra database. The tokens are randomly
+generated using Intel on-chip hardware random number generator. Kripta Key does not store the sensitive data as is, instead, encrypting it by using AES-256-GCM algorithm. Thus, even
+if the Cassandra database is stolen, the sensitive data in it are still protected.</p></li>
+<li><p>Vaultless Tokenization Service: Kripta Key uses FF1 <strong>(⸸)</strong> algorithm to encrypt the sensitive data. Since encryption is directly used, then the vault is not needed to store the mapping.
+FF1 is chosen instead of AES because of its property as format-preserving encryption (FPE). However, do take note of security concerns:</p>
+<ul>
+<li><p>FF1 (and FF3-1) algorithms are broken <strong>(‡)</strong>.</p></li>
+<li><p>NIST SP 800-38G recommends using random tweak for each sensitive data to increase the security, which means the tweak must be stored along with ciphertext, hence does not preserve
+the length. Since tokenization typically expects preservation of format and length, Kripta Key Vaultless Tokenization Service does not use the tweak for FF1 algorithm.</p></li>
+<li><p>[NIST SP 800-38G Revision 1](<a class="reference external" href="https://csrc.nist.gov/pubs/sp/800/38/g/r1/ipd">https://csrc.nist.gov/pubs/sp/800/38/g/r1/ipd</a>) requires (not recommends) one million minimum domain size to avoid ciphertext (tokens) collision. Kripta
+Key set minimum domain size to one billion, which means there are minimum length of sensitive data to tokenize, i.e. Alpha and Alphanumeric: 6 characters; Numeric: 10 characters.
+This limitation is also applicable for Vaulted Tokenization Service.</p></li>
+</ul>
+</li>
+</ul>
+<p>Security wise, Vaulted Tokenization Service is more superior as it does not use the broken FF1 algorithm. However its requires consideration of Cassandra deployment complexity.</p>
+<p>Performance wise, Vaultless Tokenization Service is more superior as it does not require storages for token-value mapping, hence simpler deployment. However it uses FF1 algorithm that already broken.</p>
+<p><strong>(†)</strong> <a href="#id6"><span class="problematic" id="id7">`NIST FIPS PUB 197, Advanced Encryption Standard, Nov 2001`__</span></a>.</p>
+<blockquote>
+<div></div></blockquote>
+<p><strong>(⸸)</strong> <a href="#id6"><span class="problematic" id="id8">`NIST SP 800-38G, Recommendation for Block Cipher Modes of Operation: Methods for Format-Preserving Encryption, March 2016`__</span></a>.</p>
+<blockquote>
+<div></div></blockquote>
+<p><strong>(‡)</strong> FF1 and FF3-1 algorithms have been broken by recent cryptanalysis researches. However, this is the only open and standardized format-preserving encryption available today. Non exhaustive list of references as follows:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><cite>Breaking the FF3 Format-Preserving Encryption Standard over Small Domains, July 2017</cite></p>
+</li>
+<li><p><cite>Three Third Generation Attacks on the Format Preserving Encryption Scheme FF3, March 2021</cite></p>
+</li>
+<li><p><cite>Linear Cryptanalysis of FF3-1 and FEA, June 2021</cite></p>
+</li>
+</ul>
+</div></blockquote>
+<p>Data <strong>masking</strong> is part of Kripta Key Tokenization Service where it returns masked characters (*) to replace the hidden sensitive data.</p>
+</section>
+<section id="recommendation-of-usage">
+<h2>Recommendation of Usage<a class="headerlink" href="#recommendation-of-usage" title="Link to this heading"></a></h2>
+<p>There is no single panacea to solve problem likes data confidentiality. Kripta Key provides options to cater various scenarios.</p>
+<p><strong>Encryption</strong> is best used to protect data confidentiality for maximum and long term protection. In PDP era, data encryption must be part of application development
+blueprint (security by design), for example: personally identifiable information (PII) at-rest must be encrypted.</p>
+<p><strong>Tokenization</strong> can be used to protect data confidentiality where the protection duration is relatively short and the format and length must be preserved, for example
+to replace some part of credit card number with random numbers during a financial transaction. Another usage is to protect data confidentiality in legacy applications
+where the data format and length must be preserved. For the latter case, since the data must be stored for long time, it is best to use Kripta Key Vaulted Tokenization
+Service for maximum protection because it does not use FFX algorithm.</p>
+<p><strong>Masking</strong> is used to protect data confidentiality in a manner that reversing it back to the original value is not needed, for example to hide some part of user id,
+credit card number or telephone number in application log files, or in data mart for big data analysis.</p>
+</section>
+<section id="deployment-options">
+<h2>Deployment Options<a class="headerlink" href="#deployment-options" title="Link to this heading"></a></h2>
+<p>Deployment of Kripta Key components depends on the chosen scenario as depicted in the diagram below.</p>
+<img alt="../_images/data_confidentiality_simplified_deployment_2.png" src="../_images/data_confidentiality_simplified_deployment_2.png" />
+<p>Note that the above deployment diagram is over simplified to emphasize for data confidentiality protection use case. It does not include compulsory enterprise grade
+resiliency aspects such as load balancing, high availability, clustering, Cassandra database replication factor, sharding and consistency level.</p>
+<p>For data masking scenario, it uses the same option as Vaultless Tokenization service.</p>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<p>The table below summarizes the difference between encryption, tokenization and masking in Kripta Key.</p>
+<section id="encryption">
+<h3>Encryption<a class="headerlink" href="#encryption" title="Link to this heading"></a></h3>
+<p>Method: AES algorithm with key length 256 bits and GCM mode of operation.</p>
+<p>Reversibility: Yes</p>
+<p>Format: Binary</p>
+<p>Length: Longer than the plaintext, i.e. 16 bytes IV + 16 bytes tag + ciphertext.</p>
+<p>Usage: Maximum and long term protection.</p>
+<p>Deployment: KK-Crypto Service</p>
+<p>BCP Concern: Backup the keys</p>
+</section>
+<section id="vaulted-tokenization">
+<h3>Vaulted Tokenization<a class="headerlink" href="#vaulted-tokenization" title="Link to this heading"></a></h3>
+<p>Method: Substituting sensitive data with random token.</p>
+<p>Reversibility: Yes</p>
+<p>Format: No changes</p>
+<p>Length: No changes</p>
+<p>Usage: Short term protection such as in a transaction or for legacy applications.</p>
+<p>Deployment: KK Tokenization Service and Cassandra database. High availability, clustering, replication factor, sharding and consistency level of Cassandra database must be considered during deployment</p>
+<p>BCP Concern: Backup the keys and Cassandra database</p>
+</section>
+<section id="vaultless-tokenization">
+<h3>Vaultless Tokenization<a class="headerlink" href="#vaultless-tokenization" title="Link to this heading"></a></h3>
+<p>Method: Encryption with FF1 algorithm.</p>
+<p>Reversibility: Yes</p>
+<p>Format: No Changes</p>
+<p>Length: No Changes</p>
+<p>Usage: Short term protection such as in a transaction.</p>
+<p>Deployment: KK-Tokenization Service</p>
+<p>BCP Concern: Backup the keys</p>
+</section>
+<section id="masking">
+<h3>Masking<a class="headerlink" href="#masking" title="Link to this heading"></a></h3>
+<p>Method: Replacing some characters with mask character (*).</p>
+<p>Reversibility: No</p>
+<p>Format: No Changes</p>
+<p>Length: No Changes</p>
+<p>Usage: Where reversing to original value is not needed such as log files and data mart.</p>
+<p>Deployment: KK-Tokenization Service</p>
+<p>BCP Concern: -</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Whitepaper" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../appendix.html" class="btn btn-neutral float-right" title="Appendix" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

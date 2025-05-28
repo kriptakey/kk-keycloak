@@ -1,0 +1,9 @@
+REST API Documentation
+======================
+
+Kripta Key REST API is a conventional REST Web Service for calling Kripta Key's cryptographic services. It should only be used if SDK is not available 
+for the programming language being used. Its usage is documented below. 
+
+.. raw:: html
+
+   <iframe src="../_static/restapi_doc/kriptakey_api.html" height="345px" width="100%"></iframe>

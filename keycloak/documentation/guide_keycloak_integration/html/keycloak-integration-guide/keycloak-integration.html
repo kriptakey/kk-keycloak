@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KeyCloak Integration with Kripta Key &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="WebSocket configuration" href="websocket-configuration.html" />
+    <link rel="prev" title="KeyCloak Integration Guide" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kkts-guide/index.html">KK-TS Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">KeyCloak Integration Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">KeyCloak Integration with Kripta Key</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#prerequisite">Prerequisite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configure-keycloak-with-tls">Configure KeyCloak with TLS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#integrate-kk-plugins-to-keycloak">Integrate KK Plugins to KeyCloak</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#verify-plugins-integration">Verify Plugins Integration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-e2ee-authentication-flow">Create E2EE Authentication Flow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="websocket-configuration.html">WebSocket configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="register-client-and-user.html">Register Client Application and User</a></li>
+<li class="toctree-l2"><a class="reference internal" href="import-users.html">Import Users to KeyCloak DB</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">KeyCloak Integration Guide</a></li>
+      <li class="breadcrumb-item active">KeyCloak Integration with Kripta Key</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/keycloak-integration-guide/keycloak-integration.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="keycloak-integration-with-kripta-key">
+<h1>KeyCloak Integration with Kripta Key<a class="headerlink" href="#keycloak-integration-with-kripta-key" title="Link to this heading"></a></h1>
+<p>KeyCloak is an identity and access management product to allow user’s authentication and single sign-on (SSO) for applications.
+To support strong authentication, Kripta Key provides KeyCloak Plugins that enhance SSO security by enabling seamless <code class="docutils literal notranslate"><span class="pre">scan</span> <span class="pre">and</span> <span class="pre">login</span></code> authentication.</p>
+<p>This KeyCloak plugins enhance authentication on OIDC Code Authorization Flow, that implements multi-factor cryptographic
+authentication, which combines something the users know (user identity), something they have (mobile device), and something
+they are (local biometric authentication).</p>
+<p>The KeyCloak plugins require Redis database, which is recommended to be installed on a separate machine. Another requirement is
+WebSocket Secure (WSS), which enables displaying the QR code on the screen.</p>
+<section id="prerequisite">
+<h2>Prerequisite<a class="headerlink" href="#prerequisite" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p>Ensure that you have installed and configured KeyCloak in production mode. Follow the instruction from  <a class="reference external" href="https://github.com/PacktPublishing/Keycloak---Identity-and-Access-Management-for-Modern-Applications-2nd-Edition">KeyCloak Identity and Access Management for Modern Applications</a> .
+Ensure that Keycloak is running successfully.</p>
+</li>
+<li><p>Install Redis on a Virtual Machine. Ensure that Redis is installed on a separate machine from Keycloak. Follow instruction on <a class="reference external" href="https://redis.io/docs/latest/operate/oss_and_stack/install/archive/install-redis/install-redis-on-linux/">Redis installation and configuration</a>.</p>
+<p>As recommendation, Redis can be installed on a VM with the following specifications:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Specification</p></th>
+<th class="head"><p>Cassandra Virtual Machine</p></th>
+<th class="head"><p>KK-TS Virtual Machine</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CPU</p></td>
+<td><p>2 core</p></td>
+<td><p>2 core</p></td>
+</tr>
+<tr class="row-odd"><td><p>RAM</p></td>
+<td><p>minimum 8GB</p></td>
+<td><p>minimum 8GB</p></td>
+</tr>
+<tr class="row-even"><td><p>NIC</p></td>
+<td><p>10GB ethernet</p></td>
+<td><p>10GB ethernet</p></td>
+</tr>
+<tr class="row-odd"><td><p>Operating System (OS)</p></td>
+<td><p>RHEL 9.2</p></td>
+<td><p>RHEL 9.2</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Ensure that an email server is installed in your environment. Integrate the email server with Keycloak by clicking on
+Realm Settings button on the left tab, then click on Email tab.</p>
+<ul>
+<li><p>Set the admin’s email</p>
+<img alt="../_images/kc_set_email.png" src="../_images/kc_set_email.png" />
+</li>
+<li><p>Set the connection and authentication</p>
+<img alt="../_images/kc_set_smtp.png" src="../_images/kc_set_smtp.png" />
+</li>
+</ul>
+</li>
+<li><p>Ensure that you have installed WSS to enable showing QR code in the screen. Therefore, ensure that you also install NGINX prior
+to the implementation. Follow this <a class="reference external" href="https://nginx.org/">guide</a> to download and install NGINX. Install <code class="docutils literal notranslate"><span class="pre">wscat</span></code> to enable wss with the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>npm<span class="w"> </span>install<span class="w"> </span>-g<span class="w"> </span>wscat
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="configure-keycloak-with-tls">
+<h2>Configure KeyCloak with TLS<a class="headerlink" href="#configure-keycloak-with-tls" title="Link to this heading"></a></h2>
+<p>KeyCloak server must be configured with a certificate and a private key to allow KeyCloak accessed securely using TLS scenario.
+The certificate must be signed by a CA whether the CA is valid or a self-signed CA that can be trusted by other applications.
+The following are example of configuring KeyCloak with TLS v1.3:</p>
+<ol class="arabic">
+<li><p>Create a keypair for CA</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>genrsa<span class="w"> </span>-out<span class="w"> </span>ca.key<span class="w"> </span><span class="m">4096</span>
+</pre></div>
+</div>
+</li>
+<li><p>Create a configuration file that contains certificate detail, subject names, and extension like the following sample.
+You can name the file with <code class="docutils literal notranslate"><span class="pre">selfsigned.conf</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">[req]</span>
+<span class="go">default_bits       = 4096</span>
+<span class="go">prompt             = no</span>
+<span class="go">default_md         = sha256</span>
+<span class="go">req_extensions     = req_ext</span>
+<span class="go">distinguished_name = dn</span>
+
+<span class="go">[dn]</span>
+<span class="go">C = ID</span>
+<span class="go">ST = Some-State</span>
+<span class="go">L = Your-City</span>
+<span class="go">O = Your-Company</span>
+<span class="go">CN = localhost                            # Ensure the CN is similar to DNS name</span>
+
+<span class="go">[req_ext]</span>
+<span class="go">subjectAltName = @alt_names</span>
+
+<span class="go">[alt_names]</span>
+<span class="go">DNS.1   = localhost                       # Ensure to replace with correct DNS name for CA</span>
+<span class="go">IP.1    = 127.0.0.1                       # Ensure to replace with correct IP address for CA</span>
+
+<span class="go">[v3_ext]</span>
+<span class="go">authorityKeyIdentifier=keyid,issuer</span>
+<span class="go">basicConstraints=CA:FALSE</span>
+<span class="go">keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment</span>
+<span class="go">extendedKeyUsage = serverAuth</span>
+<span class="go">subjectAltName = @alt_names</span>
+</pre></div>
+</div>
+</li>
+<li><p>Generate a self-signed certificate for CA and passing the configuration file.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>req<span class="w"> </span>-x509<span class="w"> </span>-nodes<span class="w"> </span>-days<span class="w"> </span><span class="m">365</span><span class="w"> </span>-newkey<span class="w"> </span>rsa:4096<span class="w"> </span>-keyout<span class="w"> </span>ca.key<span class="w"> </span>-out<span class="w"> </span>ca.crt<span class="w"> </span>-config<span class="w"> </span>selfsigned.conf<span class="w"> </span>-extensions<span class="w"> </span>v3_ext
+</pre></div>
+</div>
+</li>
+<li><p>Generate keypair for Keycloak.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>genrsa<span class="w"> </span>-out<span class="w"> </span>keycloak.key<span class="w"> </span><span class="m">4096</span>
+</pre></div>
+</div>
+</li>
+<li><p>Generate Keycloak CSR and ensure Keycloak CN is aligned to Keycloak hostname.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>req<span class="w"> </span>-new<span class="w"> </span>-key<span class="w"> </span>-keycloak.key<span class="w"> </span>-out<span class="w"> </span>keycloak.csr<span class="w"> </span>-subj<span class="w"> </span><span class="s2">&quot;/C=US/ST=CA/L=SanFrancisco/O=MyOrg/OU=MyUnit/CN=admin-keycloak.com&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Sign Keycloak CSR with CA private key and passing the same configuration file <code class="docutils literal notranslate"><span class="pre">selfsigned.conf</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>x509<span class="w"> </span>-req<span class="w"> </span>-in<span class="w"> </span>keycloak.csr<span class="w"> </span>-CA<span class="w"> </span>ca.crt<span class="w"> </span>-CAkey<span class="w"> </span>ca.key<span class="w"> </span>-CAcreateserial<span class="w">   </span>-out<span class="w"> </span>keycloak.crt<span class="w"> </span>-days<span class="w"> </span><span class="m">825</span><span class="w"> </span>-extfile<span class="w"> </span>selfsigned.conf<span class="w"> </span>-extensions<span class="w"> </span>v3_ext
+</pre></div>
+</div>
+</li>
+<li><p>Update the certificate path and private key path on <code class="docutils literal notranslate"><span class="pre">{keycloak_folder}/conf/keycloack.conf</span></code> file as shown by the following example.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Basic<span class="w"> </span>settings<span class="w"> </span><span class="k">for</span><span class="w"> </span>running<span class="w"> </span><span class="k">in</span><span class="w"> </span>production.<span class="w"> </span>Change<span class="w"> </span>accordingly<span class="w"> </span>before<span class="w"> </span>deploying<span class="w"> </span>the<span class="w"> </span>server.
+
+<span class="gp"># </span>Database
+
+<span class="gp"># </span>The<span class="w"> </span>database<span class="w"> </span>vendor.
+<span class="gp">#</span><span class="nv">db</span><span class="o">=</span>postgres
+
+<span class="gp"># </span>The<span class="w"> </span>username<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>database<span class="w"> </span>user.
+<span class="gp">#</span>db-username<span class="o">=</span>keycloak
+
+<span class="gp"># </span>The<span class="w"> </span>password<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>database<span class="w"> </span>user.
+<span class="gp">#</span>db-password<span class="o">=</span>password
+
+<span class="gp"># </span>The<span class="w"> </span>full<span class="w"> </span>database<span class="w"> </span>JDBC<span class="w"> </span>URL.<span class="w"> </span>If<span class="w"> </span>not<span class="w"> </span>provided,<span class="w"> </span>a<span class="w"> </span>default<span class="w"> </span>URL<span class="w"> </span>is<span class="w"> </span><span class="nb">set</span><span class="w"> </span>based<span class="w"> </span>on<span class="w"> </span>the<span class="w"> </span>selected<span class="w"> </span>database<span class="w"> </span>vendor.
+<span class="gp">#</span>db-url<span class="o">=</span>jdbc:postgresql://localhost/keycloak
+
+<span class="gp"># </span>Observability
+
+<span class="gp"># </span>If<span class="w"> </span>the<span class="w"> </span>server<span class="w"> </span>should<span class="w"> </span>expose<span class="w"> </span>healthcheck<span class="w"> </span>endpoints.
+<span class="gp">#</span>health-enabled<span class="o">=</span><span class="nb">true</span>
+
+<span class="gp"># </span>If<span class="w"> </span>the<span class="w"> </span>server<span class="w"> </span>should<span class="w"> </span>expose<span class="w"> </span>metrics<span class="w"> </span>endpoints.
+<span class="gp">#</span>metrics-enabled<span class="o">=</span><span class="nb">true</span>
+
+<span class="gp"># </span>HTTP
+
+<span class="gp"># </span>The<span class="w"> </span>file<span class="w"> </span>path<span class="w"> </span>to<span class="w"> </span>a<span class="w"> </span>server<span class="w"> </span>certificate<span class="w"> </span>or<span class="w"> </span>certificate<span class="w"> </span>chain<span class="w"> </span><span class="k">in</span><span class="w"> </span>PEM<span class="w"> </span>format.
+<span class="go">https-certificate-file=${kc.home.dir}/conf/raihan-keycloak-rumah.com.crt</span>
+
+<span class="gp"># </span>The<span class="w"> </span>file<span class="w"> </span>path<span class="w"> </span>to<span class="w"> </span>a<span class="w"> </span>private<span class="w"> </span>key<span class="w"> </span><span class="k">in</span><span class="w"> </span>PEM<span class="w"> </span>format.
+<span class="go">https-certificate-key-file=${kc.home.dir}/conf/raihan-keycloak-rumah.com.key</span>
+
+<span class="gp"># </span>The<span class="w"> </span>proxy<span class="w"> </span>address<span class="w"> </span>forwarding<span class="w"> </span>mode<span class="w"> </span><span class="k">if</span><span class="w"> </span>the<span class="w"> </span>server<span class="w"> </span>is<span class="w"> </span>behind<span class="w"> </span>a<span class="w"> </span>reverse<span class="w"> </span>proxy.
+<span class="gp">#</span><span class="nv">proxy</span><span class="o">=</span>reencrypt
+
+<span class="gp"># </span>Do<span class="w"> </span>not<span class="w"> </span>attach<span class="w"> </span>route<span class="w"> </span>to<span class="w"> </span>cookies<span class="w"> </span>and<span class="w"> </span>rely<span class="w"> </span>on<span class="w"> </span>the<span class="w"> </span>session<span class="w"> </span>affinity<span class="w"> </span>capabilities<span class="w"> </span>from<span class="w"> </span>reverse<span class="w"> </span>proxy
+<span class="gp">#</span>spi-sticky-session-encoder-infinispan-should-attach-route<span class="o">=</span><span class="nb">false</span>
+
+<span class="gp"># </span>Hostname<span class="w"> </span><span class="k">for</span><span class="w"> </span>the<span class="w"> </span>Keycloak<span class="w"> </span>server.
+<span class="gp">#</span><span class="nv">hostname</span><span class="o">=</span>myhostname
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Ensure that Keycloak hostname must match to the CN registered in Keycloak certificate. To set the hostname, edit
+file <code class="docutils literal notranslate"><span class="pre">etc/hostname</span></code> and set the IP address including the hostname assigned to that IP.</p>
+</div>
+</li>
+<li><p>Trust a CA self-signed certificate in browser.</p></li>
+</ol>
+</section>
+<section id="integrate-kk-plugins-to-keycloak">
+<h2>Integrate KK Plugins to KeyCloak<a class="headerlink" href="#integrate-kk-plugins-to-keycloak" title="Link to this heading"></a></h2>
+<p>In order to allow Keycloak, as the SSO server, to authorize client applications and securely authenticate users,
+KK Plugins enhance security by ensuring that authentication ends in a trusted environment. Additionally, this
+end-to-end authentication scenario, from mobile device to Kripta Key (KK), uses the user’s device as a unique identifier.</p>
+<ol class="arabic">
+<li><p>Put the plugins into KeyCloak directory, specifically in folder <code class="docutils literal notranslate"><span class="pre">providers</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cp<span class="w"> </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/keycloak-1.0-SNAPSHOT.jar<span class="w"> </span>~/kc-book/keycloak-26.1.1/providers
+</pre></div>
+</div>
+</li>
+<li><p>Create configuration file which contents listed on the following sample. It is recommended to put the file in the same
+folder with KeyCloak configuration file.  Name the file with <code class="docutils literal notranslate"><span class="pre">kkconfig.properties</span></code>. Declare the location of the configuration file
+when the KeyCloak start.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">kk.kkcs.host=10.21.0.8</span>
+<span class="go">kk.kkcs.port=7004</span>
+<span class="go">kk.kkcs.keystore.file=/tmp/TEST_Keystore.p12</span>
+<span class="go">kk.kkcs.keystore.password=12345</span>
+<span class="go">kk.kkcs.partition.id=1</span>
+<span class="go">kk.kkcs.partition.password=Klavis1!</span>
+<span class="go">kk.kkcs.keyid.certsign=04rsa4096</span>
+<span class="go">kk.kkcs.keyid.wrapping=02aes</span>
+<span class="go">kk.kkcs.keyid.permanent=01aes</span>
+<span class="go">kk.redis.host=10.21.0.8</span>
+<span class="go">kk.redis.port=6379</span>
+<span class="go">kk.redis.maxconn=32</span>
+<span class="go">kk.redis.minidleconn=8</span>
+<span class="go">kk.redis.maxidleconn=16</span>
+<span class="go">kk.redis.usessl=false</span>
+<span class="go">kk.redis.keystore.file=</span>
+<span class="go">kk.redis.keystore.password=</span>
+<span class="go">kk.redis.username=</span>
+<span class="go">kk.redis.password=</span>
+<span class="go">kk.redis.database=</span>
+<span class="go">kk.qrcode.websocket.port=8082</span>
+<span class="go">kk.qrcode.websocket.proxiedport=8081</span>
+<span class="go">kk.qrcode.logo.file=/home/klavis/Pictures/cropped-kk-favicon-png.png</span>
+</pre></div>
+</div>
+</li>
+<li><p>Run KeyCloak.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>bin/kc.sh<span class="w"> </span>start<span class="w"> </span>-Dkk.config.properties<span class="o">=</span>/home/klavis/Documents/WorkingDir/kc-auth/test/resources/kkconfig.properties<span class="w"> </span>-Djdk.internal.httpclient.disableHostnameVerification<span class="o">=</span><span class="nb">true</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="verify-plugins-integration">
+<h2>Verify Plugins Integration<a class="headerlink" href="#verify-plugins-integration" title="Link to this heading"></a></h2>
+<p>Now, you can open Keycloak admin console by typing Keycloak URL <code class="docutils literal notranslate"><span class="pre">https://admin-keycloak.com:8443</span></code>. Login to Keycloak by using
+admin’s credential. You can verify whether the provider is successfully integrated by doing the following steps:</p>
+<ol class="arabic">
+<li><p>Go to your specific realm and then click Authentication button on the left tab.</p>
+<img alt="../_images/kc_ver_auth.png" src="../_images/kc_ver_auth.png" />
+</li>
+<li><p>Click one of the flows, e.g., browser and then click Add step button.</p>
+<img alt="../_images/kc_ver_browser.png" src="../_images/kc_ver_browser.png" />
+</li>
+<li><p>Type E2EE in search column, and ensure that E2EE options are available there.</p>
+<img alt="../_images/kc_ver_addstep.png" src="../_images/kc_ver_addstep.png" />
+</li>
+</ol>
+</section>
+<section id="create-e2ee-authentication-flow">
+<h2>Create E2EE Authentication Flow<a class="headerlink" href="#create-e2ee-authentication-flow" title="Link to this heading"></a></h2>
+<p>If the provider is integrated successfully, create a new authentication flow that enable E2EE based authentication flow.
+To create the flow, you can follow the following steps:</p>
+<ol class="arabic">
+<li><p>Choose the browser flow name and click the three dots, click Duplicate.</p>
+<img alt="../_images/kc_flow_duplicate.png" src="../_images/kc_flow_duplicate.png" />
+</li>
+<li><p>Name the new authentication flow as follows:</p>
+<img alt="../_images/kc_flow_e2ee.png" src="../_images/kc_flow_e2ee.png" />
+</li>
+<li><p>Back to the Authentication page, and click on E2EE based authentication you just created.</p>
+<img alt="../_images/kc_flow_flows.png" src="../_images/kc_flow_flows.png" />
+</li>
+<li><p>Create the flows as shown by the figure below:</p>
+<img alt="../_images/kc_flow_create.png" src="../_images/kc_flow_create.png" />
+</li>
+<li><p>Go back to Authentication page, click Required actions tab, and ensure that you enable Update E2EE Password and Update
+E2EE Certificate</p>
+<img alt="../_images/kc_flow_enable.png" src="../_images/kc_flow_enable.png" />
+<img alt="../_images/kc_flow_enable2.png" src="../_images/kc_flow_enable2.png" />
+</li>
+<li><p>Go back to Flows tab and bind E2EE based Authentication flow by clicking on the three dots and click on Bind</p>
+<img alt="../_images/kc_flow_bind.png" src="../_images/kc_flow_bind.png" />
+</li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="KeyCloak Integration Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="websocket-configuration.html" class="btn btn-neutral float-right" title="WebSocket configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

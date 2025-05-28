@@ -1,0 +1,175 @@
+Integrate Apache Tomcat Web Server Applications to Kripta Key using PKCS#11 Connector
+=====================================================================================
+
+Kripta Key supports **signing** using Apache Tomcat. Apache Tomcat can be integrated with Kripta Key using PKCS#11 connector. Its software powers numerous large-scale, 
+mission-critical web applications across a diverse range of industries and organizations.  
+
+For seamless integration with Kripta Key (KK), we recommend running Apache Tomcat within a Docker container. This approach enhances 
+consistency and ensures an easily maintainable deployment environment.
+
+Kripta Key supports connecting with Apache Tomcat 9.0.98. To generate digital signatures for files, the Cryptoki configuration file 
+retrieves key and certificate information from a keystore. When using Kripta Key, the key pair and certificates are accessed directly 
+from Kripta Key. Java tools can be integrated with Kripta Key using the PKCS#11 interface, enabling secure access to the key pair and 
+certificates. 
+
+The following are the procedures to integrate Apache Tomcat running in a Docker container with Kripta Key using the PKCS#11 connector:
+
+#.  Generate a signing key pair in Kripta Key to sign the file. Currently, only RSA signing key pairs are supported to integrated 
+    with Apache Tomcat, with key lengths of 2048, 3072, or 4096 bits. 
+
+    .. code-block:: console
+
+        $ clikk key add --partition-id=1 --key-id=rsaSigning2048 --key-label=signingKey --key-algo=2 --key-length=2048 --key-purpose=3 --key-lifetime=365
+
+#.  Prepare the KK-Cryptoki (application) certificate and private key in local storage. In the provided sample, name them ``tomcat-test.key`` and ``tomcat-test.pem``.
+
+#.  Configure the signing key, KK-Cryptoki application key, and other required objects in kk-cryptoki.conf. Please specify the file path set on Docker.  
+
+    .. code-block:: console
+
+        # [Partition Configuration]
+        # Specify the partition ID and password to be used
+        # kk-cryptoki (Application) must have access to the partition
+        PartitionID=1
+        PartitionPassword=Klavis1!
+
+        # [KK-CS Configuration]
+        # Specify KKCS target host to connect to
+        # Connection established through kk-cryptoki as the Application using KKCS SDK Service
+        KKCSTargetHost=192.168.100.25
+        KKCSTargetPort=7004
+
+        # [SDK Configuration]
+        # Specify kk-cryptoki (Application) Certificate and private key registered to KK-Manager
+        ClientCertificateFile=/etc/cryptoserver/tomcat-test.pem
+        PrivateKeyFile=/etc/cryptoserver/tomcat-test.key
+
+        # LogLevel: NONE = 0, ERROR = 1, DEBUG = 2
+        LogLevel=1
+        LogPath=/tmp/kk-kriptoki.log
+
+        # Object List: KK doesn't support enumeration of object by only its class (C_FindObjectsInit)
+        # If pkcs11 object enumareted by only class eg: CKO_CERTIFICATE, id will be used from this config
+        # Format is list of id separated by comma (id1,id2)
+        # Currently supported : CKA_CERTIFICATE, CKO_PUBLIC_KEY, CKO_PRIVATE_KEY
+        # ECDSAP256Sign,p11rsa2048,p11rsa3072,p11rsa4096,p11ecdsap256,p11ecdsap384,p11ecdsap512,p11eddsaed25519
+        # Note that for tomcat only 1 keypair supported (only the first found cert/priv will be used)
+        KeyPairObject=rsaSigning2048
+
+#.  Configure the provider's name and path of ``libkk-cryptoki.so`` in ``kk_sunp11.cfg``.
+
+#.  Specify file path of ``kk_sunp11.cfg`` as provider and configure it in ``java.security``, specifically on the ``SunPKCS11`` provider line.
+
+    .. code-block:: console
+
+        #
+        # List of providers and their preference orders (see above):
+        #
+        security.provider.1=SUN
+        security.provider.2=SunRsaSign
+        security.provider.3=SunEC
+        security.provider.4=SunJSSE
+        security.provider.5=SunJCE
+        security.provider.6=SunJGSS
+        security.provider.7=SunSASL
+        security.provider.8=XMLDSig
+        security.provider.9=SunPCSC
+        security.provider.10=JdkLDAP
+        security.provider.11=JdkSASL
+        security.provider.12=SunPKCS11 /path/to/kk_sunp11.cfg
+
+#.  Retrieve and store the ``server.xml`` file of Apache Tomcat. Add the script below to ``server.xml`` at line 80. Set the provider's name, password, and signing key.
+
+    .. code-block:: console
+
+        <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol" sslImplementationName="org.apache.tomcat.util.net.jsse.JSSEImplementation"
+                    maxThreads="150" SSLEnabled="true">
+            <SSLHostConfig
+                    protocols="TLSv1.3">
+                <Certificate 
+                certificateKeystoreType="PKCS11" 
+                certificateKeystoreFile=""
+                certificateKeystoreProvider="KKCryptoki"
+                certificateKeystorePassword="Klavis1!" 
+                certificateKeyAlias="rsaSigning2048"
+                            type="RSA" />
+            </SSLHostConfig>
+        </Connector>
+
+#.  Open the ``docker-compose.yaml`` file and map files from local storage to Docker storage, including ``server.xml``, ``java.security``, ``kk_sunp11.cfg``,
+    ``tomcat-test.pem``, ``tomcat-test.key``, ``libkk-cryptoki.so``, ``logs``, and ``tmp``. 
+
+    .. code-block:: console
+
+        volumes:
+            - ./data/config/server.xml:/usr/local/tomcat/conf/server.xml
+            - ./data/config/java.security:/opt/java/openjdk/conf/security/java.security
+            - ./data/config/kk_sunp11.cfg:/opt/java/openjdk/conf/security/kk_sunp11.cfg
+            - "./data/config/kk-cryptoki.conf:/usr/lib/jvm/jre/lib/security/kk-cryptoki.conf"
+            - "./data/config/tomcat-test.pem:/etc/cryptoserver/tomcat-test.pem"
+            - "./data/config/tomcat-test.key:/etc/cryptoserver/tomcat-test.key"
+            - "./data/lib/libkk-cryptoki.so:/usr/lib/kkpkcs11/libkk-cryptoki.so"
+            - "./data/logs:/usr/local/tomcat/logs"
+            - "./data/tmp:/tmp"
+
+#.  Enable triggering signing through website. Add ``RUN cp -r $CATALINA_HOME/webapps.dist/* $CATALINA_HOME/webapps`` in line 35 of ``Dockerfile``. 
+
+    .. code-block:: console
+
+        #COPY entrypoint.sh .
+        #ENTRYPOINT [ "entrypoint.sh" ]
+        RUN cp -r $CATALINA_HOME/webapps.dist/* $CATALINA_HOME/webapps
+        CMD ["catalina.sh", "run"]
+        #CMD ["${TOMCAT_HOME}/bin/catalina.sh", "run"]
+        #ENTRYPOINT [ "tail", "-f", "/dev/null" ]
+        #CMD ["/bin/bash"]
+
+
+
+Sign and Verify using Apache Tomcat
+-----------------------------------
+
+#.  Build the Docker container and sign a file using Apache Tomcat by running the following command:
+
+    .. code-block:: console
+
+        $ docker compose -f docker-compose.yaml up --build --force-recreate
+
+#.  Trigger the Tomcat webpage at ``https://localhost:8443`` to initiate the signing process.
+
+    The full response of the signing process:
+
+    .. code-block:: console
+
+        pkcs11-tomcat-2  | 2025-02-21 04:59:07.282 Session info for session handle: 2 thread id: 139718465386176
+        pkcs11-tomcat-2  | opened: CKS_RW_PUBLIC_SESSION
+        pkcs11-tomcat-2  | operation: PKCS11_KK_CK_OPERATION_NONE
+        pkcs11-tomcat-2  | object map size: 2
+        pkcs11-tomcat-2  | 2025-02-21 04:59:07.282 C_SignInit
+        pkcs11-tomcat-2  | hSession: 2
+        pkcs11-tomcat-2  | pMechanism->mechanism: d
+        pkcs11-tomcat-2  | hKey: 1
+        pkcs11-tomcat-2  | keyId:rsaSigning2048
+        pkcs11-tomcat-2  | 2025-02-21 04:59:07.282 [CKM_RSA_PKCS_PSS] pMechanism->ulParameterLen: 24
+        pkcs11-tomcat-2  |      params.hashAlg: 592
+        pkcs11-tomcat-2  |      params.mgf: 2
+        pkcs11-tomcat-2  |      params.sLen: 32
+        pkcs11-tomcat-2  | 2025-02-21 04:59:07.282 C_Sign
+        pkcs11-tomcat-2  | ulDataLen: 32
+        pkcs11-tomcat-2  |       Data to be signed: ac 35 6e d5 8d c4 db fc 1c c f7 15 61 dc 74 f9 48 a9 3b 4b 7f ce 7a e2 39 4d c4 60 d3 78 3a 22
+        pkcs11-tomcat-2  |       Buffer size prepared: 4096
+        pkcs11-tomcat-2  |      pSignature: not null
+        pkcs11-tomcat-2  |      pData: not null
+        pkcs11-tomcat-2  | 2025-02-21 04:59:07.282 Session info for session handle: 2 thread id: 139718465386176
+        pkcs11-tomcat-2  | opened: CKS_RW_PUBLIC_SESSION
+        pkcs11-tomcat-2  | operation: PKCS11_KK_CK_OPERATION_SIGN
+        pkcs11-tomcat-2  | object map size: 2
+        pkcs11-tomcat-2  | 2025-02-21 04:59:07.282 Need Login: False
+        pkcs11-tomcat-2  | 2025-02-21 04:59:07.282 Need Refresh Session: False
+        pkcs11-tomcat-2  | 2025-02-21 04:59:07.292 ServerSDK Sign success, returned: K26L57c38+IAsXEGY3WdhOlfr2Il1Df1i2iXGNBvx91XffB7nntranUFCY/q5BXlVo9+bRxsF7UaMdOFU2DhseUD/Jo53HC+dWzoi/5ZBV0NavOV1ZjE6futE30jFkoR2RV3ZbSvFbtnqTjiy6Sde9wcx3Gi0xHUY1uoPd6BIiqrVhrFJ/tL2wWXvcCsM2OIUofaUQQdFxGmvlfn0GlLx3MsztJCvobX+XMGUOJJ1UwZsx/Qiua6YOeZi90cogJM5zRrMhmhiBrH3nogeRgAobYDJ65iHK6NbHEs2f7YOyQmZb9XHy39gqz/UFcMxD/JU8bUO+6g2JkSfz6nc+xl4Q==
+        pkcs11-tomcat-2  | 2025-02-21 04:59:07.292 Buffer prepared: 4096
+        pkcs11-tomcat-2  | Buffer needed: 256
+        pkcs11-tomcat-2  | 2025-02-21 04:59:07.292 Buffer prepared: 4096
+        pkcs11-tomcat-2  | Copying: 256 bytes.
+
+

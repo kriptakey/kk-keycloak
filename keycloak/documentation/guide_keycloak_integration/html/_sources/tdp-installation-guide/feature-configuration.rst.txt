@@ -1,0 +1,60 @@
+Feature configuration
+=====================
+
+Kripta Key TDP has main feature **tokenization**. To enable this feature,
+they must be configured first. Follow the procedure in these sections to enable that feature.
+
+
+Tokenization
+------------
+
+Tokenization is similar to encryption, where a piece of sensitive data is replaced by a surrogate value.
+This surrogate value is called a token. The sensitive information is secured from unauthorized disclosure,
+while its type, length and format are preserved.
+
+To enable this feature, add column ``tokenize_config_id`` in encrypted section. ``tokenize_config_id`` is configured in KK-TS server. 
+
+.. code-block::
+    :caption: Sample plaintext
+
+    4281 5790 7311 2819
+
+.. code-block:: json
+    :caption: Sample stored data (using ``format_char: $$$$%%%%%%%%%%%$$$$``)
+
+    4281 1111 1111 2819
+
+
+``encryption-config.yml`` example
+---------------------------------
+
+The following is a possible ``encryption-config.yml`` setting utilizing the features.
+
+.. code-block:: yaml
+
+    kkts_config:
+     kkts_host: "kkts-server.com"
+     kkts_port: "9999"
+     kkts_ca_certificate: "kkts-client-ca.crt"
+     kkts_client_certificate: "kkts-client.crt"
+     kkts_client_private_key: "kkts-client.key"
+
+    schemas:
+    - table: customer
+      columns:
+      - id
+      - nik
+      - nama
+      - email
+      - telepon
+      - tanggal_lahir
+      - namaibu
+      - debitcard
+      encrypted:
+      - column: nik
+        tokenize_config_id: "test1_1"
+        data_type: "str"
+      - column: tanggal_lahir
+        tokenize_config_id: "test1_2"
+        data_type: "str"
+

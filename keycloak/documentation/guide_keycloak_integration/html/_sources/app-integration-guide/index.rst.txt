@@ -1,0 +1,25 @@
+App Integration Guide
+=====================
+
+Preface
+-------
+
+Intended reader
+~~~~~~~~~~~~~~~
+
+This document is intended for experienced application developers and security administrators as a guide
+to integrate Java applications to Kripta Key using PKCS#11 connector. 
+
+
+Document scope
+~~~~~~~~~~~~~~
+
+This document explains use cases and process of integrating Java applications i.e., Jarsigner, Apksigner, 
+and Apache Tomcat for this version of Kripta Key.  
+
+
+Related documents
+~~~~~~~~~~~~~~~~~
+
+*   :doc:`/installation-guide/index`
+*   :doc:`/sys-admin-guide/index`

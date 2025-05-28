@@ -1,0 +1,4758 @@
+Kripta Key management with CLIKK
+================================
+
+This section details all available commands in CLIKK.
+
+
+Configuration
+-------------
+
+The configuration commands are mainly used to configure the KK-Manager host and port for CLIKK to connect to.
+Miscellaneous commands are grouped under this category as well. The available commands are:
+
+
+``clikk conf server``
+~~~~~~~~~~~~~~~~~~~~~
+
+Show the KK-Manager connection's configuration if it has been set before, otherwise show a help message.
+
+**Flags**:
+
+--kk-manager-host=<instance host>
+    The host address of the KK-Manager instance.
+
+--kk-manager-port=<instance post>
+    The port of the KK-Manager instance port. Must be a number between 1024 and 49 151, inclusive.
+
+**Privilege level**: **LOW**
+
+**Error messages**: None.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk conf server --kk-manager-host=10.30.0.3 --kk-manager-port=7002
+
+    Configuration has been saved successfully.
+    CLIKK will connect to the KK-Manager instance at 10.30.0.3:8085.
+
+
+``clikk conf get-collateral``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Download the machine's PCK certificate and collateral information from Intel's trusted web service.
+
+The collateral is used to register KK-Auditor, KK-Cryptoservice, and KK-Manager-DR instances.
+
+This command requires an API key from Intel. Refer to :ref:`appendix:obtaining intel api key` for steps on
+obtaining the Intel API key.
+
+**Flags**:
+
+--api-key=<Intel API key>
+    The API key for Intel trusted web service.
+
+--platform-info=<path to platform info>
+    The absolute path to a machine's platform information file.
+
+--machine-fmspc=<machine FMSPC>
+    The machine's Family-Model-Stepping-Platform-Custom SKU (FMSPC).
+
+--package-type=<package type>
+    The machine's package type. This must be ``processor`` or ``platform``.
+
+--output-dir-path=<output directory path>
+    The absolute path to the output directory for the downloaded files.
+
+**Privilege level**: **LOW**
+
+**Error messages**:
+
+*   *Message*:
+
+        Failed to request collateral from Intel!
+
+        Please ensure that all the parameters and platform
+        information are correct and the machine is connected
+        to the internet.
+
+    *Likely cause*: Wrong Intel API key, or wrong machine FMSPC.
+
+*   *Message*: Platform info file does not exist!
+
+    *Likely cause*: Wrong platform info path.
+
+*   *Message*: Invalid output directory!
+
+    *Likely cause*: Wrong output path.
+
+**Usage example**:
+
+*   Send a machine's platform info, and then download the machine's PCK certificate and collateral information.
+
+    .. code-block:: console
+
+        $ clikk conf get-collateral --intel-api-key=c0ffeea3d5614436ae1611dfXXXXXXXX --platform-info-path=/home/user/0323BC80XXXXXXXXXXXXXXXXXXXXXXXX.json --output-dir-path=/home/user/Documents/
+
+        This will fetch attestation material from Intel's trusted web service:
+            https://api.trustedservices.intel.com/sgx/certification/v4
+        Type `:.rzv` to continue, or press Enter to cancel.
+        > :.rzv
+
+        PCK certificate has been saved successfully to /home/user/documents/pck_cert_0323BC80XXXXXXXXXXXXXXXXXXXXXXXX.pem.
+        Quote collateral has been saved successfully to /home/user/documents/collateral_00906EXXXXXX.json.
+
+*   Send a machine's FMSPC and package type, and then download the machine's collateral information.
+
+    This command is intended to be used when the machine's PCK certificate and collateral has been downloaded
+    before, and the administrator knows the machine FMSPC and package type.
+
+    .. code-block:: console
+
+        $ clikk conf get-collateral --machine-fmspc=00A065310000 --package-type=processor --output-dir-path=/home/user/Documents/
+
+        This will fetch attestation material from Intel's trusted web service:
+            https://api.trustedservices.intel.com/sgx/certification/v4
+        Type `79Hu/` to continue, or press Enter to cancel.
+        >
+
+        Quote collateral has been saved successfully to /home/user/Documents/collateral_00A065XXXXXX.json.
+
+
+``clikk conf version``
+~~~~~~~~~~~~~~~~~~~~~~
+
+Show CLIKK's version. CLIKK will refuse to connect if the major and minor version are different from KK-Manager's version.
+
+**Flags**: None.
+
+**Privilege level**: **LOW**
+
+**Error messages**: None.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk conf version
+
+    CLIKK version 24.1.0007
+
+
+``clikk conf recovery-card-version``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Show recovery card version. 
+
+**Flags**: None.
+
+**Privilege level**: **LOW**
+
+**Error messages**: None.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk conf conf recovery-card-version
+    insert a card!
+
+    Recovery Card version 24.1.0007
+
+
+``clikk conf administrator-card-version``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Show administrator card version. 
+
+**Flags**: None.
+
+**Privilege level**: **LOW**
+
+**Error messages**: None.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk conf conf administrator-card-version
+
+    Administrator Card version 24.1.0007
+
+
+Administrator
+-------------
+
+Kripta Key controlled your accessibility by a privilege level specified for each CLIKK
+command. The authentication attributes that are needed to fulfill each privilege are
+specified in :ref:`sys-admin-guide/kripta-key-structure:Authentication and privileges`.
+
+Kripta Key has login restrictions for the administrator that are not configurable:
+
+*   The maximum number of login failures is 3, after that the account is locked. The locked account will not be able to log in or do any administrative operations.
+
+*   The locked account will be automatically unlocked after 30 minutes.
+
+*   The locked account could also be unlocked by another administrator using the admin unlock command.
+
+Three predefined admins and their passwords were introduced during the key
+ceremony and stored in the KK-Manager database for authenticating purposes. KK-
+Manager uses the password to authenticate you before executing any CLIKK
+commands.
+
+The administrator commands are used to manage the administrator accounts that can manage the KK-Manager instance.
+The available commands are:
+
+
+``clikk admin add``
+~~~~~~~~~~~~~~~~~~~
+
+Create a new administrator account.
+
+The admin will be prompted to create a password that satisfies the password policy.
+
+**Flags**:
+
+--admin-id=<admin ID>
+    The identifier of the administrator. Must be alphanumeric and not more than 20 characters in length.
+
+--admin-name=<admin name>
+    The descriptive name of the administrator. Must be alphanumeric and not more than 20 characters in length.
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password or invalid smartcard.
+
+*   *Message*: Password does not comply with policy!
+
+    *Likely cause*: Password does not satisfy the password policy requirements.
+
+*   *Message*: New password must be different from current password!
+
+    *Likely cause*: New password matches the current password.
+
+*   *Message*: Password mismatch!
+
+    *Likely cause*: Re-entered password does not match.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk admin add --admin-id=Admin4 --admin-name=Administrator
+
+    Administrator password MUST follow these requirements:
+    - Password length must be between 8 and 64 characters, inclusive.
+    - Password must contain upper case, lower case, numeric, and special characters.
+    - Password must not have repeated characters (e.g. AA, aa, 11).
+    - Password must not have more than two consecutive characters (e.g. 123, abc).
+    - Password must not contain the admin ID.
+    Enter password:
+    Re-enter password:
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Dual control authentication -- credential of a second administrator is required.
+    Admin1 is currently logged in.
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    Administrator has been created successfully.
+
+
+``clikk admin change-password``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Change an administrator's password.
+
+An administrator may only change their own password. If the administrator has no associated administrator card,
+this command will also bind an administrator card to the account. Binding an administrator card requires
+a blank administrator card on hand.
+
+**Flags**:
+
+--admin-id=<admin ID>
+    The identifier of the administrator.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Admin ID does not exist!
+
+    *Likely cause*: Wrong admin ID given to the flag.
+
+*   *Message*: Changing another admin's password is not allowed!
+
+    *Likely cause*: Admin ID provided for authentication and admin ID given via flag does not match.
+
+*   *Message*: Password does not comply with policy!
+
+    *Likely cause*: Password does not satisfy the password policy requirements.
+
+*   *Message*: New password must be different from current password!
+
+    *Likely cause*: New password matches the current password.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk admin change-password --user-id=Admin1
+
+    Enter admin ID: Admin1
+    Enter password:
+
+    User Admin1 does not have an associated administrator card.
+    This will initialize an administrator card and bind it to Admin1.
+    Type `e=g` to continue, or press Enter to cancel.
+    >
+
+    Insert a blank card.
+
+    Commencing card initialization process...
+    Resetting the card's secure channel code...
+    Storing the user's public key...
+    Administrator card for Admin1 has been initialized successfully.
+
+    Administrator password MUST follow these requirements:
+    - Password length must be between 8 and 64 characters, inclusive.
+    - Password must contain upper case, lower case, numeric, and special characters.
+    - Password must not have repeated characters (e.g. AA, aa, 11).
+    - Password must not have more than two consecutive characters (e.g. 123, abc).
+    - Password must not contain the admin ID.
+    Enter new password:
+    Re-enter user password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Password has been changed successfully.
+
+
+``clikk admin list``
+~~~~~~~~~~~~~~~~~~~~
+
+List all available administrators.
+
+**Flags**: None.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk admin list
+
+    Enter admin ID: Admin1
+    Enter password:
+
+    Admin ID(s):
+    Admin1
+    Admin2
+    Admin3
+
+
+``clikk admin info``
+~~~~~~~~~~~~~~~~~~~~
+
+Retrieve an administrator's information.
+
+**Flags**:
+
+--admin-id=<admin ID>
+    The identifier of the administrator.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+*   *Message*: User ID does not exist!
+
+    *Likely cause*: Wrong admin ID given to flag.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk admin info --admin-id=Admin1
+
+    Enter admin ID:
+    Enter password:
+
+    Admin ID: Admin1
+    Admin name: Admin1
+
+
+``clikk admin unlock``
+~~~~~~~~~~~~~~~~~~~~~~
+
+Unlock a locked administrator account.
+
+An administrator may not unlock their own account.
+
+**Flags**:
+
+--admin-id=<admin ID>
+    The identifier of the administrator.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+*   *Message*: Admin ID does not exist!
+
+    *Likely cause*: Wrong admin ID given to flag.
+
+*   *Message*: Administrator is not locked!
+
+    *Likely cause*: Attempted to unlock an administrator that is not locked.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk admin unlock --admin-id=Admin1
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    Administrator has been unlocked successfully.
+
+
+``clikk admin reset-password``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Reset an administrator's password.
+
+This command will also offer to reset the administrator's smartcard.
+The system provides three options below:
+
+#.  Keep the smartcard, so you decide not to reset the smartcard.
+
+#.  Revoke the smartcard, it will reset the smartcard and the smartcard will not be usable anymore.
+
+#.  Reset the smartcard to be used by another administrator.
+
+**Flags**:
+
+--admin-id=<admin ID>
+    The identifier of the administrator.
+
+--with-recovery-cards
+    In case there are only two administrator accounts remaining, it means that there are not enough admins to perform dual control. 
+    Therefore, resetting the password requires a number of recovery cards to meet the threshold.
+
+**Privilege level**: **CRITICAL**/**EMERGENCY**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Admin ID does not exist!
+
+    *Likely cause*: Wrong admin ID given to flag.
+
+*   *Message*: Password reset can only be done by other admins!
+
+    *Likely cause*: Attempted to reset the password of the authenticated administrators.
+
+*   *Message*: Password does not comply with policy!
+
+    *Likely cause*: Password does not satisfy the password policy requirements.
+
+*   *Message*: New password must be different from current password!
+
+    *Likely cause*: New password matches the current password.
+
+**Usage example**:
+
+*   Reset an administrator's password using dual control.
+
+    .. code-block:: console
+
+        $ clikk admin reset-password --admin-id=Admin1
+
+        Administrator password MUST follow these requirements:
+        - Password length must be between 8 and 64 characters, inclusive.
+        - Password must contain upper case, lower case, numeric, and special characters.
+        - Password must not have repeated characters (e.g. AA, aa, 11).
+        - Password must not have more than two consecutive characters (e.g. 123, abc).
+        - Password must not contain the admin ID.
+        Enter new password:
+        Re-enter new password:
+
+        Enter admin ID: Admin2
+        Enter password:
+        Insert Admin2's administrator card for two-factor authentication and press Enter.
+
+        Dual control authentication -- credential of a second administrator is required.
+        Admin2 is currently logged in.
+
+        Enter admin ID: Admin3
+        Enter password:
+        Insert Admin3's administrator card for two-factor authentication and press Enter.
+
+        Password has been reset successfully.
+        Admin1 must change their password on next login.
+
+        The following actions are available for Admin1's administrator card:
+        - [1] Do nothing. Choose this option if the administrator simply forgot their password.
+        - [2] Remove the administrator card data from the server. Choose this option if the administrator card is lost or damaged.
+        - [3] Reset the administrator card. Choose this option if the administrator card is to be reused for another administrator.
+        > 3
+        This will reset the administrator card to a blank state. It may be re-initialized and bound to another administrator.
+        Type `4^D` to continue, or press Enter to cancel.
+        > 4^D
+
+        Insert Admin1's administrator card and press Enter.
+
+        Commencing card reset process...
+        Resetting the card's secure channel code...
+        Administrator card has been reset successfully.
+        Run `clikk admin change-password` to initialize and bind the administrator card.
+
+*   Reset an administrator's password using recovery cards.
+
+    .. code-block:: console
+
+        $ clikk user reset-password --user-id=Admin1 --with-recovery-cards
+
+        Please prepare a sufficient number of healthy recovery cards.
+        Administrator password MUST follow these requirements:
+        - Password length must be between 8 and 64 characters, inclusive.
+        - Password must contain upper case, lower case, numeric, and special characters.
+        - Password must not have repeated characters (e.g. AA, aa, 11).
+        - Password must not have more than two consecutive characters (e.g. 123, abc).
+        - Password must not contain the admin ID.
+
+        Enter new password: 
+        Re-enter password: 
+
+        Insert a recovery card from the set of cards.
+
+        Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+        Total of 1 secret(s) recovered.
+        Please insert the next recovery card
+
+        Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+        Total of 2 secret(s) recovered.
+        Please insert the next recovery card
+
+        Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+        Total of 3 secret(s) recovered.
+
+        A sufficient number of secrets have been recovered.
+        Remove the card!
+        Password has been reset successfully.
+        Admin admin3 must change their password on the next login.
+
+        The following actions are available for admin3's administrator card:
+        - [1] Do nothing. Choose this option if the administator simply forgot their password.
+        - [2] Remove the administrator card data from the server. Choose this option if the administrator card is lost or damaged.
+        - [3] Reset the administrator card. Choose this option if the administrator card is to be reused for another administrator.
+        > 3
+
+        This will reset the administrator card to a blank state. It may be re-initialized and bound to another administrator.
+        Type IRS to continue, or press Enter to cancel.
+        > IRS
+
+        Insert admin3's administrator card and press Enter.
+
+
+        Commencing card reset process...
+        Resetting the card's secure channel code...
+
+        Administrator card has been reset successfully.
+
+
+``clikk admin delete``
+~~~~~~~~~~~~~~~~~~~~~~
+
+Delete an administrator.
+
+Administrator deletion is **irreversible**.
+
+If the account still has an administrator card bound to it, unbind it first using the ``clikk admin reset-password``
+command. Deleting an administrator without unbinding the administrator card first is not permitted.
+
+This command cannot delete any of the administrators authorizing the command. Note that this effectively requires
+two administrators registered at all times.
+
+**Flags**:
+
+--admin-id=<admin ID>
+    The identifier of the administrator.
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: User ID does not exist!
+
+    *Likely cause*: Wrong admin ID given to flag.
+
+*   *Message*: Deleting your own user account is not allowed!
+
+    *Likely cause*: Attempted to delete an administrator participating in authorizing the command.
+
+*   *Message*: An administrator card is still bound to the account!
+
+    *Likely cause*: Attempted to delete an administrator without unbinding the administrator card.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk admin delete --admin-id=Admin1
+
+    WARNING: Administrator deletion is IRREVERSIBLE.
+    The corresponding administrator card data will be deleted as well.
+    Ensure that the card has been reset before proceeding with deletion.
+    Are you sure you want to continue? Type `bR"X2` to continue, or press Enter to cancel.
+    > bR"X2
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    Dual control authentication -- credential of a second user is required.
+    Admin2 is currently logged in.
+
+    Enter admin ID: Admin3
+    Enter password:
+    Insert the administrator card of Admin3 for two-factor authentication.
+
+    Administrator has been deleted successfully.
+
+
+Partition
+---------
+
+Kripta Key partitions are adapted from the concept of slots in the PKCS#11 standard. Each cryptographic object stored
+in the KK-Manager's database are organized into partitions. Each partition is access-protected with a password,
+and the contents of each partition is protected with a key associated with the partition.
+
+
+``clikk partition add``
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Create a new partition.
+
+This will prompt for a partition password. The password must satisfy the password policy requirements.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition. Must be a number between 1 and 10 000, inclusive.
+
+--partition-label=<partition label>
+    The descriptive label of the partition. Must be alphanumeric and not more than 20 characters in length.
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition with the given ID has been registered!
+
+    *Likely cause*: Partition ID is already occupied by an existing partition.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Password mismatch!
+
+    *Likely cause*: Re-entered password does not match.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk partition add --partition-id=1 --partition-label=Finance
+
+    Enter partition password:
+    Re-enter partition password:
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Dual control authentication -- credential of a second user is required.
+    Admin1 is currently logged in.
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    Partition has been created successfully.
+
+
+``clikk partition list``
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+List all available partitions.
+
+**Flags**: None.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk partition list
+
+    Enter admin ID: Admin1
+    Enter password:
+
+    Partition ID(s):
+    1
+
+
+``clikk partition info``
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Retrieve information about a partition.
+
+The information includes the partition label, creation date, list of application IDs that have access
+to the partition, and the list of KK-Cryptoservice instances that the partition is registered to.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk partition info --partition-id=1
+
+    Enter admin ID:
+    Enter password:
+
+    Partition ID: 1
+    Partition label: partition1
+    Creation date: 2023-03-17 16:52:27 WIB
+    App ID(s): Postman
+    No KK-Cryptoservice instances have been registered to this partition.
+
+
+``clikk partition change-password``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Change a partition's password.
+
+The new password must satisfy the password policy requirements.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Password does not comply with policy!
+
+    *Likely cause*: Password does not satisfy the password policy requirements.
+
+*   *Message*: New password must be different from current password!
+
+    *Likely cause*: New password matches the current password.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk partition change-password --partition-id=1
+
+    Enter partition password:
+    Enter new partition password:
+    Re-enter new partition password:
+
+    Enter admin ID: Admin1
+    Enter password:
+
+    Partition password has been changed successfully.
+
+
+``clikk partition reset-password``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Reset a partition's password.
+
+This is done to restore access to the partition in case the partition's password is lost. The new password
+must satisfy the password policy requirements.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Password does not comply with policy!
+
+    *Likely cause*: Password does not satisfy the password policy requirements.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk partition reset-password --partition-id=1
+
+    Enter new partition password:
+    Re-enter new partition password:
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Dual control authentication -- credential of a second user is required.
+    Admin1 is currently logged in.
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    Partition password has been reset successfully.
+
+
+``clikk partition add-app``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Allow an application access to a given partition.
+
+An application must be added to a partition, which must also be added to the KK-Cryptoservice instance
+the application connects to, before the application can use cryptographic services offered by Kripta Key.
+See ``clikk kk-cryptoservice add-partition``.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--app-id=<application ID>
+    The identifier of the application.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Application with the given ID has not been registered yet!
+
+    *Likely cause*: Application with the given ID does not exist.
+
+*   *Message*: Application with the given ID is already registered to the partition!
+
+    *Likely cause*: Application with the given ID is already registered to the partition.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk partition add-app --partition-id=1 --app-id=Finance
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Application has been added to partition successfully.
+
+
+``clikk partition unlock-app``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Unlock a locked application on a given partition.
+
+An application gets locked on a partition after three consecutive failed login attempts to the partition.
+While an application is unlocked automatically after 30 minutes, this command may be executed
+to unlock it earlier. Propagation of this command relies on replication. Therefore, manual replication
+must be done for KK-Cryptoservice instances that are not actively connected to the main KK-Manager instance.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--app-id=<application ID>
+    The identifier of the application.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Application ID does not exist!
+
+    *Likely cause*: Application with the given ID does not exist.
+
+*   *Message*: Application is not linked to the partition!
+
+    *Likely cause*: Application with the given ID exists, but is not registered to the partition.
+
+*   *Message*: Application ID is not locked!
+
+    *Likely cause*: Application with the given ID is not locked, or already unlocked.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk partition unlock-app --partition-id=1 --app-id=postman
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Application has been unlocked successfully.
+    It may take up to a minute for the application status to update on the KK-Cryptoservice instances.
+    However, manual replication must be done for KK-Cryptoservice instances that are not connected to the KK-Manager instance.
+
+
+``clikk partition delete-app``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Remove an application's access to a given partition.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--app-id=<application ID>
+    The identifier of the application.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Application ID does not exist on the specified partition!
+
+    *Likely cause*: Application with the given ID does not exist, or is not registered to the partition.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk partition delete-app --partition-id=1 --app-id=Finance
+
+    This will revoke an application's access from the specified partition.
+    Are you sure you want to continue? Type `1@w` to continue, or press Enter to cancel.
+    > 1@w
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Application has been successfully deleted from the partition.
+
+
+``clikk partition delete``
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Delete a partition.
+
+Partition deletion is **irreversible**.
+
+Partition deletion is not permitted if a partition is referenced to by any other object. Ensure that no objects
+are stored in the partition, and no applications or KK-Cryptoservice instances are associated with the partition,
+before proceeding with deletion.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Deleting partition that is still being referenced by some objects is not allowed.
+    Remove the reference(s) first!
+
+    *Likely cause*: There are objects that refer to the given partition.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk partition delete --partition-id=1
+
+    WARNING: Deleting a partition is IRREVERSIBLE.
+    Ensure that no other objects are associated with this partition before proceeding.
+    The following commands may be used to check for association:
+    - `clikk kk-cryptoservice info`
+    - `clikk kk-manager acl`
+    - `clikk key list`
+    - `clikk cert list`
+    - `clikk secret list`
+    - `clikk partition info`
+    Manual replication must be done after this command has been executed.
+    Are you sure you want to continue? Type `X>VxU` to continue, or press Enter to cancel.
+    > X>VxU
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Dual control authentication -- credential of a second user is required.
+    Admin1 is currently logged in.
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    Partition has been deleted successfully.
+
+
+Key
+---
+
+Kripta Key also adapts the PKCS#11 standard's concept of keys. Keys are organized under partitions,
+which protects the keys in it by wrapping it with its key encryption key. All of the attributes that keys possess
+in the PKCS#11 standard are also present in Kripta Key. However, Kripta Key extends the standard by adding
+the key version attribute.
+
+The key version attribute is used with key rotation. Currently, only AES keys whose key purpose is encryption
+may be rotated. Rotating a key generates a new key material under the same key ID, incrementing the key version.
+The key version starts at zero (0), and increments by one with each key rotation.
+
+Keys may be rotated manually or automatically. This attribute may be set using ``clikk key update``, which can also
+set the time period for automatic key rotation.
+
+
+``clikk key add``
+~~~~~~~~~~~~~~~~~
+
+Generates a new key.
+
+The key material is securely and randomly generated by the system.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--key-id=<key ID>
+    The identifier of the key. Must be alphanumeric and not more than 20 characters in length.
+
+--key-label=<key label>
+    The descriptive label of the key. Must be alphanumeric and not more than 20 characters in length.
+
+--key-algo=<key algorithm index>
+    The algorithm index of the key. Refer to :ref:`sys-admin-guide/kripta-key-structure:key algorithms`
+    for the algorithm index.
+
+--key-length=<key length>
+    The length of the key. Not applicable for some key algorithms --- refer to :ref:`sys-admin-guide/kripta-key-structure:key algorithms`
+    for the possible key lengths for each key algorithm.
+
+--key-purpose=<key purpose index>
+    The purpose index of the key. Refer to :ref:`sys-admin-guide/kripta-key-structure:key purposes`
+    for the key purpose index.
+
+--key-lifetime=<key lifetime>
+    The lifetime of the key, in days. After this duration elapses, the key will expire and cannot be used
+    for cryptographic operations that generate new data. Refer to :ref:`sys-admin-guide/kripta-key-structure:key`
+    for the operations allowed with expired keys.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Invalid key lifetime duration!
+
+    *Likely cause*: Key lifetime duration is too long.
+
+*   *Message*: Invalid key length for specified key algorithm!
+
+    *Likely cause*: Key length is not supported for the given algorithm.
+
+*   *Message*: Invalid combination of key algorithm and purpose!
+
+    *Likely cause*: Key purpose is not applicable for the given algorithm, or key purpose index is out of bounds.
+
+*   *Message*: Key length is not applicable for EC keys!
+
+    *Likely cause*: Used ``--key-length`` flag with ECDSA and EdDSA keys.
+
+*   *Message*: Invalid key algorithm!
+
+    *Likely cause*: Key algorithm index is out of bounds.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk key add --partition-id=1 --key-id=aesKey --key-label=Finance --key-algo=1 --key-length=256 --key-purpose=1 --key-lifetime=30
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Partition ID: 1
+    Key ID: aesKey
+    Algorithm: AESKey
+    Key purpose: Encryption
+
+
+``clikk key list``
+~~~~~~~~~~~~~~~~~~
+
+List all available keys in a given partition.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk key list --partition-id=1
+
+    Enter admin ID: Admin1
+    Enter password:
+
+    Key ID(s):
+    01AESKey
+    01RSAKey
+    01ECDSAKey
+
+    No keys have been revoked.
+
+
+``clikk key info``
+~~~~~~~~~~~~~~~~~~
+
+Retrieve information about a key.
+
+The information includes the key label, key algorithm, key version (if applicable), key length, creation date,
+expiry date, key purpose, extractable state, rotatable state, revocation state, and the key check value.
+If the key is set to automatically rotate, the automatic rotation duration is listed as well.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--key-id=<key ID>
+    The identifier of the key.
+
+--key-version=<key version>
+    The version of the key, if applicable.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Key ID does not exist!
+
+    *Likely cause*: Key with the given ID does not exist in the given partition.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk key info --partition-id=1 --key-id=RSAKey3072
+
+    Enter admin ID: Admin1
+    Enter password:
+
+    Partition ID: 1
+    Key ID: RSAKey3072
+    Key ID (percent-encoded): %52%53%41%4b%65%79%33%30%37%32
+    Key label: RSAEncrypt
+    Algorithm: RSAKeyPair
+    Key length: 3072
+    Creation date: 2023-03-27 14:55:17 WIB
+    Expiry date: 2023-04-26 14:55:17 WIB
+    Key purpose: Encryption
+    Extractable: UNSET
+    Revoked: Not revoked
+    Rotatable: Not rotatable
+    Public key: -----BEGIN PUBLIC KEY-----
+    MIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAzCKAhuEGoBnlidZzN8ef
+    1ezF9nA5cl33K1DSSAqAUXt14F16Dxmkf4+hLrr1e8XYIBFOMaJek9YU3Hm/HXaA
+    OljVyWodjgIgtTgppjaISZA7Ke7fwVU6SAknfDhJ4vcF7uSGY5ttKgQPBHm9XU4F
+    Bo8EuCcWkNe6am0K4p9lb8M1YHW7GepqiLwY5byAtCCbZxHZfcJT9xcjrrXw34k2
+    8RoQMFkt4r+VbKTY/Czyw+ApGeBk9OrVtZkW+4dE/zThYgsgI9DT/bxgfsgjI4qu
+    zoFGKelU5fXXVCrf+lfvqthYqVSfthXBK//uxuxH9qCGiDWCsP24cquA3a2dBXc7
+    5gsYZNmdbF/bFQ3tycpybbMCjsC80dGpd0Jn0fJr+p8cMZ0Y1oNC/87TYFTFRJ5q
+    fIyYu1j9K8X/88xr+CL2I17GPpvoaDUmrNT8DK68nnYpdg6lKQl05kU4i/rls2ts
+    bEfj1/2e8ktjNUCV4ApXNLmOGml8tg2Q8NidgFHY8fKxAgMBAAE=
+    -----END PUBLIC KEY-----
+
+
+``clikk key rotate``
+~~~~~~~~~~~~~~~~~~~~
+
+Rotate a key.
+
+Key rotation is only applicable to AES keys whose key purpose is encryption.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--key-id=<key ID>
+    The identifier of the key.
+
+--key-lifetime=<key lifetime>
+    The lifetime of the rotated key, in days. Must be a number between 1 and 365, inclusive.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Key ID does not exist!
+
+    *Likely cause*: Key with the given ID does not exist in the given partition.
+
+*   *Message*: Invalid key lifetime duration!
+
+    *Likely cause*: Key lifetime is out of bounds.
+
+*   *Message*: Only AES key with encryption purpose can be rotated!
+
+    *Likely cause*: Attempted to rotate a key that is not an AES key whose key purpose is encryption.
+
+*   *Message*: Imported AES key is not rotatable!
+
+    *Likely cause*: Attempted to rotate an imported AES key.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk key rotate --partition-id=1 --key-id=AESKey --key-lifetime=60
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Key has been rotated successfully.
+
+
+``clikk key update``
+~~~~~~~~~~~~~~~~~~~~
+
+Update a key's attributes.
+
+This command updates a key's extractable and rotatable attribute. At least one attribute must be updated
+when invoking this command.
+
+The extractable attribute is "**unset**" by default. A key whose extractable attribute is set to "**no**"
+cannot have its extractable attribute changed.
+
+The rotatable attribute is "**manually rotatable**" by default. Changing the rotatable attribute to
+"**automatically rotatable**" must be accompanied by the ``--rotated-key-lifetime`` flag.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--key-id=<key ID>
+    The identifier of the key.
+
+--key-extractable=<extractable state index>
+    The index of the extractable state to be set. Optional. Refer to :ref:`sys-admin-guide/kripta-key-structure:updatable key attributes`
+    for the extractable state index.
+
+--key-rotatable=<rotatable state index>
+    The index of the rotatable state to be set. Optional. Refer to :ref:`sys-admin-guide/kripta-key-structure:updatable key attributes`
+    for the rotatable state index.
+
+--rotated-key-lifetime=<key lifetime>
+    The lifetime of the rotated key, in days. Must be a number between 1 and 365, inclusive. Must be present
+    when ``--key-rotatable`` is set to "**automatically rotatable**".
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Key ID does not exist!
+
+    *Likely cause*: Key with the given ID does not exist in the given partition.
+
+*   *Message*: Please specify automatically rotated key lifetime!
+
+    *Likely cause*: Attempted to set key to automatically rotatable without passing in ``--rotated-key-lifetime`` flag.
+
+*   *Message*: Invalid key lifetime duration!
+
+    *Likely cause*: Key lifetime is out of bounds.
+
+*   *Message*: No attributes are being updated!
+
+    *Likely cause*: Command was invoked without either ``--key-extractable`` or ``--key-rotatable`` flags.
+
+*   *Message*: Unrecognized values for the attributes!
+
+    *Likely cause*: Attribute index is out of bounds.
+
+*   *Message*: Updating rotatable status for key ID with key purpose other than encryption is not allowed!
+
+    *Likely cause*: Attempted to set rotatable attribute for a key that is not an AES key
+    whose key purpose is encryption.
+
+*   *Message*: Updating rotatable status for imported AES key is not allowed!
+
+    *Likely cause*: Attempted to set rotatable attribute for an imported AES key.
+
+*   *Message*: Updating extractable status for key ID that has been set to "NO" is not allowed!
+
+    *Likely cause*: Attempted to set extractable attribute for a key that is not extractable.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk key update --partition-id=1 --key-id=AESKey --key-rotatable=1 --rotated-key-lifetime=30 --key-extractable=1
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Key has been updated successfully.
+
+
+``clikk key export``
+~~~~~~~~~~~~~~~~~~~~
+
+Export a key by wrapping it using PKCS#11 RSA-AES key wrapping mechanism.
+
+This command requires an RSA public key, in PEM format. This public key is used to wrap the key material.
+
+The extractable attribute of the key must be set to "**yes**" before executing this command.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--key-id=<key ID>
+    The identifier of the key.
+
+--key-version=<key version>
+    The version of the key, if applicable.
+
+--pubkey-path=<path to public key>
+    The absolute path to the RSA public key, in PEM format.
+
+--output-file-path=<path to output file>
+    The absolute path where the output file will be written to.
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Key ID does not exist!
+
+    *Likely cause*: Key with the given ID does not exist in the given partition.
+
+*   *Message*: Key ID with specified version does not exist!
+
+    *Likely cause*: Key with the given version does not exist.
+
+*   *Message*: Output filename already exists!
+
+    *Likely cause*: Output path is not empty.
+
+*   *Message*: Public key file not found!
+
+    *Likely cause*: Path to public key file is incorrect.
+
+*   *Message*: Key ID is not extractable!
+
+    *Likely cause*: Extractable attribute of key is not set to "**yes**".
+
+*   *Message*: Invalid public wrapping key!
+
+    *Likely cause*: Public key file is invalid, or not in the correct format.
+
+*   *Message*: Failed to create output wrapped key file!
+
+    *Likely cause*: Unable to write to the given output path.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk key export --partition-id=1 --key-id=AESKey --key-version=1 --pubkey-path=/home/user/Documents/publicKey.pem --output-file-path=/home/user/Documents/AESExport.bin
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Dual control authentication -- credential of a second user is required.
+    Admin1 is currently logged in.
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    Key has been exported successfully to /home/user/Documents/AESExport.bin.
+
+
+``clikk key import-pkcs11``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Import a key that is wrapped using PKCS#11 RSA-AES key wrapping mechanism.
+
+The key used to wrap the imported key must already be stored. The imported key must be in DER format.
+
+Imported keys are always set to extractable and not rotatable. The following lists the available key purposes
+for the imported key:
+
+*   **AES**: Encryption.
+*   **RSA**: Encryption, signing, certificate signing.
+*   **ECDSA-P256**: Signing, certificate signing.
+*   **ECDSA-P384**: Signing, certificate signing.
+*   **ECDSA-P521**: Signing, certificate signing.
+*   **EdDSA Ed25519**: Signing, certificate signing.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--key-id=<key ID>
+    The identifier of the key. Must be alphanumeric and not more than 20 characters in length.
+
+--key-label=<key label>
+    The descriptive label of the key. Must be alphanumeric and not more than 20 characters in length.
+
+--key-algo=<key algorithm index>
+    The algorithm index of the key. Refer to :ref:`sys-admin-guide/kripta-key-structure:key algorithms`
+    for the algorithm index.
+
+--key-length=<key length>
+    The length of the key. Not applicable for some key algorithms --- refer to :ref:`sys-admin-guide/kripta-key-structure:key algorithms`
+    for the possible key lengths for each key algorithm.
+
+--key-purpose=<key purpose index>
+    The purpose index of the key. Refer to :ref:`sys-admin-guide/kripta-key-structure:key purposes`
+    for the key purpose index.
+
+--key-lifetime=<key lifetime>
+    The lifetime of the key, in days. After this duration elapses, the key will expire and cannot be used
+    for cryptographic operations that generate new data. Refer to :ref:`sys-admin-guide/kripta-key-structure:key`
+    for the operations allowed with expired keys.
+
+--wrapping-key-partition-id=<partition ID>
+    The identifier of the partition where the wrapping key is in.
+
+--wrapping-key-id=<key ID>
+    The identifier of the wrapping key.
+
+--wrapped-key-path=<path to wrapped key>
+    The absolute path to the wrapped key.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Invalid key lifetime duration!
+
+    *Likely cause*: Key lifetime duration is too long.
+
+*   *Message*: Invalid key length for specified key algorithm!
+
+    *Likely cause*: Key length is not supported for the given algorithm.
+
+*   *Message*: Invalid combination of key algorithm and purpose!
+
+    *Likely cause*: Key purpose is not applicable for the given algorithm, or key purpose index is out of bounds.
+
+*   *Message*: Importing key with wrapping purpose is not allowed!
+
+    *Likely cause*: Attempted to import a key with the key purpose set to wrapping.
+
+*   *Message*: Key length is not applicable for EC keys!
+
+    *Likely cause*: Used ``--key-length`` flag with ECDSA and EdDSA keys.
+
+*   *Message*: Invalid key algorithm!
+
+    *Likely cause*: Key algorithm index is out of bounds.
+
+*   *Message*: Wrapping key ID does not exist!
+
+    *Likely cause*: Key with the given ID does not exist in the given partition.
+
+*   *Message*: Key algorithm is not intended for key wrapping!
+
+    *Likely cause*: Key with the given ID is not an RSA key.
+
+*   *Message*: Invalid wrapping key!
+
+    *Likely cause*: Key with the given ID does not have key wrapping as its key purpose.
+
+*   *Message*: Cannot open wrapped key file!
+
+    *Likely cause*: Wrong path to wrapped key.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk key import-pkcs11 --partition-id=1 --key-id=AESKey03 --key-label=ImportedKey --key-algo=1 --key-length=256 --key-lifetime=365 --key-purpose=1 --wrapping-key-id=RSAWrappingKey --wrapping-key-partition-id=2 --wrapped-key-path=/home/user/wrappedSessionkey.bin
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Partition ID: 1
+    Key ID: AESKey03
+    Key type: AESSecretKey
+    Key purpose: Encryption
+
+
+``clikk key import-pkcs12``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Import a key and a certificate chain stored in PKCS#12 format.
+
+Keys and certificates in PKCS#12 format are usually stored in files with the P12 extension.
+
+The imported key can only be used for certificate signing, and must be of the following algorithm:
+
+*   RSA (must be not less than 3072 bits in length)
+*   ECDSA-P256
+*   ECDSA-P384
+*   ECDSA-P521
+*   EdDSA Ed25519
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--key-id=<key ID>
+    The identifier of the key. Must be alphanumeric and not more than 20 characters in length.
+
+--key-label=<key label>
+    The descriptive label of the key. Must be alphanumeric and not more than 20 characters in length.
+
+--keystore-path=<path to certificate file>
+    The absolute path to the key, in P12 format.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Certificate file does not exist!
+
+    *Likely cause*: Wrong path to certificate file.
+
+*   *Message*: Certificate is not in P12 format!
+
+    *Likely cause*: Certificate file is in the wrong format.
+
+*   *Message*: Key length is less than 3072 bit!
+
+    *Likely cause*: Key length is too short.
+
+*   *Message*: Key type is not RSA!
+
+    *Likely cause*: Key in the certificate is not an RSA key.
+
+*   *Message*: Certificate with the given DN already exists!
+
+    *Likely cause*: Certificate with the same Distinguished Name already exists.
+
+*   *Message*: Certificate associated with the key ID already exists!
+
+    *Likely cause*: Key with the given ID already has a certificate.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk key import-pkcs12 --partition-id=2 --key-id=Finance02 --key-label=finance02ImportKey --keystore-path=/home/user/Documents/certificatepkcs12.p12
+
+    Enter certificate password:
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Key and certificate have been imported successfully.
+
+
+``clikk key generate-csr``
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Create a certificate signing request (CSR) from an existing key pair.
+
+The generated CSR may be signed by external parties to create a certificate.
+
+The key pair must be in Kripta Key's database, and its key purpose must be wrapping, signing, or certificate signing.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--key-id=<key ID>
+    The identifier of the key.
+
+--output-csr-path=<path to output file>
+    The absolute path where the output CSR file will be written to.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Key ID does not exist!
+
+    *Likely cause*: Key with the given ID does not exist in the given partition.
+
+*   *Message*: Output filename already exists!
+
+    *Likely cause*: Output path is not empty.
+
+*   *Message*: Key algorithm is not intended for certificate signing!
+
+    *Likely cause*: Key algorithm is not applicable for certificates.
+
+*   *Message*: Key ID is not intended for certificate signing!
+
+    *Likely cause*: Key with the given ID has incompatible key purpose for CSR generation.
+
+*   *Message*: Certificate associated with the key ID already exists!
+
+    *Likely cause*: Key with the given ID already has a certificate.
+
+*   *Message*: Subject or Distinguished Name's length must be less than 256 characters!
+
+    *Likely cause*: Input to DN prompt is too long.
+
+*   *Message*: CSR file creation failed!
+
+    *Likely cause*: Unable to write to the given output path.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk key generate-csr --partition-id=2 --key-id=RSA4096Key01 --output-csr-path=Finance01.csr
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    This action requires a Distinguished Name for the certificate.
+    Hence, input will be required for each field in the Distinguished Name.
+    Please enter valid data in each field.
+    ------
+    [-] Common Name (fully qualified domain name): www.klaviskripta.com
+    [-] Country Name (2 letter code) (Default: []): ID
+    [-] State or Province Name (Default: []): DKI Jakarta
+    [-] Locality or City Name (Default: []): Jakarta Pusat
+    [-] Organization Name (legal company name) (Default: []): PT. Klavis Kripta Inovasi
+    [-] Organizational Unit Name (section or department) (Default: []): Finance
+    [-] Email Address (Default: []): finance@klaviskripta.com
+
+    CSR has been generated and written successfully to /home/user/Documents/Finance01.csr.
+
+
+``clikk key revoke``
+~~~~~~~~~~~~~~~~~~~~
+
+Revoke all key material under a key ID.
+
+Key revocation is **irreversible**. Any certificate associated with the key will be revoked as well.
+
+Revoked keys cannot be rotated, updated, exported, or used for cryptographic operations that generate new data.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--key-id=<key ID>
+    The identifier of the key.
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Key ID does not exist!
+
+    *Likely cause*: Key with the given ID does not exist in the given partition.
+
+*   *Message*: Key has been revoked!
+
+    *Likely cause*: Key with the given ID has already been revoked.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk key revoke --key-id=AESKey01 --partition-id=2
+
+    Read the following points before proceeding with key revocation:
+    - Key revocation is IRREVERSIBLE.
+    - All certificates associated with the key will be revoked as well.
+    - A revoked key CANNOT be rotated.
+    - A revoked key CANNOT be used cryptographic functions that generate new data, such as `mac/generate`,
+    `encrypt`, `seal`, `tokenize`, `sign`, `cert/sign`, and any function that involves key wrapping.
+    - Otherwise, a revoked key MAY be used for other cryptographic functions, such as `mac/verify`, `decrypt`,
+    `unseal`, `detokenize`, `verify`, `cert/verify`, and any function that involves key unwrapping.
+    - A revoked key CANNOT be used with any CLIKK command, except for `key info` and `key delete`.
+
+    Are you sure you want to continue? Type `Le%C;` to continue, or press Enter to cancel.
+    > Le%C;
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Dual control authentication -- credential of a second user is required.
+    Admin1 is currently logged in.
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    Key has been revoked successfully.
+
+
+``clikk key delete``
+~~~~~~~~~~~~~~~~~~~~
+
+Delete a key permanently.
+
+Key deletion is **irreversible**. Any certificate associated with the key will be deleted as well.
+
+To avoid accidental deletion, only revoked keys may be deleted.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--key-id=<key ID>
+    The identifier of the key.
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Key ID does not exist!
+
+    *Likely cause*: Key with the given ID does not exist in the given partition.
+
+*   *Message*: Unable to delete key that is not revoked!
+
+    *Likely cause*: Key with the given ID has not been revoked.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk key delete --key-id=AESKey01 --partition-id=2
+
+    Read the following points before proceeding with key deletion:
+    - Key destruction is IRREVERSIBLE.
+    - Any certificate associated with the key will be deleted as well.
+    - Any data associated with this key WILL be lost once the key is deleted.
+
+    Are you sure you want to continue? Type `^mb!z` to continue, or press Enter to cancel.
+    > ^mb!z
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin 1 for two-factor authentication.
+
+    Dual control authentication -- credential of a second user is required.
+    Admin1 is currently logged in.
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    Key has been deleted successfully.
+
+
+Certificate
+-----------
+
+Kripta Key is capable of managing certificates as well. Administrators may create a self-signed certificate
+or import an existing certificate. Certificates managed by Kripta Key must have their corresponding keys managed
+by Kripta Key as well.
+
+
+``clikk cert self-sign``
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Create a self-signed certificate.
+
+The key associated with the certificate must have certificate signing as its key purpose.
+
+The Common Name is mandatory for the certificate's Distinguished Name.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--key-id=<key ID>
+    The identifier of the key.
+
+--output-file-path=<path to output file>
+    The absolute path where the output file will be written to.
+    
+--ext-file-path=<path to extension file>
+    The absolute path where the extension file is located. This parameter is optional but mandatory if you want to create a self-signed certificate that will be used to sign another certificate.
+    
+    .. code-block:: console
+
+        {
+        "basic_constraints": "critical,CA:TRUE",
+        "key_usage": "critical,digitalSignature,keyCertSign,cRLSign"
+        }
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Key ID does not exist!
+
+    *Likely cause*: Key with the given ID does not exist in the given partition.
+
+*   *Message*: Key algorithm is not intended for certificate signing!
+
+    *Likely cause*: Key algorithm is not suitable for certificate signing.
+
+*   *Message*: Invalid key length for certificate signing!
+
+    *Likely cause*: Key length is too short.
+
+*   *Message*: Key ID is not intended for certificate signing!
+
+    *Likely cause*: Key with the given ID does not have certificate signing as its key purpose.
+
+*   *Message*: Certificate associated with the key ID already exists!
+
+    *Likely cause*: Key with the given ID already has a certificate.
+
+*   *Message*: Output filename already exists!
+
+    *Likely cause*: Output path is not empty.
+
+*   *Message*: Failed to create output wrapped key file!
+
+    *Likely cause*: Unable to write to the given output path.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk cert self-sign --partition-id=1 --key-id=ECDSAKey01 --output-file-path=/home/user/Documents/Finance.pem
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    This action requires a Distinguished Name for the certificate.
+    Hence, input will be required for each field in the Distinguished Name.
+    Please enter valid data in each field.
+    ------
+    [-] Common Name (fully qualified domain name): www.klaviskripta.com
+    [-] Country Name (2 letter code) (Default: []): ID
+    [-] State or Province Name (Default: []): DKI Jakarta
+    [-] Locality or City Name (Default: []): Jakarta Pusat
+    [-] Organization Name (legal company name) (Default: []): PT. Klavis Kripta Inovasi
+    [-] Organizational Unit Name (section or department) (Default: []): Finance
+    [-] Email Address (Default: []): finance@klaviskripta.com
+    [-] Validity period, in days: 365
+
+    Self-signed certificate created and saved successfully to /home/user/Documents/Finance.pem.
+
+
+``clikk cert list``
+~~~~~~~~~~~~~~~~~~~
+
+List all available certificates in a given partition.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk cert list --partition-id=1
+
+    Enter admin ID: Admin1
+    Enter password:
+
+    Certificate list:
+    - Key ID: Finance01
+    Distinguished Name (DN): C=ID, ST=DKI Jakarta, L=Jakarta Pusat, O=PT. Klavis Kripta Inovasi, OU=Finance, CN=Klavis Kripta/emailAddress=mail@klaviskripta.com
+    - Key ID: Finance02
+    Distinguished Name (DN): C=ID, ST=DKI Jakarta, L=Jakarta Pusat, O=PT.Klavis Kripta Inovasi, OU=Finance, CN=Budi/emailAddress=budi@klaviskripta.com
+
+    Revoked certificates:
+    No certificate has been revoked.
+
+
+``clikk cert info``
+~~~~~~~~~~~~~~~~~~~
+
+Retrieve information about a certificate.
+
+The information includes the key version, issuance date, expiry date, certificate subject,
+and the certificate itself, in PEM format.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--key-id=<key ID>
+    The identifier of the key associated with the certificate.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Certificate with the specific key ID does not exist!
+
+    *Likely cause*: Key with the given ID does not exist, or key does not have an associated certificate.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk cert info --partition-id=1 --key-id=ECDSAKey01
+
+    Enter admin ID: Admin1
+    Enter password:
+
+    Partition ID: 1
+    Key ID: ECDSAKey01
+    Key version: 0
+    Issue date: 2023-03-28 13:48:54 WIB
+    Expiry date: 2024-03-27 13:48:54 WIB
+    Subject: C=ID, ST=DKI Jakarta, L=Jakarta Pusat, O=PT. Klavis Kripta Inovasi, OU=Finance, CN=Klavis Kripta/emailAddress=mail@Klavis Kripta.com
+    Certificate: -----BEGIN CERTIFICATE-----
+    MIICszCCAlmgAwIBAgIBADAKBggqhkjOPQQDAjCBrjELMAkGA1UEBhMCSUQxFDAS
+    BgNVBAgMC0RLSSBKYWthcnRhMRYwFAYDVQQHDA1KYWthcnRhIFB1c2F0MSYwJAYD
+    VQQKDB1QVC4gU2FuZGhpZ3VuYSBXaWR5YSBQcm90ZWtzaTEQMA4GA1UECwwHRmlu
+    YW5jZTETMBEGA1UEAwwKc2FuZGhpZ3VuYTEiMCAGCSqGSIb3DQEJARYTbWFpbEBz
+    YW5kaGlndW5hLmNvbTAeFw0yMzAzMjgwNjQ4NTRaFw0yNDAzMjcwNjQ4NTRaMIGu
+    MQswCQYDVQQGEwJJRDEUMBIGA1UECAwLREtJIEpha2FydGExFjAUBgNVBAcMDUph
+    a2FydGEgUHVzYXQxJjAkBgNVBAoMHVBULiBTYW5kaGlndW5hIFdpZHlhIFByb3Rl
+    a3NpMRAwDgYDVQQLDAdGaW5hbmNlMRMwEQYDVQQDDApzYW5kaGlndW5hMSIwIAYJ
+    KoZIhvcNAQkBFhNtYWlsQHNhbmRoaWd1bmEuY29tMFkwEwYHKoZIzj0CAQYIKoZI
+    zj0DAQcDQgAEyG/SBff1WOd3ieT5x+dK1mQ98Kj+APKAfffiwyjYqi67MebvY/KH
+    ZndAz1vrQ0wShYzFntdX5snn/V/N+X1fraNmMGQwEgYDVR0TAQH/BAgwBgEB/wIB
+    ATAOBgNVHQ8BAf8EBAMCAQYwHQYDVR0OBBYEFMFyoHsA02b47ef7VPefmCBb0Mcv
+    MB8GA1UdIwQYMBaAFMFyoHsA02b47ef7VPefmCBb0McvMAoGCCqGSM49BAMCA0gA
+    MEUCIASqesgM9eVHbIeAPSjRUvCaRLT3Px3yhX3v5jgdWFZhAiEAivpFby5Mw6Zq
+    FyR3cpULcGPNZbBtad8GwvxelTZxbLY=
+    -----END CERTIFICATE-----
+
+
+``clikk cert renew``
+~~~~~~~~~~~~~~~~~~~~
+
+Renew a self-signed certificate.
+
+Renewing a certificate updates its validity period. The self-signed certificate must be stored in the system.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--key-id=<key ID>
+    The identifier of the key associated with the certificate.
+
+--validity-period=<validity period>
+    The validity period of the renewed certificate, in days. Must be a number between 30 and 1 825, inclusive.
+
+--output-file-path=<path to output file>
+    The absolute path where the output file will be written to.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Output filename already exists!
+
+    *Likely cause*: Output path is not empty.
+
+*   *Message*: Failed to create output file!
+
+    *Likely cause*: Unable to write to the given output path.
+
+*   *Message*: Key ID does not exist!
+
+    *Likely cause*: Key with the given ID does not exist in the given partition.
+
+*   *Message*: Invalid key algorithm!
+
+    *Likely cause*: Key with the given ID does not have an appropriate key purpose.
+
+*   *Message*: Certificate with the specific key ID does not exist!
+
+    *Likely cause*: Key with the given ID does not exist, or key does not have an associated certificate.
+
+*   *Message*: Imported certificate cannot be renewed!
+
+    *Likely cause*: Attempted to renew an imported certificate.
+
+*   *Message*: Certificate validity period must be between 30 and 1825 days, inclusive!
+
+    *Likely cause*: Certificate validity period is out of range.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk cert renew --partition-id=1 --key-id=ECDSAKey01 --validity-period=500 --output-file-path=/home/user/Documents/FinanceCert01.pem
+
+    This will renew an existing certificate.
+    Are you sure you want to continue? Type `2hW` to continue, or press Enter to cancel.
+    > 2hW
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Self-signed certificate has been renewed successfully.
+
+
+``clikk cert export``
+~~~~~~~~~~~~~~~~~~~~~
+
+Export a certificate.
+
+The exported certificate will be in PEM format.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--key-id=<key ID>
+    The identifier of the key associated with the certificate.
+
+--output-cert-path=<path to output file>
+    The absolute path where the certificate file will be written to.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Output filename already exists!
+
+    *Likely cause*: Output path is not empty.
+
+*   *Message*: Failed to create output file!
+
+    *Likely cause*: Unable to write to the given output path.
+
+*   *Message*: Key ID does not exist!
+
+    *Likely cause*: Key with the given ID does not exist in the given partition.
+
+*   *Message*: Certificate with the specific key ID does not exist!
+
+    *Likely cause*: Key with the given ID does not exist, or key does not have an associated certificate.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk cert export --partition-id=1 --key-id=ECDSAKey01 --output-cert-path=/home/user/Documents/FinanceCert01.pem
+
+    Enter admin ID: Admin1
+    Enter password:
+
+    Certificate has been exported successfully to /home/user/Documents/FinanceCert01.pem.
+
+
+``clikk cert import``
+~~~~~~~~~~~~~~~~~~~~~
+
+Import a certificate.
+
+The imported certificate may be associated with an existing key ID only if the certificate's key pair
+is already stored under that key ID. Otherwise, given permission, Kripta Key will create a new key ID
+for the certificate's public key.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--key-id=<key ID>
+    The identifier of the key associated, or to be associated with the certificate.
+
+--cert-file-path=<path to certificate file>
+    The absolute path to the certificate file.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Certificate file does not exist!
+
+    *Likely cause*: Wrong path to certificate file.
+
+*   *Message*: Invalid key algorithm!
+
+    *Likely cause*: Key with the given ID does not have an appropriate key purpose.
+
+*   *Message*: Key ID is not intended for certificate signing!
+
+    *Likely cause*: Key with the given ID does not have certificate signing as its key purpose.
+
+*   *Message*: The stored public key and certificate public key do not match!
+
+    *Likely cause*: Public key with the given ID is different to the imported certificate's public key.
+
+*   *Message*: Certificate with the same DN already exists!
+
+    *Likely cause*: Certificate with the same Subject or Distinguished Name already exists.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk cert import --partition-id=1 --key-id=PostmanKey --cert-file-path=/home/user/Documents/appcert.pem
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    There is no private key with the given key ID.
+    As such, only the public key and the certificate will be stored in the system for encryption purposes.
+    Are you sure you want to continue? Type `UFRfN` to continue, or press Enter to cancel.
+    > UFRfN
+
+    Certificate has been imported successfully.
+
+
+``clikk cert revoke``
+~~~~~~~~~~~~~~~~~~~~~
+
+Revoke a certificate.
+
+Certificate revocation is **irreversible**. The key associated with the certificate will be revoked as well.
+
+Revoked certificates can only be used to verify other certificates signed by them.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--key-id=<key ID>
+    The identifier of the key associated with the certificate.
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Key ID does not exist!
+
+    *Likely cause*: Key with the given ID does not exist in the given partition.
+
+*   *Message*: Certificate with the specific key ID does not exist!
+
+    *Likely cause*: Key with the given ID does not exist, or key does not have an associated certificate.
+
+*   *Message*: The certificate has been revoked!
+
+    *Likely cause*: Certificate associated with key with the given ID has already been revoked.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk cert revoke --partition-id=1 --key-id=Finance02
+
+    Read the following points before proceeding with certificate revocation:
+    - Certificate revocation is IRREVERSIBLE.
+    - All certificates signed by this certificate will be invalidated.
+
+    Are you sure you want to continue? Type `QYQ!G` to continue, or press Enter to cancel.
+    > QYQ!G
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Dual control authentication -- credential of a second user is required.
+    Admin1 is currently logged in.
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    Certificate has been revoked successfully.
+
+
+``clikk cert delete``
+~~~~~~~~~~~~~~~~~~~~~
+
+Delete a certificate permanently.
+
+Certificate deletion is **irreversible**, and will invalidate certificates signed by it, rendering them unverifiable.
+
+To avoid accidental deletion, only revoked certificate may be deleted.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--key-id=<key ID>
+    The identifier of the key associated with the certificate.
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Key ID does not exist!
+
+    *Likely cause*: Key with the given ID does not exist in the given partition.
+
+*   *Message*: Certificate with the specific key ID does not exist!
+
+    *Likely cause*: Key with the given ID does not exist, or key does not have an associated certificate.
+
+*   *Message*: Unable to delete certificate that is not revoked!
+
+    *Likely cause*: Certificate associated with key with the given ID has not been revoked.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk cert delete --partition-id=1 --key-id=Finance02
+
+    Read the following points before proceeding with certificate deletion:
+    - Certificate destruction is IRREVERSIBLE.
+    - All certificates signed by this certificate will be invalidated and unverifiable.
+
+    Are you sure you want to continue? Type `$X1FK` to continue, or press Enter to cancel.
+    > $X1FK
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Dual control authentication -- credential of second user is required.
+    Admin1 is currently logged in.
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    Certificate has been deleted successfully.
+
+
+Secret
+------
+
+Kripta Key is also capable of managing and generating secrets. Here, secrets are defined as short snippets of data
+that is typable (i.e., not binary data) and is considered confidential, to some extent. Examples of a secret include
+login credentials or a database password.
+
+Just like other objects in Kripta Key, each secret is associated with a partition.
+
+
+``clikk secret add``
+~~~~~~~~~~~~~~~~~~~~
+
+Add a secret.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--secret-id=<secret ID>
+    The identifier of the secret. Must be alphanumeric and not more than 20 characters in length.
+
+--secret-label=<secret label>
+    The descriptive label of the secret. Must be alphanumeric and not more than 20 characters in length. Optional.
+
+--secret-data=<secret data>
+    The contents of the secret. Must be not more than 256 characters in length. Be aware of the terminal's
+    special characters.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Secret ID already exists!
+
+    *Likely cause*: Secret with the given ID already exists.
+
+*   *Message*: Secret data cannot be more than 256 bytes!
+
+    *Likely cause*: Secret data is too long.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk secret add --partition-id=1 --secret-id=PasswordDBFinance --secret-label=Finance --secret-data='hdkfuig4535ushh%'
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Secret has been added successfully.
+
+
+``clikk secret generate``
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Generate a secret.
+
+The secret will be generated securely and randomly.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--secret-id=<secret ID>
+    The identifier of the secret. Must be alphanumeric and not more than 20 characters in length.
+
+--secret-label=<secret label>
+    The descriptive label of the secret. Must be alphanumeric and not more than 20 characters in length.
+
+--secret-length=<secret length>
+    The length of the secret. Must be a number between 5 and 256, inclusive.
+
+--secret-charset=<secret charset index>
+    The character set index of the secret. Refer to the following list for the character set index:
+
+    *   Alphabetic upper case [1]
+    *   Alphabetic lower case [2]
+    *   Alphabetic mixed case [3]
+    *   Alphanumeric mixed case [4]
+    *   Alphanumeric mixed case with special characters [5]
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Secret ID already exists!
+
+    *Likely cause*: Secret with the given ID already exists.
+
+*   *Message*: Secret length must be between 5 and 256 characters, inclusive!
+
+    *Likely cause*: Secret length is out of bounds.
+
+*   *Message*: Unrecognized charset!
+
+    *Likely cause*: Secret character set index is out of bounds.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk secret generate --partition-id=1 --secret-id=PasswordDBSupport --secret-label=onlyweknow --secret-length=20 --secret-charset=5
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Secret has been generated successfully.
+
+
+``clikk secret list``
+~~~~~~~~~~~~~~~~~~~~~
+
+List all available secrets in a given partition.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk secret list --partition-id=1
+
+    Enter admin ID: Admin1
+    Enter password:
+
+    Secret ID(s):
+    PasswordDBFinance
+    PasswordDBSupport
+
+
+``clikk secret info``
+~~~~~~~~~~~~~~~~~~~~~
+
+Retrieve information about a secret.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--secret-id=<secret ID>
+    The identifier of the secret.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Secret ID does not exist!
+
+    *Likely cause*: Secret with the given ID does not exist.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk secret info --partition-id=1 --secret-id=PasswordDBFinance
+
+    Enter admin ID: Admin1
+    Enter password:
+
+    Secret ID: PasswordDBFinance
+    Secret label: Finance
+
+
+``clikk secret update``
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Update the contents of a secret.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--secret-id=<secret ID>
+    The identifier of the secret.
+
+--secret-data=<secret data>
+    The contents of the secret. Must be not more than 256 characters in length. Be aware of the terminal's
+    special characters.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Secret ID does not exist!
+
+    *Likely cause*: Secret with the given ID does not exist.
+
+*   *Message*: Secret data cannot be more than 256 bytes!
+
+    *Likely cause*: Secret data is too long.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk secret update --partition-id=1 --secret-id=PasswordDBFinance --secret-data='hdkfuig4535ushh%'
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Secret has been updated successfully.
+
+
+``clikk secret delete``
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Delete a secret permanently.
+
+Secret deletion is **irreversible**.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--secret-id=<secret ID>
+    The identifier of the secret.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: Secret ID does not exist!
+
+    *Likely cause*: Secret with the given ID does not exist.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk secret delete --partition-id=1 --secret-id=PasswordDBSupport
+
+    This will delete the given secret. Ensure that no applications are using this secret.
+    Are you sure you want to continue? Type `vUo` to continue, or press Enter to cancel.
+    > vUo
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Secret has been deleted successfully.
+
+
+Application
+-----------
+
+Kripta Key offers application management, acting as an access control mechanism over its cryptographic object
+and services. It performs this by having a whitelist of applications allowed to access a KK-Cryptoservice instance,
+and by requiring the application to present a valid certificate, which is created when the application is added
+to Kripta Key.
+
+Additionally, the application must know the password for the partition it intends to access, and that the partition
+has been added to the KK-Cryptoservice instance it is accessing.
+
+
+``clikk app add``
+~~~~~~~~~~~~~~~~~
+
+Add an application.
+
+This command requires the application's CSR, which will be signed by Kripta Key.
+
+**Flags**:
+
+--app-id=<application ID>
+    The identifier of the application. Must be alphanumeric and not more than 20 characters in length.
+
+--validity-period=<validity period>
+    The validity period of the application's certificate, in days. Must be a number between 30 and 1 825, inclusive.
+
+--csr-file-path=<path to CSR file>
+    The absolute path to the application's CSR file.
+
+--output-cert-path=<path to output file>
+    The absolute path where the application's certificate file will be written to.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Application ID already exists!
+
+    *Likely cause*: Application with the given ID already exists.
+
+*   *Message*: Validity period must be between 30 and 1825 in days!
+
+    *Likely cause*: Certificate validity period is out of range.
+
+*   *Message*: Output filename already exists!
+
+    *Likely cause*: Output path is not empty.
+
+*   *Message*: Failed to create output certificate file!
+
+    *Likely cause*: Unable to write to the given output path.
+
+*   *Message*: Failed to open CSR path!
+
+    *Likely cause*: Wrong path to CSR file.
+
+*   *Message*: Invalid CSR content!
+
+    *Likely cause*: Invalid, or corrupted CSR file.
+
+*   *Message*: The public key has been used by another application!
+
+    *Likely cause*: Another application has the same key pair.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk app add --csr-file-path=appcsr.pem --app-id=postman --validity-period=365 --output-cert-path=/home/user/Documents/bot-kms-2/postman_CER.pem
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    App ID: postman
+    Subject: C=ID, ST=DKI, L=Jakarta, O=PT. Klavis Kripta Inovasi, OU= Support, CN=mail@klaviskripta.com
+    Registration date: 2023-01-11 09:40:35 WIB
+    Expiry date: 2024-01-10 09:40:35 WIB
+
+    Application has been added successfully.
+    Certificate has been written successfully to /home/user/Documents/bot-kms-2/postman_CER.pem.
+
+
+``clikk app list``
+~~~~~~~~~~~~~~~~~~
+
+List all available applications.
+
+**Flags**: None.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk app list
+
+    Enter admin ID: Admin1
+    Enter password:
+
+    Application ID(s):
+    jmeter
+    postman
+
+
+``clikk app info``
+~~~~~~~~~~~~~~~~~~
+
+Retrieve information about an application.
+
+The information includes the application's subject (Distinguished Name), Base64 encoded public key hash,
+registration date, certificate expiry date, and the list of partitions the application can access.
+
+If desired, the application's certificate can be exported to a file.
+
+**Flags**:
+
+--app-id=<application ID>
+    The identifier of the application.
+
+--verbose
+    If present, show the application's certificate as well, in PEM format.
+
+--output-cert-path=<path to output file>
+    The absolute path where the application's certificate file will be written to. Optional.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+*   *Message*: Application ID does not exist!
+
+    *Likely cause*: Application with the given ID does not exist.
+
+*   *Message*: Output certificate path exists!
+
+    *Likely cause*: Output path is not empty.
+
+*   *Message*: Cannot create output certificate file!
+
+    *Likely cause*: Unable to write to the given output path.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk app info --app-id=postman
+
+    Enter admin ID: Admin1
+    Enter password:
+
+    App ID: postman
+    Subject: C=ID, ST=DKI Jakarta, L=Jakarta Selatan, O=PT. CompanyA, OU=Support, CN=companya.com
+    Encoded public key hash: GBTh8LdL3Vt6pVsnULMjekYfAp0=
+    Registration date: 2023-08-07 10:17:33 WIB
+    Expiry date: 2024-08-06 10:17:33 WIB
+    Partition ID(s):
+    - 1
+
+
+``clikk app renew``
+~~~~~~~~~~~~~~~~~~~
+
+Renew an application's certificate.
+
+This requires a separate CSR for each renewal. The application to be renewed must already be present in Kripta Key.
+
+**Flags**:
+
+--app-id=<application ID>
+    The identifier of the application.
+
+--csr-file-path=<path to CSR file>
+    The absolute path to the application's CSR file.
+
+--output-cert-path=<path to output file>
+    The absolute path where the application's certificate file will be written to.
+
+--validity-period=<validity period>
+    The validity period of the application's certificate, in days. Must be a number between 30 and 1 825, inclusive.
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Application ID does not exist!
+
+    *Likely cause*: Application with the given ID does not exist.
+
+*   *Message*: Validity period must be between 30 and 1825 in days!
+
+    *Likely cause*: Certificate validity period is out of range.
+
+*   *Message*: Output filename already exists!
+
+    *Likely cause*: Output path is not empty.
+
+*   *Message*: Failed to create output certificate file!
+
+    *Likely cause*: Unable to write to the given output path.
+
+*   *Message*: Failed to open CSR path!
+
+    *Likely cause*: Wrong path to CSR file.
+
+*   *Message*: Invalid CSR content!
+
+    *Likely cause*: Invalid or corrupted CSR file.
+
+*   *Message*: Renewing application certificate with different subject or distinguished name is not allowed!
+
+    *Likely cause*: CSR has a different Subject/Distinguished Name to the existing certificate.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk app renew --csr-file-path=/home/user/jmeter_CSR.pem --app-id=jmeter --validity-period=365 --output-cert-path=/tmp/jmeter_CER.pem
+
+    This will renew an existing application's certificate.
+    Ensure that the DN (subject) in the CSR matches with the one in KK-Manager's database.
+    Run `clikk app info` to check the DN of an existing application.
+    Are you sure you want to continue? Type `AmnaT` to continue, or press Enter to cancel.
+    > AmnaT
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Dual control authentication -- credential of second user is required.
+    Admin1 is currently logged in.
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    App ID: jmeter
+    Subject: C=ID, ST=DKI Jakarta, L=South Jakarta, O=PT. Klavis Kripta Inovasi, OU=Quality Assurance, CN=QA/emailAddress=main@klaviskripta.com
+    Registration date: 2023-03-20 15:19:25 WIB
+    Certificate: -----BEGIN CERTIFICATE-----
+    MIIFnjCCA4agAwIBAgIBADANBgkqhkiG9w0BAQsFADCBtDELMAkGA1UEBhMCSUQx
+    FzAVBgNVBAgMDktlcHVsYXVhbiBSaWF1MQ4wDAYDVQQHDAVCYXRhbTETMBEGA1UE
+    CgwKU2FuZGhpZ3VuYTEcMBoGA1UECwwTUHJvZHVjdCBEZXZlbG9wbWVudDEiMCAG
+    A1UEAwwZZGVwbG95bWVudC5zYW5kaGlndW5hLmNvbTElMCMGCSqGSIb3DQEJARYW
+    c3VwcG9ydEBzYW5kaGlndW5hLmNvbTAeFw0yMzAzMjAwODE5MjVaFw0yNDAzMTkw
+    ODE5MjVaMIGrMQswCQYDVQQGEwJJRDEXMBUGA1UECAwOS2VwdWxhdWFuIFJpYXUx
+
+    Application has been renewed successfully.
+
+
+``clikk app delete``
+~~~~~~~~~~~~~~~~~~~~
+
+Delete an application permanently.
+
+This will revoke an application's access to any KK-Cryptoservice instance. Before an application can be deleted,
+it must be removed from all partitions it has been added to.
+
+**Flags**:
+
+--app-id=<application ID>
+    The identifier of the application.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Application ID does not exist!
+
+    *Likely cause*: Application with the given ID does not exist.
+
+*   *Message*: Deleting an application that is still being referenced to by a partition is not allowed.
+
+    *Likely cause*: Application has not been removed from all partitions.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk app delete --app-id=jmeter
+
+    This will delete the given application. Ensure that it has been removed from all partitions.
+    Are you sure you want to continue? Type `Yqe` to continue, or press Enter to cancel.
+    > Yqe
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Application has been deleted successfully.
+
+
+KK-Manager
+----------
+
+KK-Manager is a centralized server that contains Kripta Key's main database. This command offers functionalities
+that allows the administrator to examine, manage, and maintain the Kripta Key installation. This command
+operates on the KK-Manager instance CLIKK is currently connected to. Hence, it can also be used to manage
+KK-Manager-DR instances.
+
+
+``clikk kk-manager status``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Show the status of KK-Manager.
+
+Information shown includes:
+
+*   KK-Manager daemon start time
+*   KK-Manager module version
+*   KK-Manager machine's FMSPC
+*   KK-Manager machine's processor package type
+*   Last five commands executed via CLIKK
+*   Number of audit log entries queued
+*   List of registered KK-Cryptoservice instances
+*   List of registered KK-Manager-DR instances, if any
+*   Status of KK-Auditor instance
+*   License information, which includes:
+
+    *   Deployment ID
+    *   Product edition
+    *   License model
+    *   Remaining KK-Cryptoservice instance quota
+    *   Remaining KK-Manager-DR instance quota
+    *   Registration date
+    *   Expiry date
+
+**Flags**:
+
+--verify
+    If present, verify the integrity of the database instead.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+**Usage example**:
+
+*   Check KK-Manager status.
+
+    .. code-block:: console
+
+        $ clikk kk-manager status
+
+        Enter admin ID: Admin1
+        Enter password:
+
+        KRIPTA KEY status as of 2023-03-24 14:59:21 WIB
+        ===============================================
+
+        KK-Manager information:
+        - Started on: 2023-03-24 14:32:56 WIB
+        - Version: 24.1.0007-GA
+        - Machine FMSPC: 00A065310000
+        - Processor package type: processor
+        - Last five executed commands:
+        -- 2023-03-24 14:49:14 WIB: clikk partition info --partition-id=1
+        -- 2023-03-24 14:49:16 WIB: clikk admin list
+        -- 2023-03-24 14:55:22 WIB: clikk admin info --user-id=Admin1
+        -- 2023-03-24 14:57:03 WIB: clikk kk-cryptoservice add-partition --kk-cryptoservice-name=KK-CSOne --partition-id=3
+        -- 2023-03-24 14:57:17 WIB: clikk partition add-app --partition-id=3 --app-id=jmeter
+        - Number of KK-Auditor entry in queue: 0
+
+        KK-Cryptoservice information:
+        - KK-CSOne (B41BEB6BXXXXXXXXXXXXXXXXXXXXXXX), last heartbeat: 2023-03-24 14:58:32 WIB
+
+        KK-Manager-DR information:
+        - KK-Mdr_1 (42ACCC9FXXXXXXXXXXXXXXXXXXXXXXXXXXXX), last heartbeat: 2023-03-24 14:58:55 WIB
+
+        KK-Auditor information: Ready
+
+        Kripta Key deployment license information
+        - Deployment ID: 1234
+        - Product edition: Enterprise
+        - License model: Subscription
+        - Remaining KK-Cryptoservice instance registrations: 4
+        - Remaining KK-Manager-DR instance registrations: 0
+        - Registration date: 2022-12-26 00:00:00 WIB
+        - Expiry date: 2025-12-26 00:00:00 WIB
+
+*   Verify KK-Manager database.
+
+    .. code-block:: console
+
+        $ clikk kk-manager status --verify
+
+        Enter admin ID: Admin1
+        Enter password:
+
+        KK-Manager has been verified successfully. Database is in good condition.
+
+
+``clikk kk-manager acl``
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Show the access control list for each KK-Cryptoservice instance.
+
+The access control list is a list of partitions available in each KK-Cryptoservice instance, as well as
+a list of partitions each application can access.
+
+For each KK-Cryptoservice instance, this command also shows each month's last HMAC, for transaction counting purposes.
+
+**Flags**:
+
+--output-file-path=<path to output file>
+    The absolute path where the ACL file will be written to. Optional. If present, the ACL is not shown in console.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+*   *Message*: Output filename already exists!
+
+    *Likely cause*: Output path is not empty.
+
+*   *Message*: Failed to create output file!
+
+    *Likely cause*: Unable to write to the given output path.
+
+**Usage example**:
+
+*   Show the access control list.
+
+    .. code-block:: console
+
+        $ clikk kk-manager acl
+
+        Enter admin ID: Admin1
+        Enter password:
+
+        KK-CSOne(cXY71nwAcf3dA9+AVHWn82IGrQT8LdgCqstOz+G5P8g= HMAC-1 3/2022, MJA363QY2JBKC4K3rlKhwmNYzGuZeH8uDFa2RVfvtAE= HMAC-2 4/2022, zr7A92BmVU9h7yZtXmNoBL0HLglmwAaBnF6mXdYUpKc= HMAC-3 5/2022):
+            Partition 3:
+                jmeter
+
+        jmeter:
+            Partition 3
+
+        postman:
+            No partitions added.
+
+*   Write the access control list to file.
+
+    .. code-block:: console
+
+        $ clikk kk-manager acl -–output-file-path=/home/user/ACL.file
+
+        Enter admin ID: Admin1
+        Enter password:
+
+        Access control list has been written successfully to /home/user/ACL.file.
+
+
+``clikk kk-manager request-license``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Generate a license request file.
+
+This command will prompt for a Distinguished Name.
+
+Refer to :doc:`/license-guide/license-request` for steps on requesting a license.
+
+**Flags**:
+
+--out-license-request=<path to output file>
+    The absolute path where the license request will be written to.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Subject or Distinguished Name's length must be less than 256 characters!
+
+    *Likely cause*: Input to DN prompt is too long.
+
+*   *Message*: Output filename already exists!
+
+    *Likely cause*: Output path is not empty.
+
+*   *Message*: Failed to create output file!
+
+    *Likely cause*: Unable to write to the given output path.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk kk-manager request-license --out-license-request=/path/to/licenserequest.bin
+
+    This action requires a Distinguished Name for the certificate.
+    Hence, input will be required for each field in the Distinguished Name.
+    Please enter valid data in each field.
+    ------
+    [-] Common Name (the fully qualified domain name): example.com
+    [-] Country Name (2 letter code) (Default: []): ID
+    [-] State or Province Name (Default: []): DKI Jakarta
+    [-] Locality or City Name (Default: []): South Jakarta
+    [-] Organization Name (legal company name) (Default: []): PT. Example Corp.
+    [-] Organizational Unit Name (section or department) (Default: []): Support
+    [-] Email Address (Default: []): support@example.com
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    License request file has been generated and saved successfully to /path/to/licenserequest.bin.
+
+
+``clikk kk-manager apply-license``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Apply a license file to the Kripta Key deployment.
+
+The license file is obtained from Klavis Kripta after sending the license request in.
+
+Refer to :doc:`/license-guide/license-apply` for steps on applying a license.
+
+**Flags**:
+
+--license-file=<path to license file>
+    The absolute path to the license file.
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: License file cannot be opened!
+
+    *Likely cause*: Wrong path to license file.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk kk-manager apply-license --license-file=/tmp/license1.file
+
+    This will apply the license file to this Kripta Key installation. Upon success, all Kripta Key instances must be restarted.
+    Are you sure you want to continue? Type `("4%O` to continue, or press Enter to cancel.
+    > ("4%O
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Dual control authentication -- credential of second user is required.
+    Admin1 is currently logged in.
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    License has been applied successfully.
+    Please restart the KK-Auditor service and the KK-Manager service.
+    If this is the first license application, re-register all applications and all KK-Cryptoservice instances to download the latest certificate from KK-Manager.
+
+
+``clikk kk-manager add-dr``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Register a KK-Manager-DR instance.
+
+Refer to :ref:`installation-guide/disaster-recovery:registering kk-manager-dr` for steps
+on KK-Manager-DR instance registration.
+
+**Flags**:
+
+--kk-manager-collateral-path=<path to collateral file>
+    The absolute path to the main KK-Manager machine's collateral file.
+
+--kk-manager-dr-collateral-path=<path to collateral file>
+    The absolute path to the KK-Manager-DR machine's collateral file.
+
+--kk-manager-dr-host=<instance host>
+    The host address of the KK-Manager-DR instance.
+
+--kk-manager-dr-port=<instance port>
+    The port of the KK-Manager-DR instance. Must be a number between 1024 and 49 151, inclusive.
+
+--kk-manager-dr-name=<instance name>
+    The identifying name of the KK-Manager-DR instance.
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Failed to open the specified collateral file!
+
+    *Likely cause*: Wrong path to certificate file.
+
+*   *Message*: Invalid collateral file!
+
+    *Likely cause*: File is not a collateral file or is corrupted.
+
+*   *Message*: Failed to connect to KK-Manager-DR!
+
+    *Likely cause*: Wrong host address and/or port, or connection cannot be established.
+
+*   *Message*: You have reached the maximum machine(s) allowed according to your license!
+
+    *Likely cause*: Insufficient quota available for KK-Manager-DR registration.
+
+*   *Message*: Cannot register KK-Manager-DR using the same machine as main KK-Manager!
+
+    *Likely cause*: Attempted to register a KK-Manager-DR instance sharing a machine with the main KK-Manager instance.
+
+*   *Message*: KK-Manager-DR is already registered!
+
+    *Likely cause*: KK-Manager-DR with the same QE ID or name has already been registered.
+
+*   *Message*: Use the most recent backup file!
+
+    *Likely cause*: Database is not synchronized --- use the most recent backup file.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk kk-manager add-dr --kk-manager-collateral-path=home/user/documents/collateral_00A065XXXXXXX.json --kk-manager-dr-collateral-path=/home/user/documents/collateral_00906EXXXXXX.json --kk-manager-dr-host=10.30.0.2 --kk-manager-dr-port=8086 --kk-manager-dr-name=kk-m-drOne
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Dual control authentication -- credential of second user is required.
+    Admin1 is currently logged in.
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    KK-Manager-DR `kk-m-drOne` at 10.30.0.2 has been registered successfully.
+
+
+``clikk kk-manager list-dr``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List all available KK-Manager-DR instances.
+
+**Flags**: None.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk kk-manager list-dr
+
+    Enter admin ID: Admin1
+    Enter password:
+
+    DR instance names:
+    kk-m-drOne
+
+
+``clikk kk-manager info-dr``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Retrieve information about a KK-Manager-DR instance.
+
+The information includes the KK-Manager-DR machine's QE ID, and the registration date.
+
+**Flags**:
+
+--kk-manager-dr-name=<instance name>
+    The identifying name of the KK-Manager-DR instance.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+*   *Message*: KK-Manager-DR does not exist!
+
+    *Likely cause*: KK-Manager-DR instance with the given name does not exist.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk kk-manager info-dr --kk-manager-dr-name=KK-MdrOne
+
+    Enter admin ID: Admin1
+    Enter password:
+
+    KK-Manager-DR ID: 8F0FFCDC31A4E2BB628ECC25113837AD
+    KK-Manager-DR name: KK-MdrOne
+    Registration date: 2023-03-27 11:49:24 WIB
+
+
+``clikk kk-manager promote-dr``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Promote a KK-Manager-DR instance to the main KK-Manager instance.
+
+Refer to :ref:`installation-guide/disaster-recovery:kk-manager-dr promotion` for steps
+on KK-Manager-DR promotion.
+
+**Flags**:
+
+--kk-manager-collateral-path=<path to collateral file>
+    The absolute path to the to-be-promoted KK-Manager machine's collateral file. Optional. Used if registering
+    a new KK-Auditor instance.
+
+--kk-auditor-collateral-path=<path to collateral file>
+    The absolute path to the KK-Auditor machine's collateral file. Optional. Used if registering
+    a new KK-Auditor instance.
+
+--kk-auditor-host=<instance host>
+    The host address of the KK-Auditor instance.
+
+--kk-auditor-port=<instance port>
+    The port of the KK-Auditor instance. Must be a number between 1024 and 49 151, inclusive.
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Failed to open the specified collateral file!
+
+    *Likely cause*: Wrong path to certificate file.
+
+*   *Message*: Invalid collateral file!
+
+    *Likely cause*: File is not a collateral file or, collateral file is corrupted.
+
+**Usage example**:
+
+*   Promote a KK-Manager-DR instance to the main KK-Manager instance, using the existing KK-Auditor instance.
+
+    .. code-block:: console
+
+        $ clikk kk-manager promote-dr --kk-auditor-host=127.0.0.1 --kk-auditor-port=8082
+
+        Enter admin ID: Admin1
+        Enter password:
+        Insert the administrator card of Admin1 for two-factor authentication.
+
+        Dual control authentication -- credential of second user is required.
+        Admin1 is currently logged in.
+
+        Enter admin ID: Admin2
+        Enter password:
+        Insert the administrator card of Admin2 for two-factor authentication.
+
+        KK-Manager-DR has been promoted successfully to main KK-Manager.
+        Please update the relevant configurations and restart the KK-Manager service.
+
+*   Promote a KK-Manager-DR instance to the main KK-Manager instance, registering a new KK-Auditor instance.
+
+    .. code-block:: console
+
+        $ clikk kk-manager promote-dr --kk-manager-collateral-path=/home/user/Documents/collateral_00A0XXXXXXXX.json --kk-auditor-collateral-path=/home/user/Documents/collateral_00A0XXXXXXXX.json --kk-auditor-host=127.0.0.1 --kk-auditor-port=8082
+
+        Enter admin ID: Admin1
+        Enter password:
+        Insert the administrator card of Admin1 for two-factor authentication.
+
+        Dual control authentication -- credential of second user is required.
+        Admin1 is currently logged in.
+
+        Enter admin ID: Admin2
+        Enter password:
+        Insert the administrator card of Admin2 for two-factor authentication.
+
+        KK-Manager-DR has been promoted successfully to main KK-Manager.
+        Please update the relevant configurations and restart the KK-Manager service.
+
+
+``clikk kk-manager request-delete-dr``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Generate a KK-Manager-DR deletion request file.
+
+This is done if the KK-Manager-DR machine has been rendered inoperable and the machine is considered lost.
+Send the generated request file to Klavis Kripta's sales team to obtain a signed permission file.
+
+**Flags**:
+
+--kk-manager-dr-name=<server name>
+    The identifying name of the KK-Manager-DR instance.
+
+--out-delete-request=<path to output file>
+    The absolute path where the deletion request will be written to.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: KK-Manager-DR does not exist!
+
+    *Likely cause*: KK-Manager-DR with the given name does not exist.
+
+*   *Message*: Output filename already exists!
+
+    *Likely cause*: Output path is not empty.
+
+*   *Message*: Failed to create output file!
+
+    *Likely cause*: Unable to write to the given output path.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk kk-manager request-delete-dr --kk-manager-dr-name=kkmDROne --out-delete-request=/home/User/Documents/deleterequest.file
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Dual control authentication -- credential of second user is required.
+    Admin1 is currently logged in.
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    Permission file to delete KK-Manager-DR `DROne` has been generated and written successfully to /home/User/Documents/deleterequest.file.
+
+
+``clikk kk-manager delete-dr``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Delete a KK-Manager-DR instance.
+
+Depending on the state of the KK-Manager-DR, this command can perform a soft delete or a hard delete,
+which is explained as follows:
+
+*   **Soft delete**: This occurs when the instance is no longer connected to the main KK-Manager instance
+    when it is deleted. It is removed from the list of registered instances. However, this will not increment
+    the registration quota.
+
+    When the deleted instance connects to the main KK-Manager instance, it will then be hard deleted automatically.
+
+*   **Hard delete**: This occurs when the instance is connected to the main KK-Manager instance,
+    or it is no longer connected, but a deletion permission file is provided. The instance's functionality
+    will be disabled, and it is removed from the list of registered instances. Finally, the registration quota
+    will be incremented.
+
+Regardless of the type of deletion, deleted instances may be registered to the main KK-Manager instance again.
+
+**Flags**:
+
+--kk-manager-dr-name=<instance name>
+    The identifying name of the KK-Manager-DR instance.
+
+--permission=<path to permission file>
+    The absolute path to the permission file. Optional.
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: KK-Manager-DR does not exist!
+
+    *Likely cause*: KK-Manager-DR with the given name does not exist.
+
+*   *Message*: Invalid file path!
+
+    *Likely cause*: Wrong path to permission file.
+
+*   *Message*: Invalid permission file!
+
+    *Likely cause*: File is not a permission file, or permission file is corrupt.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk kk-manager delete-dr --kk-manager-dr-name=kkmDROne
+
+    Enter admin ID: Admin1
+    Enter Password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Dual control authentication -- credential of second user is required.
+    Admin1 is currently logged in.
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    KK-Manager-DR instance has been deleted successfully.
+
+.. code-block:: console
+
+    $ clikk kk-manager delete-dr --kk-manager-dr-name=kkmDROne --permission=/home/User/Documents/permission.file
+
+
+``clikk kk-manager backup``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Create a manual backup of the KK-Manager's database.
+
+The resulting backup is stored in the ``backup`` directory, within the KK-Manager's working directory.
+
+**Flags**: None.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk kk-manager backup
+
+    Enter admin ID: Admin1
+    Enter password:
+
+    KK-Manager database has been backed up successfully to /var/local/kriptakey/kk-manager/backup/kkm-20231016-14:43:35-manual.backup.
+
+
+``clikk kk-manager regenerate-backup-key``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Regenerate the system's backup key.
+
+This command requires the administrators to prepare two sets of recovery cards, the same amount prepared
+as during key ceremony. Both new and existing recovery cards are accepted.
+
+This command is intended to be used when some of the existing recovery cards are lost or otherwise
+rendered unusable. Regenerating the backup key create two new sets of recovery cards, ensuring that commands
+with EMERGENCY privilege level can be executed.
+
+**Flags**: None.
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: The provided TEK component is not valid!
+
+    *Likely cause*: SCC is in invalid format.
+
+*   *Message*: The TEK component provided does not appear to match the one stored in the database!
+
+    *Likely cause*: SCC does not match with the one issued during key ceremony.
+
+*   *Message*: The Deployment ID provided does not appear to match the one stored in the database!
+
+    *Likely cause*: Deployment ID does not match with the one entered during key ceremony.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk kk-manager regenerate-backup-key
+
+    This will regenerate the backup key and the recovery cards.
+    Recovery cards associated with the previous backup key will become UNUSEABLE.
+    Existing recovery cards may be used for this purpose.
+    Prepare two sets of 5 cards each.
+
+    Are you sure you want to continue? Type `DSIcE` to continue, or press Enter to cancel.
+    > DSIcE
+
+    Enter the secure channel code (SCC): b2baa436XXXXXXXXXXXXXXXXXXXXXXXX
+    Enter the deployment ID: ENTERPRIXXXXXXXX
+    Dual control authentication--credential of a second administrator is required.
+    admin1 is currently logged in.
+
+    Enter admin ID: admin2
+    Enter password: 
+
+    Insert the administrator card of admin2 for two-factor authentication.
+    Remove the card!
+
+    Please prepare 5 cards for the first set of recovery cards.
+    Insert a card!
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Secret 1 has been written successfully.
+    Remove the card!
+    Insert a card!
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Secret 2 has been written successfully.
+    Remove the card!
+    Insert a card!
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Secret 3 has been written successfully.
+    Remove the card!
+    Insert a card!
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Secret 4 has been written successfully.
+    Remove the card!
+    Insert a card!
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Secret 5 has been written successfully.
+    Remove the card!
+
+    Please prepare 5 cards for the second set of recovery cards.
+    Insert a card!
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Secret 1 has been written successfully.
+    Remove the card!
+    Insert a card!
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Secret 2 has been written successfully.
+    Remove the card!
+    Insert a card!
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Secret 3 has been written successfully.
+    Remove the card!
+    Insert a card!
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Secret 4 has been written successfully.
+    Remove the card!
+    Insert a card!
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Secret 5 has been written successfully.
+    Remove the card!
+
+    Backup key has been regenerated successfully.
+    It is strongly advised to test the regenerated recovery cards by running the `clikk kk-manager verify-recovery-cards` command.
+
+
+``clikk kk-manager verify-recovery-cards``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Verify the integrity of the recovery cards.
+
+This action requires all cards within a recovery card set.
+
+**Flags**: None.
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk kk-manager verify-recovery-cards
+
+    It is strongly advised to run this command for both sets of Kripta Key recovery cards, completing the process for one set first, and then running it again for the next set.
+    Are you sure you want to continue? Type `s~U` to continue, or press Enter to cancel.
+    > s~U
+
+    Insert a recovery card from the set of cards.
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Total of 1 secret(s) recovered.
+    Please insert the next recovery card
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Total of 2 secret(s) recovered.
+    Please insert the next recovery card
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Total of 3 secret(s) recovered.
+    Please insert the next recovery card
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Total of 4 secret(s) recovered.
+    Please insert the next recovery card
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Total of 5 secret(s) recovered.
+
+    A sufficient number of secrets have been recovered.
+
+    Enter admin ID: admin1
+    Enter password: 
+
+    Insert the administrator card of admin1 for two-factor authentication.
+    Remove the card!
+    Dual control authentication--credential of a second administrator is required.
+    admin1 is currently logged in.
+
+    Enter admin ID: admin2
+    Enter password: 
+
+    Insert the administrator card of admin2 for two-factor authentication.
+    Remove the card!
+    Recovery cards are in good condition.
+
+
+KK-Cryptoservice
+----------------
+
+KK-Cryptoservice instances may be managed via CLIKK, offering the usual set of management commands.
+Additionally, administrators can perform access control by adding and removing partition to and from
+KK-Cryptoservice instances.
+
+
+``clikk kk-cryptoservice add``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Register a KK-Cryptoservice instance.
+
+Refer to :ref:`installation-guide/cryptographic-service-installation:registering kk-cryptoservice` for steps
+on KK-Manager-DR instance registration.
+
+**Flags**:
+
+--kk-manager-collateral-path=<path to collateral file>
+    The absolute path to the main KK-Manager machine's collateral file.
+
+--kk-cryptoservice-collateral-path=<path to collateral file>
+    The absolute path to the KK-Cryptoservice machine's collateral file.
+
+--kk-cryptoservice-host=<instance host>
+    The host address of the KK-Cryptoservice instance.
+
+--kk-cryptoservice-port=<instance port>
+    The port of the KK-Cryptoservice instance. Must be a number between 1024 and 49 151, inclusive.
+
+--kk-cryptoservice-name=<instance name>
+    The identifying name of the KK-Cryptoservice instance.
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Failed to open the specified collateral file!
+
+    *Likely cause*: Wrong path to certificate file.
+
+*   *Message*: Invalid collateral file!
+
+    *Likely cause*: File is not a collateral file or is corrupted.
+
+*   *Message*: Failed to connect to KK-Cryptoservice!
+
+    *Likely cause*: Wrong host address and/or port, or connection cannot be established.
+
+*   *Message*: You have reached the maximum machine(s) allowed according to your license!
+
+    *Likely cause*: Insufficient quota available for KK-Cryptoservice registration.
+
+*   *Message*: KK-Cryptoservice is already registered!
+
+    *Likely cause*: KK-Cryptoservice with the same QE ID or name has already been registered.
+
+*   *Message*: Use the most recent backup file!
+
+    *Likely cause*: Database is not synchronized --- use the most recent backup file.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk kk-cryptoservice add --kk-manager-collateral-path=/home/user/documents/collateral_00A065XXXXXX.json --kk-cryptoservice-collateral-path=/home/user/documents/collateral_00A065XXXXXX.json --kk-cryptoservice-host=10.30.0.2 --kk-cryptoservice-port=8086 --kk-cryptoservice-name=kk-csOne
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Dual control authentication -- credential of second user is required.
+    Admin1 is currently logged in.
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    KK-Cryptoservice `KK-CSOne` at 10.30.0.2 has been registered successfully.
+
+
+``clikk kk-cryptoservice list``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List all available KK-Cryptoservice instances.
+
+**Flags**: None.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+**Usage example**:
+
+.. code-block:: console
+
+$ clikk kk-cryptoservice list
+
+    Enter admin ID: Admin1
+    Enter password:
+
+    KK-Cryptoservice names:
+    KK-CSKriptabox
+    KK-CSBuilder
+
+
+``clikk kk-cryptoservice info``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Retrieve information about a KK-Manager-DR instance.
+
+The information includes the KK-Manager-DR machine's QE ID, registration date, and the list of partitions
+added to the instance.
+
+**Flags**:
+
+--kk-cryptoservice-name=<server name>
+    The identifying name of the KK-Cryptoservice instance.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, or wrong password.
+
+*   *Message*: KK-Cryptoservice with the specified name does not exist!
+
+    *Likely cause*: KK-Cryptoservice instance with the given name does not exist.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk kk-cryptoservice info --kk-cryptoservice-name=kk-csBuilder
+
+    Enter admin ID: Admin1
+    Enter password:
+
+    KK-Cryptoservice ID: 8F0FFCDCXXXXXXXXXXXXXXXXXXXXXX
+    KK-Cryptoservice name: KK-CSBuilder
+    Registration date: 2023-03-21 15:01:12 SE Asia Standard Time
+    Partition ID(s): 3
+
+
+``clikk kk-cryptoservice update``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Update the name of a KK-Cryptoservice instance.
+
+**Flags**:
+
+--kk-cryptoservice-name=<server name>
+    The identifying name of the KK-Cryptoservice instance.
+
+--kk-cryptoservice-new-name=<server name>
+    The new identifying name of the KK-Cryptoservice instance.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: KK-Cryptoservice with the specified name does not exist!
+
+    *Likely cause*: KK-Cryptoservice instance with the given name does not exist.
+
+*   *Message*: New name must be different from current name!
+
+    *Likely cause*: New name is the same as the instance's current name.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk kk-cryptoservice update --kk-cryptoservice-name=kk-csBuilder --kk-cryptoservice-new-name=KK-CSBuilderr
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    KK-Cryptoservice instance name has been updated successfully.
+
+
+``clikk kk-cryptoservice add-partition``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Add a partition to a given KK-Cryptoservice instance.
+
+This allows applications connected to the KK-Cryptoservice instance to access the partition. The partition password
+is still required, however.
+
+**Flags**:
+
+--kk-cryptoservice-name=<server name>
+    The identifying name of the KK-Cryptoservice instance.
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: KK-Cryptoservice with the specified name does not exist!
+
+    *Likely cause*: KK-Cryptoservice instance with the given name does not exist.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk kk-cryptoservice add-partition --kk-cryptoservice-name=kk-csBuilder --partition-id=1
+
+    Enter admin ID: Admin1
+    Enter password:
+
+    Partition has been added to the KK-Cryptoservice instance successfully.
+
+
+``clikk kk-cryptoservice delete-partition``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Remove a partition from a given KK-Cryptoservice instance.
+
+This will cause applications connected to the KK-Cryptoservice instance to lose access to the partition.
+
+**Flags**:
+
+--kk-cryptoservice-name=<server name>
+    The identifying name of the KK-Cryptoservice instance.
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: KK-Cryptoservice with the specified name does not exist!
+
+    *Likely cause*: KK-Cryptoservice instance with the given name does not exist.
+
+*   *Message*: Partition ID must be between 1 and 10000, inclusive!
+
+    *Likely cause*: Partition ID is out of range.
+
+*   *Message*: Partition ID does not exist!
+
+    *Likely cause*: Partition with the given ID does not exist.
+
+*   *Message*: The partition is not linked to the KK-Cryptoservice.
+
+    *Likely cause*: Partition with the given ID has not been added to the given KK-Cryptoservice instance.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk kk-cryptoservice delete-partition --kk-cryptoservice-name=kkcsOne --partition-id=1
+
+    This will remove a partition from the given KK-Cryptoservice instance.
+    Applications that access that partition through the given KK-Cryptoservice instance will be affected.
+    Manual replication must be done after this command has been executed.
+    Are you sure you want to continue? Type `o{0` to continue, or press Enter to cancel.
+    > o{0
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Partition has been removed from the KK-Cryptoservice instance successfully.
+
+
+``clikk kk-cryptoservice request-delete``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Generate a KK-Cryptoservice deletion request file.
+
+This is done if the KK-Cryptoservice machine has been rendered inoperable and the machine is considered lost.
+Send the generated request file to Klavis Kripta's sales team to obtain a signed permission file.
+
+**Flags**:
+
+--kk-cryptoservice-name=<server name>
+    The identifying name of the KK-Cryptoservice instance.
+
+--out-delete-request=<path to output file>
+    The absolute path where the deletion request will be written to.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: KK-Cryptoservice does not exist!
+
+    *Likely cause*: KK-Cryptoservice with the given name does not exist.
+
+*   *Message*: Output filename already exists!
+
+    *Likely cause*: Output path is not empty.
+
+*   *Message*: Failed to create output file!
+
+    *Likely cause*: Unable to write to the given output path.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk kk-cryptoservice request-delete --kk-cryptoservice-name=kkcsOne --out-delete-request=/home/User/Documents/deleterequest.file
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Dual control authentication -- credential of second user is required.
+    Admin1 is currently logged in.
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    Permission file to delete KK-Cryptoservice `kkcsOne` has been generated and written successfully to /home/User/Documents/deleterequest.file.
+
+
+``clikk kk-cryptoservice delete``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Delete a KK-Cryptoservice instance.
+
+Depending on the state of the KK-Manager-DR, this command can perform a soft delete or a hard delete.
+Refer to :ref:`sys-admin-guide/kripta-key-management:\`\`clikk kk-manager delete-dr\`\`` for explanation on
+soft deletion and hard deletion.
+
+**Flags**:
+
+--kk-cryptoservice-name=<server name>
+    The identifying name of the KK-Cryptoservice instance.
+
+--permission=<path to permission file>
+    The absolute path to the permission file. Optional.
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: KK-Cryptoservice does not exist!
+
+    *Likely cause*: KK-Cryptoservice with the given name does not exist.
+
+*   *Message*: Invalid file path!
+
+    *Likely cause*: Wrong path to permission file.
+
+*   *Message*: Invalid permission file!
+
+    *Likely cause*: File is not a permission file, or permission file is corrupt.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk kk-cryptoservice delete --kk-cryptoservice-name=kkcsOne
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Dual control authentication -- credential of second user is required.
+    Admin1 is currently logged in.
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    KK-Cryptoservice instance has been deleted successfully.
+
+.. code-block:: console
+
+    $ clikk kk-cryptoservice delete --kk-cryptoservice-name=kkcsOne --permission=/home/User/Documents/permission.file
+
+
+KK-Auditor
+----------
+
+The main KK-Manager instance connects to a KK-Auditor instance, which records all administrative actions
+in a tamper-proof database. As such, it is required to have a KK-Auditor instance registered
+to the main KK-Manager instance, and it is not allowed to remove the KK-Auditor instance once it is registered.
+
+CLIKK offers a number of commands for managing the KK-Auditor instance.
+
+
+``clikk kk-auditor add``
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Register a KK-Auditor instance.
+
+Typically, administrators need not run this command, as KK-Auditor registration happens automatically
+during key ceremony, KK-Manager-DR promotion, and KK-Manager restoration.
+
+Registering a new KK-Auditor instance automatically unregisters the previously registered instance.
+
+**Flags**:
+
+--kk-manager-collateral-path=<path to collateral file>
+    The absolute path to the main KK-Manager machine's collateral file.
+
+--kk-auditor-collateral-path=<path to collateral file>
+    The absolute path to the KK-Auditor machine's collateral file.
+
+--kk-auditor-host=<instance host>
+    The host address of the KK-Auditor instance.
+
+--kk-auditor-port=<instance port>
+    The port of the KK-Auditor instance.
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Failed to open the specified collateral file!
+
+    *Likely cause*: Wrong path to certificate file.
+
+*   *Message*: Invalid collateral file!
+
+    *Likely cause*: File is not a collateral file or is corrupted.
+
+*   *Message*: Failed to connect to KK-Auditor!
+
+    *Likely cause*: Wrong host address and/or port, or connection cannot be established.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk kk-auditor add --kk-manager-collateral-path=./collateral_00A065310000.json --kk-auditor-collateral-path=./collateral_00A065310000.json --kk-auditor-host=10.30.0.2 --kk-auditor-port=7001
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Dual control authentication -- credential of second user is required.
+    Admin1 is currently logged in.
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    KK-Auditor instance at 10.30.0.2 has been registered successfully.
+
+
+``clikk kk-auditor verify``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Verify the integrity of the audit logs.
+
+**Flags**: None.
+
+**Privilege level**: **NORMAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk kk-auditor verify
+
+    Enter admin ID: Admin1
+    Enter password:
+
+    KK-Auditor database has been verified successfully.
+    The audit logs have perfect integrity.
+
+
+``clikk kk-auditor export``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Export the audit logs within a certain date range.
+
+The audit logs are exported in CSV format. The exported audit logs will be written to the ``export`` directory
+within KK-Auditor's working directory.
+
+**Flags**:
+
+--from-date=<start date>
+    The start date for the audit log export. Must be in YYYYMMDD format.
+
+--to-date=<end date>
+    The end date for the audit log export. Must be in YYYYMMDD format.
+
+**Privilege level**: **HIGH**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Invalid date!
+
+    *Likely cause*: Incorrect date format, start date is chronologically after end date,
+    or either dates are in the future.
+
+*   *Message*: Audit log export/archive process is in progress!
+
+    *Likely cause*: KK-Auditor is busy with another operation. Wait until operation finishes.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk kk-auditor export --from-date=20230319 --to-date=20230320
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Audit entries have been successfully exported in the KK-Auditor machine to /var/local/kriptakey/kk-auditor/export/exported_KK-A_20230319_to_20230320.csv.
+    Total exported entry: 32
+
+
+``clikk kk-auditor archive``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Archive audit log entries.
+
+This command works similarly to ``clikk kk-auditor export``, with two differences --- the archived entries
+are removed from the audit log, and the archive always starts from the earliest entry.
+
+The archived audit logs are exported in CSV format. The archived audit logs will be written to
+the ``archive`` directory within KK-Auditor's working directory.
+
+**Flags**:
+
+--until-date=<start date>
+    The end date for the audit log archival. Must be in YYYYMMDD format. Mutually exclusive with ``-all``.
+
+--all
+    If present, archive all audit log entries. Mutually exclusive with ``--until-date``.
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Invalid date!
+
+    *Likely cause*: Incorrect date format, start date is chronologically after end date,
+    or either dates are in the future.
+
+*   *Message*: Audit log export/archive process is in progress!
+
+    *Likely cause*: KK-Auditor is busy with another operation. Wait until operation finishes.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk kk-auditor archive --until-date=20230320
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Dual control authentication -- credential of second user is required.
+    Admin1 is currently logged in.
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    KK-Auditor logs have been archived successfully in the KK-Auditor machine to /var/local/kriptakey/kk-auditor/archive/archived_KK-A_20230320_to_20230320_2.csv.
+    Total archived entries: 12

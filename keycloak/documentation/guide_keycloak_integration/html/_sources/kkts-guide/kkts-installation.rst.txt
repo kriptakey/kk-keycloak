@@ -1,0 +1,719 @@
+KK-Tokenization Service Setup and Configuration
+===============================================
+
+KK-Tokenization Service provides tokenization services for client applications in vault-based system. 
+Authorized applications may connect to the KK-Tokenization Service instances to perform vaulted tokenization operations using keys that are stored in the KK-Manager database or otherwise created by the KK-Manager.
+KK-TS is using Transport Layer Security (TLS) 1.3. To enable communication between KK-TS and its client, the client must also support TLS 1.3. 
+
+This section describes the steps required to install and configure KK-Tokenization Service.
+
+
+Preparatory steps
+-----------------
+
+Kripta Key Tokenization Service (KK-TS) requires Apache Cassandra database. 
+Apache Cassandra is an open-source noSQL database that distributes data over multiple commodity servers.
+Cassandra uses a ring design rather than the master-slave design. KK-TS structures the database to store 
+``PartitionConfig``, ``AppConfig``, ``DataConfig``, ``sessionCache``, ``configCache``, and ``dataDomains``.
+
+Prepare Virtual Machine (VM)s for KK-Tokenization Service. KK-TS requires Apache Cassandra, which needs 2 VMs for two nodes.  
+KK-TS itself also requires a VM. The total number of Virtual Machines depends on the deployment model. The following are the VMs specifications.
+
+ +-----------------------+---------------------------+------------------------------------------------------------------------+
+ | Specification         | Cassandra Virtual Machine | KK-TS Virtual Machine                                                  |
+ +=======================+===========================+========================================================================+
+ | CPU                   | 8 core                    | 8 core                                                                 |
+ +-----------------------+---------------------------+------------------------------------------------------------------------+
+ | RAM                   | minimum 32GB              | minimum 16GB                                                           |
+ +-----------------------+---------------------------+------------------------------------------------------------------------+
+ | NIC                   | 10GB ethernet             | 10GB ethernet                                                          |
+ +-----------------------+---------------------------+------------------------------------------------------------------------+
+ | Operating System (OS) | RHEL 9.2                  | RHEL 9.2                                                               |
+ +-----------------------+---------------------------+------------------------------------------------------------------------+
+ | Requirements          | None                      | Setup and enable vTPM (please read the documentation of the VM Manager)|
+ +-----------------------+---------------------------+------------------------------------------------------------------------+
+
+* **Notes**
+
+      We recommend you to use vSphere as the VM Manager. 
+
+
+Installing KK-Tokenization Service
+----------------------------------
+
+#.  Run KK-NativeSDK, set the root user before the installation.
+
+    .. code-block:: console
+            
+        $ chmod 755 KK-NativeSDK.sh
+        $ ./KK-NativeSDK.sh install <username>
+
+#.  Install KK-Tokenization Service from the package. Before doing the installation, set the root user  
+
+    .. code-block:: console
+            
+        $ chmod 755 kkts_installer.sh
+        $ ./kkts_installer.sh install <username>
+
+#.  Register KK-Tokenization Service as application to KK-Manager.
+
+    Generate key and CSR. Register them to KK-Manager as key and CSR of KKTS application.
+
+    The following steps demonstrate the method of creating the CSR for an application that will be used to register
+    the application in Kripta Key. In this example, OpenSSL is used to create the KK-TS CSR.
+
+    *   Generate the KK-TS key pair. This example generates an ECDSA P-256 key pair.
+
+        .. code-block:: console
+
+            $ openssl ecparam -name prime256v1 -genkey -noout -out KKTSprivate.key
+
+    *   Create the CSR for the key pair.
+
+        .. code-block:: console
+
+            $ openssl req -new -sha256 -key KKTSprivate.key -out KKTScsr.pem
+
+    *   Register the application using ``clikk app add``, passing in the path to the CSR.
+
+        .. code-block:: console
+
+            $ clikk app add --csr-file-path=KKTScsr.pem --app-id=KKTS --validity-period=365 --output-cert-path=/home/user/Documents/KKTSCertificate.pem
+
+    *   Add the application to a partition using ``clikk partition add-app``.
+
+        .. code-block:: console
+
+            $ clikk partition add-app --partition-id=1 --app-id=KKTS
+
+    *   Ensure the partition has access to KK-Cryptoservice. If it has not, add the partition to the KK-Cryptoservice using ``clikk kk-cryptoservice add-partition``
+
+        .. code-block:: console
+
+            $ clikk kk-cryptoservice add-partition --partition-id=1 --kk-cryptoservice-name=cryptoserviceOne
+
+
+
+Apache Cassandra Configuration
+------------------------------
+
+Apache Cassandra requires 2 VMs for two nodes.
+
+#.  Prerequisites
+
+    *   Install Java 11.
+
+        .. code-block:: console
+
+            $ sudo dnf install java-11-openjdk
+
+    *   Install Python 3.9.
+
+        .. code-block:: console
+
+            $ sudo dnf install python3
+
+#.  Apache Cassandra Installation
+
+    Before installation, adjust :ref:`kernel configuration <kkts-guide/cassandra-setting-recommendation:Kernel configuration>` and 
+    :ref:`disk configuration <kkts-guide/cassandra-setting-recommendation:Disk configuration>` to optimize apache cassandra performance.
+
+    *   Add Cassandra repositories, execute command below.
+
+        .. code-block:: console
+
+            sudo nano /etc/yum.repos.d/cassandra.repo
+
+    *   Insert the following to cassandra.repo
+
+        .. code-block:: console
+
+            [cassandra]
+            name=Apache Cassandra
+            baseurl=https://redhat.cassandra.apache.org/41x/
+            gpgcheck=1
+            repo_gpgcheck=1
+            gpgkey=https://downloads.apache.org/cassandra/KEYS
+
+    *   Install Cassandra
+
+        .. code-block:: console
+
+            sudo dnf install -y cassandra
+
+    *   Create keystore for all nodes, including the truststore containing root and intermediate certificates,
+        here bash script to generate.
+
+        .. code-block:: console
+
+            #!/bin/bash
+
+            # Define directories and file names
+            DIR="/home/user/Documents/kkts"
+            TRUSTSTORE="truststore.jks"
+            CLIENT_KEYSTORE="client.jks"
+            ROOT_CA_KEY="root-ca.key"
+            ROOT_CA_CERT="root-ca.crt"
+            INTERMEDIATE_CA_KEY="intermediate-ca.key"
+            INTERMEDIATE_CA_CERT="intermediate-ca.crt"
+            KEYSTORE_PASS="cassandra"
+
+            # Create directories
+            mkdir -p $DIR
+
+            # Generate Root CA Key and Certificate
+            openssl genrsa -out $DIR/$ROOT_CA_KEY 2048
+            openssl req -new -x509 -days 3650 -key $DIR/$ROOT_CA_KEY -out $DIR/$ROOT_CA_CERT -subj "/C=ID/ST=Kepri/L=Batam/O=Klavis/CN=Root"
+
+            # Generate Intermediate CA Key and Certificate
+            openssl genrsa -out $DIR/$INTERMEDIATE_CA_KEY 2048
+            openssl req -new -key $DIR/$INTERMEDIATE_CA_KEY -out $DIR/intermediate-ca.csr -subj "/C=ID/ST=Kepri/L=Batam/O=Klavis/CN=Intermediate"
+
+            # Sign Intermediate CA Certificate with Root CA
+            openssl x509 -req -in $DIR/intermediate-ca.csr -CA $DIR/$ROOT_CA_CERT -CAkey $DIR/$ROOT_CA_KEY -CAcreateserial -out $DIR/$INTERMEDIATE_CA_CERT -days 1825
+
+            # Create and populate the TrustStore
+            keytool -importcert -noprompt -alias rootCA -file $DIR/$ROOT_CA_CERT -keystore $DIR/$TRUSTSTORE -storepass $KEYSTORE_PASS #-storetype jks
+            keytool -importcert -noprompt -alias intermediateCA -file $DIR/$INTERMEDIATE_CA_CERT -keystore $DIR/$TRUSTSTORE -storepass $KEYSTORE_PASS
+
+            # Generate and Import Client Certificates and Keys
+            clients=("kkts" "node1" "node2")
+
+
+            for client in "${clients[@]}"; do
+                # Generate Client Key and Certificate
+                openssl genrsa -out $DIR/$client.key 2048
+                openssl req -new -key $DIR/$client.key -out $DIR/$client.csr -subj "/C=ID/ST=Kepri/L=Batam/O=Klavis/CN=$client"
+                
+                # Sign Client Certificate with Intermediate CA
+                openssl x509 -req -in $DIR/$client.csr -CA $DIR/$INTERMEDIATE_CA_CERT -CAkey $DIR/$INTERMEDIATE_CA_KEY -CAcreateserial -out $DIR/$client.crt -days 365
+
+                # Combine Key and Certificate into PKCS#12 format (PFX)
+                openssl pkcs12 -export -in $DIR/$client.crt -inkey $DIR/$client.key -out $DIR/$client.p12 -name $client -CAfile $DIR/$INTERMEDIATE_CA_CERT -caname intermediateCA -passout pass:$KEYSTORE_PASS
+
+                # Import PKCS#12 file into the KeyStore
+                keytool -importkeystore -deststorepass $KEYSTORE_PASS -destkeypass $KEYSTORE_PASS -destkeystore $DIR/$client.jks -srckeystore $DIR/$client.p12 -srcstoretype PKCS12 -srcstorepass $KEYSTORE_PASS -alias $client #-storetype jks
+            done
+
+            # List certificates in the TrustStore
+            echo "Listing certificates in the TrustStore:"
+            keytool -list -keystore $DIR/$TRUSTSTORE -storepass $KEYSTORE_PASS
+
+    *   Run above script, below is example with name file ``cassandra.file``.
+
+        .. code-block:: console
+
+            ./cassandra.file
+
+    *   Generate directory ``/var/lib/cassandra/data/``
+
+        .. code-block:: console
+
+            sudo mkdir -p /var/lib/cassandra/data/
+            sudo chown cassandra:cassandra /var/lib/cassandra/data/
+
+    *   After generate the certificates, copy to the directory ``/var/lib/cassandra/data/``.
+
+        .. code-block:: console
+
+            sudo cp [filename]  /var/lib/cassandra/data/
+            sudo chown -R cassandra:cassandra /var/lib/cassandra/data/
+
+    *   Edit cassandra.yaml configuration file which is located on ``/etc/cassandra/conf/cassandra.yaml``,
+        change the following to all nodes.
+
+        .. code-block:: console
+
+            cluster_name: 'KK-TS Cluster'
+
+    *   Assign one node as seed nodes. You can promote additional nodes to seed nodes later, but please promote them one by one. 
+        Do not designate them as seeds during the bootstrap process for a new node.
+        Below is configuration example with 2 nodes:
+        
+        *   Node 1: 10.21.0.2
+        *   Node 2: 10.21.0.3
+
+        Edit cassandra.yaml configuration file which is located on ``/etc/cassandra/conf/cassandra.yaml``, change the following.
+        
+        *   Node 1
+
+            .. code-block:: console
+
+                seed_provider:
+                # Addresses of hosts that are deemed contact points.
+                # Cassandra nodes use this list of hosts to find each other and learn
+                # the topology of the ring.  You must change this if you are running
+                # multiple nodes!
+                - class_name: org.apache.cassandra.locator.SimpleSeedProvider
+                parameters:
+                    # seeds is actually a comma-delimited list of addresses.
+                    # Ex: "<ip1>,<ip2>,<ip3>"
+                    - seeds: "10.21.0.2:7000"
+                .
+                .
+                .
+
+                listen_address: 10.21.0.2
+                rpc_address: 10.21.0.2
+
+                .
+                .
+                .
+
+                server_encryption_options:
+                internode_encryption: all
+                keystore: /var/lib/cassandra/data/node1.jks
+                keystore_password: cassandra
+                require_client_auth: true
+                truststore: /var/lib/cassandra/data/truststore.jks
+                truststore_password: cassandra
+                store_type: PKCS12
+                .
+                .
+                .
+                client_encryption_options:
+                enabled: true
+                keystore: /var/lib/cassandra/data/node1.jks
+                keystore_password: cassandra
+                require_client_auth: true 
+                truststore: /var/lib/cassandra/data/truststore.jks
+                truststore_password: cassandra
+                store_type: PKCS12
+                .
+                .
+                .
+                authenticator: PasswordAuthenticator
+                .
+                .
+                .
+
+                authorizer: CassandraAuthorizer
+                .
+                .
+                .
+                endpoint_snitch: GossipingPropertyFileSnitch
+
+
+        *   Node 2
+
+            .. code-block:: console
+
+                seed_provider:
+                # Addresses of hosts that are deemed contact points.
+                # Cassandra nodes use this list of hosts to find each other and learn
+                # the topology of the ring.  You must change this if you are running
+                # multiple nodes!
+                - class_name: org.apache.cassandra.locator.SimpleSeedProvider
+                parameters:
+                    # seeds is actually a comma-delimited list of addresses.
+                    # Ex: "<ip1>,<ip2>,<ip3>"
+                    - seeds: "10.21.0.2:7000"
+                .
+                .
+                .
+
+                listen_address: 10.21.0.3
+                rpc_address: 10.21.0.3
+
+                .
+                .
+                .
+
+                server_encryption_options:
+                internode_encryption: all
+                keystore: /var/lib/cassandra/data/node2.jks
+                keystore_password: cassandra
+                require_client_auth: true
+                truststore: /var/lib/cassandra/data/truststore.jks
+                truststore_password: cassandra
+                store_type: PKCS12
+                .
+                .
+                .
+                client_encryption_options:
+                enabled: true
+                keystore: /var/lib/cassandra/data/node2.jks
+                keystore_password: cassandra
+                require_client_auth: true 
+                truststore: /var/lib/cassandra/data/truststore.jks
+                truststore_password: cassandra
+                store_type: PKCS12
+                .
+                .
+                .
+                authenticator: PasswordAuthenticator
+                .
+                .
+                .
+
+                authorizer: CassandraAuthorizer
+                .
+                .
+                .
+                endpoint_snitch: GossipingPropertyFileSnitch
+
+    *   Configure rack and DC. Specify rack and DC for each node. 
+
+        .. code-block:: console
+
+            sudo nano /etc/cassandra/conf/cassandra-rackdc.properties
+
+    *   If using multiple datacenters or there is high connection latency between nodes, consider 
+        changing internode request timeout on the ``/etc/cassandra/conf/cassandra.yaml``.
+
+        .. code-block:: console
+
+            # How long the coordinator should wait for read operations to complete.
+            # Lowest acceptable value is 10 ms.
+            # Min unit: ms
+            read_request_timeout: 5000ms
+            # How long the coordinator should wait for seq or index scans to complete.
+            # Lowest acceptable value is 10 ms.
+            # Min unit: ms
+            range_request_timeout: 10000ms
+            # How long the coordinator should wait for writes to complete.
+            # Lowest acceptable value is 10 ms.
+            # Min unit: ms
+            write_request_timeout: 2000ms
+            # How long the coordinator should wait for counter writes to complete.
+            # Lowest acceptable value is 10 ms.
+            # Min unit: ms
+            counter_write_request_timeout: 5000ms
+            # How long a coordinator should continue to retry a CAS operation
+            # that contends with other proposals for the same row.
+            # Lowest acceptable value is 10 ms.
+            # Min unit: ms
+            cas_contention_timeout: 1000ms
+            # How long the coordinator should wait for truncates to complete
+            # (This can be much longer, because unless auto_snapshot is disabled
+            # we need to flush first so we can snapshot before removing the data.)
+            # Lowest acceptable value is 10 ms.
+            # Min unit: ms
+            truncate_request_timeout: 60000ms
+            # The default timeout for other, miscellaneous operations.
+            # Lowest acceptable value is 10 ms.
+            # Min unit: ms
+            request_timeout: 10000ms
+
+    *   By default, Cassandra has several directory configurations, as identified by the command below. 
+        You can change the directory paths to match the directories you use.
+
+        .. code-block:: console
+
+            # Directories where Cassandra should store data on disk. If multiple
+            # directories are specified, Cassandra will spread data evenly across
+            # them by partitioning the token ranges.
+            # If not set, the default directory is $CASSANDRA_HOME/data/data.
+            data_file_directories:
+                - /var/lib/cassandra/data
+    
+    *   Configure firewall to allow in and out connection on port 7000 and 9042 on all machine.
+
+        .. code-block:: console
+
+            sudo firewall-cmd --permanent --zone=public --add-port=7000/tcp
+            sudo firewall-cmd --permanent --zone=public --add-port=9042/tcp
+            sudo firewall-cmd --reload
+
+    *   Install systemd
+
+        .. code-block:: console
+
+            sudo dnf install systemd
+
+    *   Install initscripts
+
+        .. code-block:: console
+
+            sudo dnf install initscripts
+
+    
+    At this time, before you start the Cassandra service, you allowed to set YAML and JVM configuration. 
+    
+    Execute commands below on each node. Please start the service sequentially. One node must succeed first before continuing to the next node. 
+
+    *   Start the Cassandra service.
+
+        .. code-block:: console
+
+            $ sudo service cassandra start
+
+    *   Ensure that the node up by checking the service 
+
+        .. code-block:: console
+
+            $ sudo systemctl status cassandra
+            $ nodetool status
+
+        .. note::
+
+            If you encounter any problems, check the log on ``/var/log/cassandra/cassandra.log``.
+
+    *   Check if it's running correct configuration.
+
+        .. code-block:: console
+
+            $ nodetool info
+
+Cqlsh Setup
+-----------
+
+    Cqlsh is a command line interface for interacting with Cassandra using CQL (Cassandra Query Language).
+    Cqlsh is implemented with Python native protocol driver, and connects to the single specified node.
+
+    *   Install properties
+
+        .. code-block:: console
+
+            $ sudo dnf install pip 
+
+    *   Install Cqlsh
+
+        .. code-block:: console
+
+            $ pip install cqlsh
+    
+    *   Create file ``cqlshrc`` on ``$HOME/.cassandra`` directory. Insert script below and use the 
+        previously generated certificate from same CA.
+
+        .. code-block:: console
+
+            [connection]
+            factory = cqlshlib.ssl.ssl_transport_factory
+
+            [ssl]
+            certfile = /home/user/root-ca.crt
+            validate = false
+            userkey = /home/user/kkts.key
+            usercert = /home/user/kkts.crt
+    
+    *   Start cqlsh and connect it to node 1 by using default superuser name and password (user = cassandra, password = cassandra).
+
+        .. code-block:: console
+
+            $ cqlsh node1 --ssl -u cassandra
+
+    *   Alter system_auth to replicate authentication and authorization. The defautlt replication factor for the system_auth is 1, 
+        increase it to same as of the number of nodes to ensure the keyspace is always available.
+
+        .. code-block:: console
+
+            ALTER KEYSPACE system_auth WITH replication = {'class': 'SimpleStrategy', 'datacenter1': 2};
+
+    *   After update the replication factor, run nodetool repair to make certain change is propagated:
+
+        .. code-block:: console
+
+            nodetool repair system_auth
+
+    *   Restart Cassandra service.
+
+        .. code-block:: console
+
+            $ sudo service cassandra start
+    
+    *   Start the cqlsh.
+
+        .. code-block:: console
+
+            $ cqlsh node1 --ssl -u cassandra
+
+    *   Replace the default superuser "cassandra" with another superuser to prevent security breaches. 
+        It identified by different name. Create your own db administrator. 
+
+        .. code-block:: console
+
+            $ CREATE ROLE dba WITH SUPERUSER = true AND LOGIN = true AND PASSWORD = 'super';
+
+    *   Exit the cqlsh and reconnect using new dba user. 
+
+        .. code-block:: console
+
+            cqlsh node1 --ssl -u dba
+
+    *   The default superuser "cassandra" cannot be deleted from Cassandra. To neutralize the account, 
+        change the password to something long and incomprehensible, and alter the user's status to NOSUPERUSER by query.
+
+        .. code-block:: console
+
+            $ ALTER ROLE cassandra WITH PASSWORD='SomeNonsenseThatNoOneWillThinkOf' AND SUPERUSER=false;
+
+        or disable the default superuser access 
+
+        .. code-block:: console
+
+            $ ALTER ROLE cassandra WITH SUPERUSER = false AND LOGIN = false;
+
+    *   Create user for KK-TS namespace.
+    
+        .. code-block:: console
+            
+            $ CREATE ROLE kkts WITH SUPERUSER = false AND LOGIN = true AND PASSWORD = `Klavis1!`;
+
+    *   Follow :ref:`KK-TS namespace setup <kkts-guide/kkts-installation:KK-TS Namespace Setup>`, 
+        then grant all access to kkts keyspace 
+
+        .. code-block:: console
+
+            $ GRANT ALL ON KEYSPACE kkts TO kkts;
+
+    
+
+
+KK-TS Namespace Setup
+---------------------
+
+    Run these command on cqlsh
+
+    .. code-block:: console
+
+        CREATE KEYSPACE IF NOT EXISTS kkts WITH replication = {'class': 'NetworkTopologyStrategy', 'datacenter1': 3};
+        CREATE TABLE IF NOT EXISTS kkts.AppConfig (m_appSKI VARCHAR PRIMARY KEY, m_partitionId BIGINT, m_keyId VARCHAR) WITH caching = {'keys': 'ALL', 'rows_per_partition': 'ALL'} AND compaction = { 'class' : 'LeveledCompactionStrategy' } AND compression = {'class': 'LZ4Compressor', 'chunk_length_in_kb': 4 };
+        CREATE TABLE IF NOT EXISTS kkts.AppName (m_appName VARCHAR PRIMARY KEY, m_appSKI VARCHAR) WITH caching = {'keys': 'ALL', 'rows_per_partition': 'ALL'} AND compaction = { 'class' : 'LeveledCompactionStrategy' } AND compression = {'class': 'LZ4Compressor', 'chunk_length_in_kb': 4 };
+        CREATE TABLE IF NOT EXISTS kkts.DataConfig (m_appSKI VARCHAR, m_configId VARCHAR, m_tokenType BIGINT, m_formattingCharacters VARCHAR, m_tokenizedWith BIGINT, m_minimumLength BIGINT, PRIMARY KEY(m_appSKI, m_configId)) WITH caching = {'keys': 'ALL', 'rows_per_partition': 'ALL'} AND compaction = { 'class' : 'LeveledCompactionStrategy' } AND compression = {'class': 'LZ4Compressor', 'chunk_length_in_kb': 4 };
+        CREATE TABLE IF NOT EXISTS kkts.AppConfigACL (m_masterAppSKI VARCHAR, m_slaveAppSKI VARCHAR, PRIMARY KEY ((m_masterAppSKI, m_slaveAppSKI))) WITH caching = {'keys': 'ALL', 'rows_per_partition': 'ALL'} AND compaction = { 'class' : 'LeveledCompactionStrategy' };
+
+    If you have multiple datacenter (for example 3 nodes in datacenter2), the KK-TS keyspace creation will be:
+    ``CREATE KEYSPACE IF NOT EXISTS kkts WITH replication = {'class': 'SimpleStrategy', 'datacenter1': 2};``
+
+
+YAML Configuration
+------------------
+
+    File configuration: ``etc/cassandra/conf/cassandra.yaml``
+
+    *   ``disk_optimization_strategy``: optimizing disk read, ``ssd`` or ``spinning`` for HDD
+    *   ``concurrent_Reads``: 16*number_of_drives
+    *   ``concurrent_counter_writes``: same as concurrent_Reads
+    *   ``concurrent_writes``: 8*number_of_cores
+    *   ``concurrent_materialized_view_writes``: less of concurrent reads or concurrent writes
+    *   ``concurrent_compactors``: number of cores if using ssd
+    *   ``compaction_throughput``: ``0MiB/s`` to remove throttle
+    *   ``paxos_variant``: ``v2`` use newest paxos
+
+
+JVM Configuration
+-----------------
+
+    .. figure:: /_static/cassandra_heap_memory.png
+
+    File configuration: ``/etc/cassandra/conf/jvm-server.options``
+
+    32 GB RAM configuration:
+
+    *   Xms16GB: min heap size, 16GB to spare some for page cache. 
+    *   Xmx16GB: max heap size, 16GB to avoid stop-the-world during resize.
+    *   Comment Xmn setting
+
+    File configuration: ``/etc/cassandra/conf/jvm11-server.options``
+    
+    *   X:+UseG1GC
+    *   XX:+ParallelRefProcEnabled
+    *   XX:MaxTenuringThreshold=6
+    *   comment CMS setting
+
+
+Configuring KK-TS to KK-CS and Apache Cassandra
+-----------------------------------------------
+
+#.  Set KK-TS port.
+
+    .. code-block:: console
+
+        $ kk-ts config set --kkts-server-port=8080
+
+#.  Configure KK-TS with KK-CS. 
+
+    *   Set the connection port and host for KK-CS. Please use the SDK port specified on KK-CS.
+
+        .. code-block:: console
+
+            $ kk-ts config set --kkcs-connection-host=10.30.0.6 --kkcs-connection-port=8088
+
+    *   Set the KK-TS private key and certificate created in process :ref:`installing KK-Tokenization Service <kkts-guide/kkts-installation:Installing KK-Tokenization Service>`
+
+        .. code-block:: console
+
+            $ kk-ts config set --kkcs-connection-appcertificate=KKTSCertificate.pem --kkcs-connection-appprivatekey=KKTSprivate.key
+
+#.  Configure KK-TS with Apache Cassandra. 
+
+    *   Set the connection port and host of Cassandra.
+
+        .. code-block:: console
+
+            $ kk-ts config set --cassandra-connection-host=10.30.0.2 --cassandra-connection-port=8001
+
+    *   Set the username and password of Cassandra.
+
+        .. code-block:: console
+
+            $ kk-ts config set --cassandra-connection-user=CassandraKlavis --cassandra-connection-password=CassandraKlavis1!
+
+    *   Set the private key and certificate of Cassandra.
+
+        .. code-block:: console
+
+            $ kk-ts config set --cassandra-connection-certificate=/path/to/cassandrakktscertificate.crt --cassandra-connection-privatekey=/path/to/cassandrakkts.key
+
+
+Apply KK-TS License and Run the KK-TS 
+-------------------------------------
+
+#.  Request the license to RSI and apply this to KK-TS. Detailed on :ref:`KK-TS License <kkts-guide/kkts-license:KK-TS License>`
+
+#.  Enable and start the KK-TS service.
+
+    .. code-block:: console
+
+        $ sudo systemctl enable kk-tsd --now
+
+#.  Check the status the KK-TS service, ensure that the service active.
+
+    .. code-block:: console
+
+        $ sudo systemctl status kk-tsd
+
+
+Generating Client Certificate and Configuring the Client Application to KK-TS
+-----------------------------------------------------------------------------
+
+#.  Generate Client Certificate
+
+    *   Generate the application's key pair. This example generates an ECDSA P-256 key pair.
+
+        .. code-block:: console
+
+            $ openssl ecparam -name prime256v1 -genkey -noout -out client_private.key
+
+    *   Create the CSR for the key pair.
+
+        .. code-block:: console
+
+            $ openssl req -new -sha256 -key client_private.key -out client_csr.pem
+
+    *   Generate client certificate using KK-TS command.
+
+        .. code-block:: console
+
+            $ kk-ts client-app gen-cert --csr-path=/path/to/client_csr.pem --output-cert-path=/path/to/output/client_cert.pem
+
+#.  Configure the Client Application to KK-Tokenization Service.
+
+    *   Before you start using vault-based tokenization please do client :ref:`kkts-guide/command-line-interface:Application configuration`.
+
+        .. code-block:: console
+
+            $ kk-ts appconfig add --app-name=AppOne --certificate-file=client_cert.pem --partition-id=1 --key-id=01aes
+
+    *   For the tokenization service functionality, add data config with specific data format. Data format detailed on :ref:`data configuration <kkts-guide/domain-configuration:Data configuration>`
+
+        .. code-block:: console
+
+            $ kk-ts dataconfig add --app-ski=656cf721a1efc325d44181c1e877445efc3079ae --config-id=PhoneNumber --token-type=1 --tokenized-with=2 --minimum-length=8
+
+
+
+
+
+

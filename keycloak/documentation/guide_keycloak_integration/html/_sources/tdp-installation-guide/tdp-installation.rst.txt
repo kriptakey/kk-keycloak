@@ -1,0 +1,155 @@
+Deploying Kripta Key TDP
+========================
+
+Just like Kripta Key itself, the TDP deployment is supported only on Red Hat Enterprise Linux 9.2.
+This guide breaks down the steps into several sections.
+
+
+Installing database server
+--------------------------
+
+As mentioned in :ref:`tdp-installation-guide/before-installing:creating the tdp certificates`, this guide only covers
+MySQL and PostgreSQL database servers. Follow the steps for the appropriate database server below.
+
+
+Using MySQL
+~~~~~~~~~~~
+
+**Install MySQL**
+
+#.  Install MySQL.
+
+    .. code-block:: console
+
+        $ sudo dnf install mariadb-server
+
+**Enabling mTLS in MySQL**
+
+#.  Copy the prepared certificates and key to ``/var/lib/mysql``.
+
+    .. code-block:: console
+
+        $ sudo cp database.crt database.key root.crt /var/lib/mysql/
+
+#.  Change the ownership of the certificate file to the MySQL user.
+
+    .. code-block:: console
+
+        $ sudo chown mysql:mysql /var/lib/mysql/database.crt /var/lib/mysql/database.key /var/lib/mysql/root.crt
+
+#.  Change the permissions of the private key file.
+
+    .. code-block:: console
+
+        $ sudo chmod 400 /var/lib/mysql/database.key
+
+#.  Add the following settings to the ``/etc/my.cnf`` file.
+
+    .. code-block:: ini
+
+        [mysqld]
+        ssl
+        ssl-ca=/var/lib/mysql/root.crt
+        ssl-cert=/var/lib/mysql/database.crt
+        ssl-key=/var/lib/mysql/database.key
+        require_secure_transport=ON
+
+#.  Restart mySQL, and then run this command to test if mTLS has been enabled successfully.
+
+    .. code-block:: console
+
+        mysql -u root -h mysql --ssl-ca=root.crt --ssl-cert=tdp-server.crt --ssl-key=tdp-server.key
+
+
+
+Using PostgreSQL
+~~~~~~~~~~~~~~~~
+
+**Install PostgreSQL**
+
+#.  Install PostgreSQL.
+
+    .. code-block:: console
+
+        $ sudo dnf install postgresql-server postgresql-contrib
+
+#.  Initialize the database.
+
+    .. code-block:: console
+
+        $ sudo /usr/bin/postgresql-setup --initdb --unit postgresql
+
+
+**Enabling mTLS in PostgreSQL**
+
+#.  Copy the prepared certificates and key to ``/var/lib/pgsql/data``.
+
+    .. code-block:: console
+
+        $ sudo cp database.crt database.key root.crt /var/lib/pgsql/data/
+
+#.  Change the ownership of the certificate file to the PostgreSQL user.
+
+    .. code-block:: console
+
+        $ sudo chown postgres:postgres /var/lib/pgsql/data/database.crt /var/lib/pgsql/data/database.key /var/lib/pgsql/data/root.crt
+
+#.  Change the permissions of the private key file.
+
+    .. code-block:: console
+
+        $ sudo chmod 400 /var/lib/pgsql/data/database.key
+
+#.  Edit the PostgreSQL configuration.
+
+    .. code-block::
+
+        listen_addresses '*'
+        ssl on
+        ssl_ca_file 'root.crt'
+        ssl_cert_file 'database.crt'
+        ssl_key_file 'database.key'
+
+#.  Restart PostgreSQL, and then run this command to test if mTLS has been enabled successfully.
+
+    .. code-block:: console
+
+        $ psql "sslmode=verify-full sslrootcert=root.crt sslcert=tdp-client.crt sslkey=tdp-client.key host=postgresql port=5432 user=test dbname=test"
+
+
+
+Deploying TDP server
+--------------------
+
+#.  Install KK-TDP.
+
+    .. code-block:: console
+
+        $ sudo bash kk_tdp_installer.sh install [username]
+
+#.  Configure the daemon service.
+
+    .. code-block:: console
+
+        $ sudo bash kk_tdp_installer.sh configure-daemon-service 
+
+#.  Start the KK-TDP service.
+
+    .. code-block:: console
+
+        $ sudo systemctl start kk-tdp.service
+
+#.  Test the database server.
+
+    *   Test postgresql TDP server using command below.
+
+        .. code-block:: console
+
+            $ psql "sslmode=verify-full sslrootcert=root.crt sslcert=tdp-client.crt sslkey=tdp-client.key host=tdp-server port=9393 user=test dbname=test"
+
+    *   Test mysql TDP server using command below.
+
+        .. code-block:: console
+
+            $ mysql -u root -h tdp-server -P 9393 --ssl-ca=root.crt --ssl-cert=tdp-client.crt --ssl-key=tdp-client.key
+

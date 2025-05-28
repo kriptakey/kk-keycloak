@@ -1,0 +1,32 @@
+Authentication services
+=======================
+
+Each connection from any application to KK-Cryptoservice, via REST API or SDK, is authenticated by
+the certificate-based mutual authentication protocol in mutual Transport Layer Security (mTLS). A partition ID and
+a password constitute additional factors for :term:`login`. A successful login returns a session token, which grants
+the application a session to directly access the relevant cryptographic services.
+
+Each session has a one hour time limit. Within one hour, the application may extend its session
+by refreshing it using the :term:`refresh session` service. However, a session cannot be extended indefinitely ---
+a session will  Additionally, a session may time out and expire
+if it is not refreshed within one hour. Once the session expires, the application must obtain a new session
+by performing login again in order to access the cryptographic services.
+
+If an application fails to login three times due to incorrect credentials, it will be locked out. This lock out
+will normally cease in thirty minutes. However, an administrator may unlock the application immediately
+by running the ``clikk partition unlock-app`` command.
+
+.. todo::
+
+    TODO: Link ``unlock-app`` to System Admin Guide.
+
+.. glossary::
+
+    Login
+        Applications are allowed access to cryptographic services only if they have a session. Sessions may be
+        obtained after a successful login.
+
+    Refresh session
+        If an application still needs access to cryptographic services as its session nears the one hour limit,
+        the application can call this endpoint to extend the session. The extended session ends in one hour
+        from the time of refresh,

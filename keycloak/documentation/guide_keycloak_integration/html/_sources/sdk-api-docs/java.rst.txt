@@ -1,0 +1,6 @@
+Java SDK Documentation
+======================
+
+.. raw:: html
+
+   <iframe src="../_static/sdk_doc/java/index.html" height="345px" width="100%"></iframe>

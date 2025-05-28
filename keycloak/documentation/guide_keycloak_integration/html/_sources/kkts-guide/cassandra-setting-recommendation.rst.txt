@@ -1,0 +1,176 @@
+Apache Cassandra Setting Recommendation
+=======================================
+
+This section provides the recommendation settings to optimize the Apache Cassandra performance.
+
+Keyspace configuration
+----------------------
+
+*   ``class`` on replication: ``SimpleStrategy``, used for single datacenter. 
+*   ``datacenter1``: 2, full replication (means all data replicated to all 2 nodes by setting up the RF=2)
+
+
+Table Configuration
+-------------------
+
+*   ``chunk_length_in_kb`` on compression: set to 4kb for SSD and 64kb for HDD (sync with disk read_ahead).
+
+
+Disk configuration
+------------------
+
+*   ``read_ahead``: set to 4kb for SSD and 64kb for HDD. Below is an example of changing the read ahead value for ``/dev/vdb`` to 4kb SSD.
+    Note that this change not permanent, admin need to re-set after a restart.
+    Block calculation:
+    setra in 512-byte sectors
+
+    4kb = 4 * 1024 = 4096 byte.
+    
+    setra block = 4096/512 = 8 blocks.
+
+    .. code-block:: console
+
+        $ sudo blockdev --setra 8 /dev/vdb
+
+
+Kernel Configuration
+--------------------
+
+*   Adjust sysctl.conf
+
+    .. code-block:: console
+
+        $ sudo nano /etc/sysctl.conf
+
+*   Insert following script
+
+    .. code-block:: console
+
+        net.core.rmem_max = 16777216
+        net.core.wmem_max = 16777216
+        net.core.rmem_default = 16777216
+        net.core.wmem_default = 16777216
+        net.core.optmem_max = 40960
+        net.ipv4.tcp_rmem = 4096 87380 16777216
+        net.ipv4.tcp_wmem = 4096 65536 16777216
+
+        vm.max_map_count = 1048575
+
+*   Save the adjustment
+
+    .. code-block:: console
+
+        sudo sysctl -p
+
+
+Audit Log
+---------
+
+To activate the audit log, please follow procedure below:
+
+*   Modify cassandra.yaml. Ensure that ``/path/to/logdir/`` is created and owned by ``cassandra`` user.
+
+     .. code-block:: console
+
+        audit_logging_options:
+        enabled: true 
+        logger:
+            - class_name: BinAuditLogger
+        audit_logs_dir: /path/to/logdir/
+        # included_keyspaces:
+        # excluded_keyspaces: system, system_schema, system_virtual_schema
+        # included_categories:
+        excluded_categories: QUERY, DML
+
+*   Restart the cassandra service.
+
+    .. code-block:: console
+
+        sudo systemctl restart cassandra
+
+*   Login to ``cqlsh`` and check the log.
+
+    .. code-block:: console
+
+        auditlogviewer /path/to/logdir/
+
+
+Tuning Guide 
+------------
+
+*   System Resource
+
+    #.  Install demonstrate
+
+        .. code-block:: console
+
+            $ sudo dnf install dstat
+
+    #.  Monitoring system resource
+
+        .. code-block:: console
+
+            $ dstat -lrvn 10
+
+        .. figure:: /_static/cassandra_system_monitoring.png
+
+    #.  Check io read/write if there is high read/write operation then observe with command below.
+
+        .. code-block:: console
+
+            $ sudo dnf install sysstat
+            $ sudo iostat -xdm 2
+
+    #.  See if there is high ``r_await`` or ``w_await`` to check disk read/write latency and benchmark
+        your disk using ``fio``
+
+    #.  Check the memory. Cassandra uses cached memory (page cache), so high cached memory and low free memory is good.
+
+    #.  Check network recv/send, also benchmark connection over node using ``iperf3``
+
+        .. code-block:: console
+
+            $ sudo dnf install iperf3
+
+    #.  Execute command below on server, e.g., node 1.
+
+        .. code-block:: console
+
+            $ iperf -s
+
+    #.  Execute command below on client, e.g., node 2.
+
+        .. code-block:: console
+
+            $ iperf -c 10.21.0.2
+
+    #.  Check total-usage if there is a lot of ``wait``, there might be IO bottleneck.
+
+
+*   JVM profiling
+
+    #.  get asprof (https://github.com/async-profiler/async-profiler) and copy to directory which cassandra can access.
+
+    #.  Generate flame graph for the cassandra JVM.
+
+        .. code-block:: console
+
+            $ sudo /cassandra/async-profiler-3.0-linux-x64/bin/asprof -f /tmp/cass.html $(cat /var/run/cassandra/cassandra.pid)
+
+    #.  Check the flamegraph to see the method calls and the percentage of time they are taking, and to check if there is a long GC pause.
+
+        .. figure:: /_static/cassandra_flamegraph.png
+            
+
+*   Nodetool command
+
+    Important command to check nodes condition.
+
+    *   ``nodetool status``: show cluster information
+    *   ``nodetool info``: show node information
+    *   ``nodetool compationstatus``: check compaction
+    *   ``nodetool tpstats``: check thread pools
+    *   ``nodetool tablehistograms``: check histograms
+    *   ``nodetool tablestats``: check table 
+
+

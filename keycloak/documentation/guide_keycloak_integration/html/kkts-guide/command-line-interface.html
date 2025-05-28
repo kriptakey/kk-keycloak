@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KK-TS command line interface &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tokenization services" href="kms-tokenization-services.html" />
+    <link rel="prev" title="KK-TS License" href="kkts-license.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">KK-TS Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design-motivation.html">Design motivation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kkts-installation.html">KK-Tokenization Service Setup and Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kkts-backuprestore.html">KK-Tokenization Service Backup and Restore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cassandra-setting-consideration.html">Apache Cassandra Setting Consideration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cassandra-setting-recommendation.html">Apache Cassandra Setting Recommendation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domain-configuration.html">Domain configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kkts-license.html">KK-TS License</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">KK-TS command line interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#license">License</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#license-request">License Request</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kk-ts-license-request-customer-cert"><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">license</span> <span class="pre">request</span> <span class="pre">customer-cert</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kk-ts-license-request-deploy-perm"><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">license</span> <span class="pre">request</span> <span class="pre">deploy-perm</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#license-apply">License Apply</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kk-ts-license-apply-customer-cert"><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">license</span> <span class="pre">apply</span> <span class="pre">customer-cert</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kk-ts-license-apply-deploy-perm"><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">license</span> <span class="pre">apply</span> <span class="pre">deploy-perm</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#kk-ts-configuration">KK-TS configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kkts-config-print"><code class="docutils literal notranslate"><span class="pre">kkts</span> <span class="pre">config</span> <span class="pre">print</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kkts-config-set"><code class="docutils literal notranslate"><span class="pre">kkts</span> <span class="pre">config</span> <span class="pre">set</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#client-management">Client management</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kk-ts-client-gen-cert"><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">client</span> <span class="pre">gen-cert</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#partition-configuration">Partition configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kk-ts-partition-add"><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">partition</span> <span class="pre">add</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kk-ts-partition-list"><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">partition</span> <span class="pre">list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kk-ts-partition-delete"><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">partition</span> <span class="pre">delete</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#application-configuration">Application configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kk-ts-appconfig-add"><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">appconfig</span> <span class="pre">add</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kk-ts-appconfig-list"><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">appconfig</span> <span class="pre">list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kk-ts-appconfig-info"><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">appconfig</span> <span class="pre">info</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kk-ts-appconfig-acl-add"><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">appconfig</span> <span class="pre">acl-add</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kk-ts-appconfig-acl-masterlist"><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">appconfig</span> <span class="pre">acl-masterlist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kk-ts-appconfig-acl-slavelist"><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">appconfig</span> <span class="pre">acl-slavelist</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#data-configuration">Data configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kk-ts-dataconfig-add"><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">dataconfig</span> <span class="pre">add</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kk-ts-dataconfig-list"><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">dataconfig</span> <span class="pre">list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kk-ts-dataconfig-info"><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">dataconfig</span> <span class="pre">info</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="kms-tokenization-services.html">Tokenization services</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">KK-TS Guide</a></li>
+      <li class="breadcrumb-item active">KK-TS command line interface</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/kkts-guide/command-line-interface.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="kk-ts-command-line-interface">
+<h1>KK-TS command line interface<a class="headerlink" href="#kk-ts-command-line-interface" title="Link to this heading"></a></h1>
+<p>This section details all available commands in Kripta Key Tokenization Service. All commands will prompt for
+KK-TS CLI password.</p>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Link to this heading"></a></h2>
+<p>These commands are used to manage KK-TS license.</p>
+</section>
+<section id="license-request">
+<h2>License Request<a class="headerlink" href="#license-request" title="Link to this heading"></a></h2>
+<p>Generate request file for tokenization service.</p>
+<section id="kk-ts-license-request-customer-cert">
+<h3><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">license</span> <span class="pre">request</span> <span class="pre">customer-cert</span></code><a class="headerlink" href="#kk-ts-license-request-customer-cert" title="Link to this heading"></a></h3>
+<p>Create customer certificate request file.</p>
+<p><strong>Flags</strong>:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">--customer-id=<var>&lt;customer ID&gt;</var></span></kbd></dt>
+<dd><p>The identifier of customer.</p>
+</dd>
+<dt><kbd><span class="option">--output-enc-privkey-path=<var>&lt;output path of private key&gt;</var></span></kbd></dt>
+<dd><p>The output encrypted private key path.</p>
+</dd>
+<dt><kbd><span class="option">--output-csr-path=<var>&lt;output path of CSR&gt;</var></span></kbd></dt>
+<dd><p>The output CSR path</p>
+</dd>
+</dl>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kk-ts<span class="w"> </span>license<span class="w"> </span>request<span class="w"> </span>customer-cert<span class="w"> </span>--customer-id<span class="o">=</span>customer1<span class="w"> </span>--output-enc-privkey-path<span class="o">=</span>/path/to/customer.key<span class="w"> </span>--output-csr-path<span class="o">=</span>/path/to/customerCSR.pem
+<span class="go">New customer private key password:</span>
+<span class="go">New customer private key password confirmation:</span>
+<span class="go">[v] Request customer certificate successfully created</span>
+</pre></div>
+</div>
+</section>
+<section id="kk-ts-license-request-deploy-perm">
+<h3><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">license</span> <span class="pre">request</span> <span class="pre">deploy-perm</span></code><a class="headerlink" href="#kk-ts-license-request-deploy-perm" title="Link to this heading"></a></h3>
+<p>Create KK-TS signature to get deployment permission from RSI.</p>
+<p><strong>Flags</strong>: None.</p>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kk-ts<span class="w"> </span>license<span class="w"> </span>request<span class="w"> </span>deploy-perm
+<span class="go">To enhance KKTS security against unauthorized administrator, you must set KKTS password to be used for most KKTS command line features</span>
+<span class="go">New KKTS command line password:</span>
+<span class="go">New KKTS command line password confirmation:</span>
+<span class="go">[v] Request deployment permission successfully created MEUCIQDuL7RMP4Vkkz3kr2CqFfXEZZ88aLdUnmeR+ynyaURzsQIgQer0Fm0CWWaqAqHWdnH87AlaYV/Tbtmhdfiu=</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="license-apply">
+<h2>License Apply<a class="headerlink" href="#license-apply" title="Link to this heading"></a></h2>
+<p>Apply Kripta Key Tokenization Service license.</p>
+<section id="kk-ts-license-apply-customer-cert">
+<h3><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">license</span> <span class="pre">apply</span> <span class="pre">customer-cert</span></code><a class="headerlink" href="#kk-ts-license-apply-customer-cert" title="Link to this heading"></a></h3>
+<p>Apply the customer certificate to enable tokenization service.
+The customer certificate is applied only once per customer.</p>
+<p><strong>Flags</strong>:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">--encrypted-private-key-path=<var>&lt;encrypted private key path&gt;</var></span></kbd></dt>
+<dd><p>The file path of encrypted customer private key is obtained from command <code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">license</span> <span class="pre">request</span> <span class="pre">customer-cert</span></code>.</p>
+</dd>
+<dt><kbd><span class="option">--certificate-path=<var>&lt;customer certificate path&gt;</var></span></kbd></dt>
+<dd><p>The file path of customer certificate.</p>
+</dd>
+</dl>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kk-ts<span class="w"> </span>license<span class="w"> </span>apply<span class="w"> </span>customer-cert<span class="w"> </span>--encrypted-private-key-path<span class="o">=</span>/path/to/customer.key<span class="w"> </span>--certificate-path<span class="o">=</span>/path/to/customerCert.pem
+<span class="go">Encrypted customer private key password:</span>
+<span class="go">[v] Customer license sucessfully applied</span>
+</pre></div>
+</div>
+</section>
+<section id="kk-ts-license-apply-deploy-perm">
+<h3><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">license</span> <span class="pre">apply</span> <span class="pre">deploy-perm</span></code><a class="headerlink" href="#kk-ts-license-apply-deploy-perm" title="Link to this heading"></a></h3>
+<p>Apply deployment permission file.</p>
+<p>This command requires KK-TS and RSI signature.</p>
+<p><strong>Flags</strong>:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">--kkts-signature=<var>&lt;KKTS signature&gt;</var></span></kbd></dt>
+<dd><p>The KK-TS signature.</p>
+</dd>
+<dt><kbd><span class="option">--rsi-signature=<var>&lt;RSI signature&gt;</var></span></kbd></dt>
+<dd><p>The RSI signature.</p>
+</dd>
+<dt><kbd><span class="option">--kkts-host=<var>&lt;KKTS host address&gt;</var></span></kbd></dt>
+<dd><p>The KK-TS IPv4 host address.</p>
+</dd>
+<dt><kbd><span class="option">--dns-name=<var>&lt;dns name&gt;</var></span></kbd></dt>
+<dd><p>Domain Name System of KK-TS server.</p>
+</dd>
+</dl>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kk-ts<span class="w"> </span>license<span class="w"> </span>apply<span class="w"> </span>deploy-perm<span class="w"> </span>--kkts-signature<span class="o">=</span>MEUCIQDuL7RMP4Vkkz3kr2CqFfXEZZ88aLdUnmeR+ynyaURzsQIgQer0Fm0CWWaqAqHWdnH87AlaYV/Tbtmhdfiu<span class="o">=</span><span class="w"> </span>--rsi-signature<span class="o">=</span>MIGHAkEgUfO0vnx1Ug77d7EFsTUrx0DQ0pJwsZy1JVLyqR96ia6zePfzAkV6LuCEerwtjZQ6DV1pjBl8A6vMpIp/nzUheQJCAKzUq8Y0ArSPNNcXzlCO6VZOfsgDhOcssHoJYdtVOB8MzjaLJY9V0RKy7rogdfduti<span class="w"> </span>--kkts-host<span class="o">=</span><span class="m">192</span>.155.100.200<span class="w"> </span>--dns-name<span class="o">=</span>kkts
+<span class="go">[v] Deployment permission license sucessfully applied</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="kk-ts-configuration">
+<h2>KK-TS configuration<a class="headerlink" href="#kk-ts-configuration" title="Link to this heading"></a></h2>
+<p>This command is used to manage KK-TS configuration.</p>
+<section id="kkts-config-print">
+<h3><code class="docutils literal notranslate"><span class="pre">kkts</span> <span class="pre">config</span> <span class="pre">print</span></code><a class="headerlink" href="#kkts-config-print" title="Link to this heading"></a></h3>
+<p>Show the information of KK-TS configuration.</p>
+<p><strong>Flags</strong>: None.</p>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">kk-ts config print</span>
+<span class="go">[kkcs_connection]</span>
+<span class="go">host=192.155.100.200</span>
+<span class="go">port=7004</span>
+<span class="go">app_certificate=&quot;/path/to/KKTSVlientCert.pem&quot;</span>
+<span class="go">app_privatekey=&quot;/path/to/KKTSClientKey.key&quot;</span>
+<span class="go">[kkts_server]</span>
+<span class="go">port=8000</span>
+<span class="go">[cassandra_connection]</span>
+<span class="go">host=192.155.100.147</span>
+<span class="go">port=9042</span>
+<span class="go">certificate=&quot;/path/to/KKTSServerCertificate.pem&quot;</span>
+<span class="go">privatekey=&quot;/path/to/KKTSServerKey.key&quot;</span>
+<span class="go">[customer_info]</span>
+<span class="go">customer_id=customer1</span>
+<span class="go">encrypted_private_key_path=&quot;/home/user/.kkts/cust_enc_privkey.pem&quot;</span>
+<span class="go">certificate_path=&quot;/home/user/.kkts/cust_cert.crt&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="kkts-config-set">
+<h3><code class="docutils literal notranslate"><span class="pre">kkts</span> <span class="pre">config</span> <span class="pre">set</span></code><a class="headerlink" href="#kkts-config-set" title="Link to this heading"></a></h3>
+<p>Set Kripta Key Tokenization Service (KK-TS) configuration.</p>
+<p><strong>Flags</strong>:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">--kkts-server-port=<var>&lt;KKTS server port&gt;</var></span></kbd></dt>
+<dd><p>The KK-TS server port.</p>
+</dd>
+<dt><kbd><span class="option">--kkcs-connection-host=<var>&lt;KKCS connection host&gt;</var></span></kbd></dt>
+<dd><p>The KK-CS connection host.</p>
+</dd>
+<dt><kbd><span class="option">--kkcs-connection-port=<var>&lt;KKCS connection port&gt;</var></span></kbd></dt>
+<dd><p>The KK-CS connection port.</p>
+</dd>
+<dt><kbd><span class="option">--kkcs-connection-appcertificate=<var>&lt;KKCS connection certificate&gt;</var></span></kbd></dt>
+<dd><p>The KK-CS connection certificate.</p>
+</dd>
+<dt><kbd><span class="option">--kkcs-connection-appprivatekey=<var>&lt;KKCS connection private key&gt;</var></span></kbd></dt>
+<dd><p>The KK-CS connection private key.</p>
+</dd>
+<dt><kbd><span class="option">--cassandra-connection-host=<var>&lt;cassandra connection host&gt;</var></span></kbd></dt>
+<dd><p>The Cassandra database managemnet connection host.</p>
+</dd>
+<dt><kbd><span class="option">--cassandra-connection-port=<var>&lt;cassandra connection port&gt;</var></span></kbd></dt>
+<dd><p>The Cassandra database management connection port. Check this as “native_transport_port” on cassandra.yaml.</p>
+</dd>
+<dt><kbd><span class="option">--cassandra-connection-user=<var>&lt;cassandra connection user&gt;</var></span></kbd></dt>
+<dd><p>The user connection for Cassandra database management.</p>
+</dd>
+<dt><kbd><span class="option">--cassandra-connection-password=<var>&lt;cassandra connection password&gt;</var></span></kbd></dt>
+<dd><p>The password of Cassandra database management.</p>
+</dd>
+<dt><kbd><span class="option">--cassandra-connection-certificate=<var>&lt;cassandra connection certificate&gt;</var></span></kbd></dt>
+<dd><p>The certificate of Cassandra database management.</p>
+</dd>
+<dt><kbd><span class="option">--cassandra-connection-privatekey=<var>&lt;cassandra connection private key&gt;</var></span></kbd></dt>
+<dd><p>The private key of Cassandra database management.</p>
+</dd>
+<dt><kbd><span class="option">--cassandra-consistency=<var>&lt;cassandra consistency level&gt;</var></span></kbd></dt>
+<dd><p>Cassandra cluster consistency level, please refer to <a class="reference internal" href="cassandra-setting-consideration.html#cassandra-setting-for-kk-ts"><span class="std std-ref">Cassandra Setting for KK-TS</span></a>.</p>
+</dd>
+<dt><kbd><span class="option">--cassandra-serial-consistency=<var>&lt;cassandra serial consistency level&gt;</var></span></kbd></dt>
+<dd><p>Cassandra cluster serial consistency level, please refer to <a class="reference internal" href="cassandra-setting-consideration.html#cassandra-setting-for-kk-ts"><span class="std std-ref">Cassandra Setting for KK-TS</span></a>.</p>
+</dd>
+</dl>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kk-ts<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>--kkts-server-port<span class="o">=</span><span class="m">8000</span><span class="w"> </span>--kkcs-connection-host<span class="o">=</span><span class="m">192</span>.155.100.200<span class="w"> </span>--kkcs-connection-port<span class="o">=</span><span class="m">7004</span><span class="w"> </span>--kkcs-connection-appcertificate<span class="o">=</span>/path/to/KKTSVlientCert.pem<span class="w"> </span>--kkcs-connection-appprivatekey<span class="o">=</span>/path/to/KKTSClientKey.key<span class="w"> </span>--cassandra-connection-host<span class="o">=</span><span class="m">192</span>.155.100.147<span class="w"> </span>--cassandra-connection-port<span class="o">=</span><span class="m">9042</span><span class="w"> </span>--cassandra-connection-user<span class="o">=</span>klavis<span class="w"> </span>--cassandra-connection-password<span class="o">=</span>Password1!<span class="w"> </span>--cassandra-connection-certificate<span class="o">=</span>/path/to/KKTSServerCertificate.pem<span class="w"> </span>--cassandra-connection-privatekey<span class="o">=</span>/path/to/KKTSServerKey.key<span class="w"> </span>--cassandra-consistency<span class="o">=</span>EACH_QUORUM<span class="w"> </span>--cassandra-serial-consistency<span class="o">=</span>SERIAL
+</pre></div>
+</div>
+</section>
+</section>
+<section id="client-management">
+<h2>Client management<a class="headerlink" href="#client-management" title="Link to this heading"></a></h2>
+<p>These commands are used to manage client that connect to Kripta Key Tokenization Service (KK-TS).</p>
+<section id="kk-ts-client-gen-cert">
+<h3><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">client</span> <span class="pre">gen-cert</span></code><a class="headerlink" href="#kk-ts-client-gen-cert" title="Link to this heading"></a></h3>
+<p>Generate KK-TS client certificate.</p>
+<p>This command requires the client CSR.</p>
+<p><strong>Flags</strong>:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">--csr-path=<var>&lt;client CSR path&gt;</var></span></kbd></dt>
+<dd><p>The absolute path to the client CSR file, in PEM format.</p>
+</dd>
+<dt><kbd><span class="option">--output-cert-path=<var>&lt;output certificate path&gt;</var></span></kbd></dt>
+<dd><p>The output client certificate path, in PEM format.</p>
+</dd>
+</dl>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kk-ts<span class="w"> </span>client-app<span class="w"> </span>gen-cert<span class="w"> </span>--csr-path<span class="o">=</span>/path/to/clientCSR.csr<span class="w"> </span>--output-cert-path<span class="o">=</span>/path/to/outputClientCert.pem
+<span class="go">KKTS command line password:</span>
+<span class="go">Encrypted customer private key password:</span>
+<span class="go">[v] Client certificate successfully generated</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="partition-configuration">
+<h2>Partition configuration<a class="headerlink" href="#partition-configuration" title="Link to this heading"></a></h2>
+<p>These commands are used to manage partition access configurations. Partition to which the client application is assigned must be
+added first before it can access the tokenization service.</p>
+<section id="kk-ts-partition-add">
+<h3><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">partition</span> <span class="pre">add</span></code><a class="headerlink" href="#kk-ts-partition-add" title="Link to this heading"></a></h3>
+<p>Create a new partition configuration.</p>
+<p><strong>Flags</strong>:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">--partition-id=<var>&lt;partition ID&gt;</var></span></kbd></dt>
+<dd><p>The identifier of the partition.</p>
+</dd>
+</dl>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kk-ts<span class="w"> </span>partition<span class="w"> </span>add<span class="w"> </span>--partition-id<span class="o">=</span><span class="m">1</span>
+<span class="go">KKTS command line password:</span>
+<span class="go">Partition password:</span>
+<span class="go">Partition password confirmation:</span>
+<span class="go">[v] Partition configuration successfully added</span>
+</pre></div>
+</div>
+</section>
+<section id="kk-ts-partition-list">
+<h3><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">partition</span> <span class="pre">list</span></code><a class="headerlink" href="#kk-ts-partition-list" title="Link to this heading"></a></h3>
+<p>List partition configuration.</p>
+<p><strong>Flags</strong>: None.</p>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kk-ts<span class="w"> </span>partition<span class="w"> </span>list
+<span class="go">KKTS command line password:</span>
+<span class="go">+--------------+</span>
+<span class="go">| Partition Id |</span>
+<span class="go">+--------------+</span>
+<span class="go">| 1            |</span>
+<span class="go">+--------------+</span>
+</pre></div>
+</div>
+</section>
+<section id="kk-ts-partition-delete">
+<h3><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">partition</span> <span class="pre">delete</span></code><a class="headerlink" href="#kk-ts-partition-delete" title="Link to this heading"></a></h3>
+<p>Delete existing partition configuration. Please restart the KK-TS service after execute this command.</p>
+<p><strong>Flags</strong>:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">--partition-id=<var>&lt;partition ID&gt;</var></span></kbd></dt>
+<dd><p>The identifier of the partition.</p>
+</dd>
+</dl>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kk-ts<span class="w"> </span>partition<span class="w"> </span>delete<span class="w"> </span>--partition-id<span class="o">=</span><span class="m">2</span>
+<span class="go">KKTS command line password:</span>
+<span class="go">[v] Deleted Partition Id: 2</span>
+<span class="go">[v] Partition configuration successfully deleted</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="application-configuration">
+<h2>Application configuration<a class="headerlink" href="#application-configuration" title="Link to this heading"></a></h2>
+<p>These commands are used to manage application access to the tokenization service. Applications must be added
+first before they can access the tokenization service.</p>
+<section id="kk-ts-appconfig-add">
+<h3><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">appconfig</span> <span class="pre">add</span></code><a class="headerlink" href="#kk-ts-appconfig-add" title="Link to this heading"></a></h3>
+<p>Create a new application configuration.</p>
+<p>This command requires the application’s certificate file.</p>
+<p><strong>Flags</strong>:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">--certificate-file=<var>&lt;path to certificate file&gt;</var></span></kbd></dt>
+<dd><p>The absolute path to the application’s certificate file, in PEM format.</p>
+</dd>
+<dt><kbd><span class="option">--partition-id=<var>&lt;partition ID&gt;</var></span></kbd></dt>
+<dd><p>The identifier of the partition.</p>
+</dd>
+<dt><kbd><span class="option">--key-id=<var>&lt;key ID&gt;</var></span></kbd></dt>
+<dd><p>The identifier of the key. The key must be suitable for tokenization.</p>
+</dd>
+</dl>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kk-ts<span class="w"> </span>appconfig<span class="w"> </span>add<span class="w"> </span>--app-name<span class="o">=</span>AppOne<span class="w"> </span>--certificate-file<span class="o">=</span>/path/to/appCertificate.pem<span class="w"> </span>--partition-id<span class="o">=</span><span class="m">1</span><span class="w"> </span>--key-id<span class="o">=</span>AESKey
+<span class="go">KKTS command line password:</span>
+<span class="go">[v] Registered Application SKI: 2bf4a5d6696fac53f44a44dbb5dd44239768dhi</span>
+<span class="go">[v] Application configuration successfully added</span>
+</pre></div>
+</div>
+</section>
+<section id="kk-ts-appconfig-list">
+<h3><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">appconfig</span> <span class="pre">list</span></code><a class="headerlink" href="#kk-ts-appconfig-list" title="Link to this heading"></a></h3>
+<p>List all available application configurations associated with a given partition.</p>
+<p><strong>Flags</strong>:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">--partition-id=<var>&lt;partition ID&gt;</var></span></kbd></dt>
+<dd><p>The identifier of the partition.</p>
+</dd>
+</dl>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kk-ts<span class="w"> </span>appconfig<span class="w"> </span>list<span class="w"> </span>--partition-id<span class="o">=</span><span class="m">1</span>
+<span class="go">KKTS command line password:</span>
+<span class="go">+--------------+------------------------------------------+--------+</span>
+<span class="go">| Partition Id | Application SKI                          | Key Id |</span>
+<span class="go">+--------------+------------------------------------------+--------+</span>
+<span class="go">| 1            | 2bf4a5d6696fac53f44a44dbb5dd44239768dhi  | AESKey |</span>
+<span class="go">+--------------+------------------------------------------+--------+</span>
+</pre></div>
+</div>
+</section>
+<section id="kk-ts-appconfig-info">
+<h3><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">appconfig</span> <span class="pre">info</span></code><a class="headerlink" href="#kk-ts-appconfig-info" title="Link to this heading"></a></h3>
+<p>Retrieve information about an application’s configuration.</p>
+<p><strong>Flags</strong>:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">--app-ski=<var>&lt;application SKI&gt;</var></span></kbd></dt>
+<dd><p>The subject key identifier of the application.</p>
+</dd>
+</dl>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kk-ts<span class="w"> </span>appconfig<span class="w"> </span>info<span class="w"> </span>--app-ski<span class="o">=</span>2bf4a5d6696fac53f44a44dbb5dd44239768dhi
+<span class="go">KKTS command line password:</span>
+<span class="go">[-] Partition Id: 1</span>
+<span class="go">[-] Key Id: AESKey</span>
+<span class="go">[-] Application SKI: 2bf4a5d6696fac53f44a44dbb5dd44239768dhi</span>
+</pre></div>
+</div>
+</section>
+<section id="kk-ts-appconfig-acl-add">
+<h3><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">appconfig</span> <span class="pre">acl-add</span></code><a class="headerlink" href="#kk-ts-appconfig-acl-add" title="Link to this heading"></a></h3>
+<p>Associate a client application to another client application as a master and slave application. Slave application has privilege to access the data configuration owned by its
+master application.</p>
+<p><strong>Flags</strong>:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">--master-app-ski=<var>&lt;application SKI&gt;</var></span></kbd></dt>
+<dd><p>The subject key identifier of the master application.</p>
+</dd>
+<dt><kbd><span class="option">--slave--app-ski=<var>&lt;application SKI&gt;</var></span></kbd></dt>
+<dd><p>The subject key identifier of the slave application.</p>
+</dd>
+</dl>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kk-ts<span class="w"> </span>appconfig<span class="w"> </span>acl-add<span class="w"> </span>--master-app-ski<span class="o">=</span>72bf4a5d6696fac53f44a44dbb5dd44239768dhi<span class="w"> </span>--slave-app-ski<span class="o">=</span>jy98676sdf78957tdi8544a44dbb5dd4479687446t
+<span class="go">KKTS command line password:</span>
+<span class="go">[v] ACL between master and slave app successfully created.</span>
+<span class="go">[v] Slave app can now use master app config id for detokenization.</span>
+</pre></div>
+</div>
+</section>
+<section id="kk-ts-appconfig-acl-masterlist">
+<h3><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">appconfig</span> <span class="pre">acl-masterlist</span></code><a class="headerlink" href="#kk-ts-appconfig-acl-masterlist" title="Link to this heading"></a></h3>
+<p>List the master applications associated with a specific slave application.</p>
+<p><strong>Flags</strong>:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">--slave--app-ski=<var>&lt;application SKI&gt;</var></span></kbd></dt>
+<dd><p>The subject key identifier of the slave application.</p>
+</dd>
+</dl>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kk-ts<span class="w"> </span>appconfig<span class="w"> </span>acl-masterlist<span class="w"> </span>--slave-app-ski<span class="o">=</span>jy98676sdf78957tdi8544a44dbb5dd4479687446t
+<span class="go">KKTS command line password:</span>
+<span class="go">+--------------------------------------------+---------------------------------------------+</span>
+<span class="go">| Master Application                         | Slave Application                           |</span>
+<span class="go">+--------------------------------------------+---------------------------------------------+</span>
+<span class="go">| AppOne                                     | AppTwo                                      |</span>
+<span class="go">| (72bf4a5d6696fac53f44a44dbb5dd44239768dhi) | (jy98676sdf78957tdi8544a44dbb5dd4479687446t)|</span>
+<span class="go">+--------------------------------------------+---------------------------------------------+</span>
+</pre></div>
+</div>
+</section>
+<section id="kk-ts-appconfig-acl-slavelist">
+<h3><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">appconfig</span> <span class="pre">acl-slavelist</span></code><a class="headerlink" href="#kk-ts-appconfig-acl-slavelist" title="Link to this heading"></a></h3>
+<p>List the slave applications associated with a specific master application.</p>
+<p><strong>Flags</strong>:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">--master-app-ski=<var>&lt;application SKI&gt;</var></span></kbd></dt>
+<dd><p>The subject key identifier of the master application.</p>
+</dd>
+</dl>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kk-ts<span class="w"> </span>appconfig<span class="w"> </span>acl-slavelist<span class="w"> </span>--master-app-ski<span class="o">=</span>72bf4a5d6696fac53f44a44dbb5dd44239768dhi
+<span class="go">KKTS command line password:</span>
+<span class="go">+--------------------------------------------+---------------------------------------------+</span>
+<span class="go">| Master Application                         | Slave Application                           |</span>
+<span class="go">+--------------------------------------------+---------------------------------------------+</span>
+<span class="go">| AppOne                                     | AppTwo                                      |</span>
+<span class="go">| (72bf4a5d6696fac53f44a44dbb5dd44239768dhi) | (jy98676sdf78957tdi8544a44dbb5dd4479687446t)|</span>
+<span class="go">+--------------------------------------------+---------------------------------------------+</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="data-configuration">
+<h2>Data configuration<a class="headerlink" href="#data-configuration" title="Link to this heading"></a></h2>
+<p>These commands are used to configure how sensitive data are tokenized, with each data field associated to
+a specific application.</p>
+<section id="kk-ts-dataconfig-add">
+<h3><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">dataconfig</span> <span class="pre">add</span></code><a class="headerlink" href="#kk-ts-dataconfig-add" title="Link to this heading"></a></h3>
+<p>Create a new data configuration.</p>
+<p><strong>Flags</strong>:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">--app-ski=<var>&lt;application SKI&gt;</var></span></kbd></dt>
+<dd><p>The subject key identifier of the application.</p>
+</dd>
+<dt><kbd><span class="option">--config-id=<var>&lt;config ID&gt;</var></span></kbd></dt>
+<dd><p>The identifier of the data configuration.</p>
+</dd>
+<dt><kbd><span class="option">--token-type=<var>&lt;token type index&gt;</var></span></kbd></dt>
+<dd><p>The tokenization type index of the data configuration. Refer to <a class="reference internal" href="domain-configuration.html#data-configuration"><span class="std std-ref">Data configuration</span></a>
+for the tokenization type index.</p>
+</dd>
+<dt><kbd><span class="option">--tokenized-with=<var>&lt;tokenization charset index&gt;</var></span></kbd></dt>
+<dd><p>The tokenization character set index of the data configuration. Refer to <a class="reference internal" href="domain-configuration.html#data-configuration"><span class="std std-ref">Data configuration</span></a>
+for the tokenization character set index.</p>
+</dd>
+<dt><kbd><span class="option">--formatting-char=<var>&lt;format string&gt;</var></span></kbd></dt>
+<dd><p>The format string of the data configuration. Only applicable if the tokenization type is <code class="docutils literal notranslate"><span class="pre">FORMAT_CHAR</span></code>.</p>
+</dd>
+<dt><kbd><span class="option">--minimum-length=<var>&lt;minimum length&gt;</var></span></kbd></dt>
+<dd><p>The minimum number of characters to be tokenized.</p>
+</dd>
+</dl>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kk-ts<span class="w"> </span>dataconfig<span class="w"> </span>add<span class="w"> </span>--app-ski<span class="o">=</span>2bf4a5d6696fac53f44a44dbb5dd44239768dhi<span class="w"> </span>--config-id<span class="o">=</span>CONF_ALPHA_CHAR_TEN<span class="w"> </span>--token-type<span class="o">=</span><span class="m">0</span><span class="w"> </span>--tokenized-with<span class="o">=</span><span class="m">2</span><span class="w"> </span>--minimum-length<span class="o">=</span><span class="m">10</span><span class="w"> </span>--formatting-char<span class="o">=</span><span class="s1">&#39;$$$$$$$$%%&#39;</span>
+<span class="go">KKTS command line password:</span>
+<span class="go">[v] Data configuration successfully added</span>
+</pre></div>
+</div>
+</section>
+<section id="kk-ts-dataconfig-list">
+<h3><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">dataconfig</span> <span class="pre">list</span></code><a class="headerlink" href="#kk-ts-dataconfig-list" title="Link to this heading"></a></h3>
+<p>List all available data configurations for a specific application.</p>
+<p><strong>Flags</strong>:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">--app-ski=<var>&lt;application SKI&gt;</var></span></kbd></dt>
+<dd><p>The subject key identifier of the application.</p>
+</dd>
+</dl>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kk-ts<span class="w"> </span>dataconfig<span class="w"> </span>list<span class="w"> </span>--app-ski<span class="o">=</span>2bf4a5d6696fac53f44a44dbb5dd44239768dhi
+<span class="go">KKTS command line password:</span>
+<span class="go">+------------------------------------------+-------------------------+</span>
+<span class="go">| Application SKI                          | Config Id               |</span>
+<span class="go">+------------------------------------------+-------------------------+</span>
+<span class="go">| 2bf4a5d6696fac53f44a44dbb5dd44239768dhi  | CONF_ALPHANUM_FIRST_TEN |</span>
+<span class="go">+------------------------------------------+-------------------------+</span>
+</pre></div>
+</div>
+</section>
+<section id="kk-ts-dataconfig-info">
+<h3><code class="docutils literal notranslate"><span class="pre">kk-ts</span> <span class="pre">dataconfig</span> <span class="pre">info</span></code><a class="headerlink" href="#kk-ts-dataconfig-info" title="Link to this heading"></a></h3>
+<p>Retrieve information about a data configuration.</p>
+<p><strong>Flags</strong>:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">--app-ski=<var>&lt;application SKI&gt;</var></span></kbd></dt>
+<dd><p>The subject key identifier of the application.</p>
+</dd>
+<dt><kbd><span class="option">--config-id=<var>&lt;config ID&gt;</var></span></kbd></dt>
+<dd><p>The identifier of the data configuration.</p>
+</dd>
+</dl>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kk-ts<span class="w"> </span>dataconfig<span class="w"> </span>info<span class="w"> </span>--app-ski<span class="o">=</span>2bf4a5d6696fac53f44a44dbb5dd44239768dhi<span class="w"> </span>--config-id<span class="o">=</span>CONF_ALPHANUM_FIRST_TEN
+<span class="go">KKTS command line password:</span>
+<span class="go">[-] Application SKI: 2bf4a5d6696fac53f44a44dbb5dd44239768dhi</span>
+<span class="go">[-] Config Id: CONF_ALPHANUM_FIRST_TEN</span>
+<span class="go">[-] Formatting Characters: $$$*$$$</span>
+<span class="go">[-] Minimum Length: 10</span>
+<span class="go">[-] Tokenized With: TOKENIZE_WITH_ALPHANUM</span>
+<span class="go">[-] Token Type: TOKEN_TYPE_FORMAT_CHAR</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="kkts-license.html" class="btn btn-neutral float-left" title="KK-TS License" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="kms-tokenization-services.html" class="btn btn-neutral float-right" title="Tokenization services" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,147 @@
+Before deploying Kripta Key TDP
+===============================
+
+Kripta Key :term:`TDP` serves as a proxy between applications, database servers, and the KK-Tokenization Service instances.
+Kripta Key performs encryption and decryption with Format Preserving Encryption (FPE) transparently, while applications can simply access data
+just as before, without the need to change their source code to integrate Kripta Key.
+
+:term:`TDP` must be deployed in a Virtual Machine (VM) with the following specifications:
+ +-----------------------+---------------------+
+ | Specification         | TDP Virtual Machine | 
+ +=======================+=====================+
+ | CPU                   | 4 core              | 
+ +-----------------------+---------------------+
+ | RAM                   | minimum 16GB        | 
+ +-----------------------+---------------------+
+ | NIC                   | 10GB ethernet       | 
+ +-----------------------+---------------------+
+ | Operating System (OS) | RHEL 9.2            | 
+ +-----------------------+---------------------+
+ | Requirements          | None                | 
+ +-----------------------+---------------------+
+
+
+The following preparatory steps are required to deploy Kripta Key TDP:
+
+*   Deploy a KK-Cryptoservice instance.
+*   Deploy a KK-Tokenization Service instance.
+*   Create the application's certificate.
+*   Register the application to the KK-TS. 
+*   Use MySQL with minimum version 5.7.31 or PostgreSQL with minimum version 9.23 databases.
+*   Use TLS 1.3.
+
+Refer to the :doc:`/installation-guide/index`, :doc:`/kkts-guide/index` and the :doc:`/sys-admin-guide/index` for details on these steps.
+
+.. important::
+
+    Before running the installer, perform :ref:`an integrity check <appendix:performing integrity checks>` first.
+    Also, make sure that the installer is appropriate for the machine's OS.
+
+.. note::
+
+    Please contact support@klaviskripta.com if any problems were encountered during installation.
+
+
+Configuring the TDP deployment
+------------------------------
+
+After the preparatory steps are done, the TDP deployment may be configured.
+
+*   Extract the TDP ZIP archive.
+*   Edit ``encryption-config.yml``. Add table schema, define all columns in encryption config then define the specific columns that need
+    to be encrypted. Refer to :doc:`feature-configuration` for more details.
+
+.. todo::
+
+    TODO: What ZIP archive?
+
+
+Creating the TDP certificates
+-----------------------------
+
+Kripta Key TDP communicates with Kripta Key database to fetch objects, such as encryption keys. In order to
+guarantee secure communication between the database and the TDP deployment, certificates will be needed for both.
+There are 4 certificates for TDP server:
+
+*   Root certificate
+*   Database certificate
+*   TDP server certificate
+*   TDP client certificate
+
+This guide covers **MySQL and PostgreSQL databases**. Other database servers are currently not supported.
+
+The following are the steps to create the certificates:
+
+Root certificate
+~~~~~~~~~~~~~~~~
+
+#.  Create the root key pair for the certificate. Here, the root key pair is a 4096-bit RSA key. The key material
+    will be outputted to the ``root.key`` file.
+
+    .. code-block:: console
+
+        $ openssl genrsa -out root.key 4096
+
+    .. todo::
+
+        TODO: Can this key be other type? Maybe like Ed25519 key? Or different RSA key size?
+
+#.  Create the root certificate from the root key pair. The ``root.cnf`` file is obtained from the ZIP archive.
+    The root certificate will be outputted to the ``root.crt`` file.
+
+    .. code-block:: console
+
+        $ openssl req -new -x509 -days 3650 -config root.cnf -key root.key -out root.crt
+
+
+Database certificate
+~~~~~~~~~~~~~~~~~~~~
+
+#.  Create another key pair for the database certificate. This key pair is a 3072-bit RSA key. The key material
+    will be outputted to the ``database.key`` file.
+
+    .. code-block:: console
+
+        $ openssl genrsa -out database.key 3072
+
+#.  Generate a certificate signing request (CSR) from the database key pair. The ``openssl.cnf`` file is
+    obtained from the ZIP archive. The CSR will be outputted to the ``database.csr`` file.
+
+    .. code-block:: console
+
+        $ openssl req -config openssl.cnf -new -key database.key -out database.csr
+
+#.  Create the database certificate by signing the CSR with the root certificate. The ``database.cnf`` file is
+    obtained from the ZIP archive. The database certificate will be outputted to the ``database.crt`` file.
+
+    .. code-block:: console
+
+        $ openssl x509 -req -days 365 -in database.csr -CA root.crt -CAkey root.key -out database.crt -extfile database.cnf
+
+
+TDP server certificate
+~~~~~~~~~~~~~~~~~~~~~~
+
+#.  Create RSA keypair 3072 for TDP server certificates. The ``tdp-server.cnf``
+    is obtained from the ZIP archive. The certificates will be outputted to
+    ``tdp-server.crt`` for the TDP server, respectively.
+
+    .. code-block:: console
+
+        $ openssl genrsa -out tdp-server.key 3072
+        $ openssl req -config openssl.cnf -new -key tdp-server.key -out tdp-server.csr
+        $ openssl x509 -req -days 365 -in tdp-server.csr -CA root.crt -CAkey root.key -out tdp-server.crt -exfile tdp-server.cnf
+
+
+TDP client certificate
+~~~~~~~~~~~~~~~~~~~~~~
+
+#.  Create RSA keypair 3072 for TDP client certificates. The ``tdp-client.cnf``
+    is obtained from the ZIP archive. The certificates will be outputted to
+    ``tdp-client.crt`` for the TDP client, respectively.
+
+    .. code-block:: console
+
+        $ openssl genrsa -out tdp-client.key 3072
+        $ openssl req -config openssl.cnf -new -key tdp-client.key -out tdp-client.csr
+        $ openssl x509 -req -days 365 -in tdp-client.csr -CA root.crt -CAkey root.key -out tdp-client.crt -exfile tdp-client.cnf

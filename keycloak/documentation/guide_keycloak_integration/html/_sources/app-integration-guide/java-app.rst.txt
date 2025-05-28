@@ -1,0 +1,347 @@
+Integrate Java Applications to Kripta Key using PKCS#11 Connector
+=================================================================
+
+Java applications such as Jarsigner and Apksigner can be integrated with Kripta Key using PKCS#11 connector. 
+
+Java tools can be used for two purposes:
+
+*   Signing files – Ensures the authenticity and integrity of the JAR by applying a digital signature.
+*   Verifying files – Confirms the validity of signatures and checks the integrity of the JAR contents.
+
+To generate digital signatures for files, the jarsigner command retrieves key and certificate information from a 
+keystore. In this case, when using Kripta Key (KK), the key pair and certificates are accessed directly from the Kripta Key. 
+The java tools can be integrated with Kripta Key using the PKCS#11 interface, enabling secure access to the key pair and certificates. 
+
+The following are procedure to intgrate Java tools specifically Jarsigner and Apksigner with Kripta Key using PKCS#11 connector:
+
+#.  Generate a signing key pair in Kripta Key to sign the file. Currently, only RSA signing key pairs are supported to integrated 
+    with jarsigner tool, with key lengths of 2048, 3072, or 4096 bits. 
+
+    .. code-block:: console
+
+        $ clikk key add --partition-id=1 --key-id=rsaSigning2048 --key-label=signingKey --key-algo=2 --key-length=2048 --key-purpose=3 --key-lifetime=365
+
+#.  After successfully generating the key, configure it and other required objects in kk-cryptoki.conf.
+
+    .. code-block:: console
+
+        # [Partition Configuration]
+        # Specify the partition ID and password to be used
+        # kk-cryptoki (Application) must have access to the partition
+        PartitionID=1
+        PartitionPassword=Klavis1!
+
+        # [KK-CS Configuration]
+        # Specify KKCS target host to connect to
+        # Connection established through kk-cryptoki as the Application using KKCS SDK Service
+        KKCSTargetHost=192.168.100.25
+        KKCSTargetPort=7004
+
+        # [SDK Configuration]
+        # Specify kk-cryptoki (Application) Certificate and private key registered to KK-Manager
+        ClientCertificateFile=/etc/cryptoserver/test.pem
+        PrivateKeyFile=/etc/cryptoserver/test.key
+
+        # LogLevel: NONE = 0, ERROR = 1, DEBUG = 2
+        LogLevel=1
+        LogPath=/tmp/kk-kriptoki.log
+
+        # Object List: KK doesn't support enumeration of object by only its class (C_FindObjectsInit)
+        # If pkcs11 object enumareted by only class eg: CKO_CERTIFICATE, id will be used from this config
+        # Format is list of id separated by comma (id1,id2)
+        # Currently supported : CKA_CERTIFICATE, CKO_PUBLIC_KEY, CKO_PRIVATE_KEY
+        # ECDSAP256Sign,p11rsa2048,p11rsa3072,p11rsa4096,p11ecdsap256,p11ecdsap384,p11ecdsap512,p11eddsaed25519
+        # Note that for tomcat only 1 keypair supported (only the first found cert/priv will be used)
+        KeyPairObject=rsaSigning2048
+
+#.  Ensure the ``KK_CRYPTOKI_CONFIG`` is set as the environment variable.
+
+    .. code-block:: console
+
+        $ export KK_CRYPTOKI_CONFIG=/path/to/kk-cryptoki.conf
+
+#.  Configure the provider's name and path of ``libkk-cryptoki.so`` in ``kk_sunp11.cfg``.
+
+#.  Before executing the JAR file signing, specify the path of ``kk_sunp11.cfg`` as provider and configure it in ``java.security``, 
+    specifically on the ``SunPKCS11`` provider line.
+
+    .. code-block:: console
+
+        #
+        # List of providers and their preference orders (see above):
+        #
+        security.provider.1=SUN
+        security.provider.2=SunRsaSign
+        security.provider.3=SunEC
+        security.provider.4=SunJSSE
+        security.provider.5=SunJCE
+        security.provider.6=SunJGSS
+        security.provider.7=SunSASL
+        security.provider.8=XMLDSig
+        security.provider.9=SunPCSC
+        security.provider.10=JdkLDAP
+        security.provider.11=JdkSASL
+        security.provider.12=SunPKCS11 /path/to/kk_sunp11.cfg
+
+
+
+Sign and Verify using Jarsigner
+-------------------------------
+
+The jarsigner tool can sign various data types, such as images, audio files, ZIP archives, Android APKs, and 
+more. It requires a public/private key pair to generate an entity's signature and one or more certificates to authenticate its 
+public key. Currently, Kripta Key supports connecting with jarsigner version 21.0.5 and 17. 
+
+#.  To sign a JAR file with the jarsigner tool, run the following command:
+
+    .. code-block:: console
+
+        $ jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA256 -storetype PKCS11 -providerName SunPKCS11Name -signedjar /path/to/signed-output.apk /path/to/input.apk mykeyalias
+
+    By default, if we are not passing the ``-sigalg`` and ``-digestalg``, jarsigner will sign the JAR file by using sha384Hashed.
+
+    Notes:
+
+    *   verbose : Enables detailed information about the signing process.
+    *   sigalg : Specifies the signature algorithm used to sign the JAR file. Supported algorithms are listed `here`__.
+
+    __ https://docs.oracle.com/en/java/javase/11/tools/jarsigner.html#GUID-925E7A1B-B3F3-44D2-8B49-0B3FA2C54864__SUPPORTEDALGORITHMS-9B9E0E06.
+    *   digestalg : Specifies the message digest algorithm used when hashing the entries of a JAR file.
+    *   storetype : Defines the keystore type to be instantiated. For this case, the store type should be set to "PKCS11".
+    *   providerName : Specifies the provider name that set in ``kk-sunp11.cfg`` (such as KKCryptoki).
+    *   signedjar : Defines the output file name and path for the signed JAR.
+    *   Input JAR file : Specifies the plain (unsigned) JAR file to be signed.
+    *   Key alias :  Refers to the key alias used for signing the JAR file. The key must be generated on Kripta Key. In this example, the ID of the 
+        signing key is ``rsaSigning2048``.
+
+    Example:
+
+    below is an example with provider name ``KKCryptoki`` and signing key ID ``rsaSigning2048``.
+    
+    When prompted for the keystore passphrase, enter the partition password.
+
+    .. code-block:: console
+
+        $ jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA256 -storetype PKCS11 -providerName KKCryptoki -signedjar /home/user/Documents/signed-output.apk /home/user/Documents/input.apk rsaSigning2048
+        Enter Passphrase for keystore: 
+        adding: META-INF/MANIFEST.MF
+        adding: META-INF/RSASIGNI.SF
+        adding: META-INF/RSASIGNI.RSA
+        signing: META-INF/version-control-info.textproto
+        signing: META-INF/androidx.activity_activity-compose.version
+        signing: META-INF/androidx.activity_activity-ktx.version
+        signing: META-INF/androidx.activity_activity.version
+        signing: META-INF/androidx.annotation_annotation-experimental.version
+        signing: META-INF/androidx.arch.core_core-runtime.version
+        signing: META-INF/androidx.autofill_autofill.version
+        signing: META-INF/androidx.compose.animation_animation-core.version
+        signing: META-INF/androidx.compose.animation_animation.version
+        signing: META-INF/androidx.compose.foundation_foundation-layout.version
+        signing: META-INF/androidx.compose.foundation_foundation.version
+        signing: META-INF/androidx.compose.material3_material3.version
+        signing: META-INF/androidx.compose.material_material-icons-core.version
+        signing: META-INF/androidx.compose.material_material-ripple.version
+        signing: META-INF/androidx.compose.runtime_runtime-saveable.version
+        signing: META-INF/androidx.compose.runtime_runtime.version
+        signing: META-INF/androidx.compose.ui_ui-geometry.version
+        signing: META-INF/androidx.compose.ui_ui-graphics.version
+        signing: META-INF/androidx.compose.ui_ui-text.version
+        signing: META-INF/androidx.compose.ui_ui-tooling-preview.version
+        signing: META-INF/androidx.compose.ui_ui-unit.version
+        signing: META-INF/androidx.compose.ui_ui-util.version
+        signing: META-INF/androidx.compose.ui_ui.version
+        signing: META-INF/androidx.core_core-ktx.version
+        signing: META-INF/androidx.core_core.version
+        signing: META-INF/androidx.customview_customview-poolingcontainer.version
+        signing: META-INF/androidx.emoji2_emoji2.version
+        signing: META-INF/androidx.interpolator_interpolator.version
+        signing: META-INF/androidx.lifecycle_lifecycle-livedata-core.version
+        signing: META-INF/androidx.lifecycle_lifecycle-process.version
+        signing: META-INF/androidx.lifecycle_lifecycle-runtime-ktx.version
+        signing: META-INF/androidx.lifecycle_lifecycle-runtime.version
+        signing: META-INF/androidx.lifecycle_lifecycle-viewmodel-ktx.version
+        signing: META-INF/androidx.lifecycle_lifecycle-viewmodel-savedstate.version
+        signing: META-INF/androidx.lifecycle_lifecycle-viewmodel.version
+        signing: META-INF/androidx.profileinstaller_profileinstaller.version
+        signing: META-INF/androidx.savedstate_savedstate-ktx.version
+        signing: META-INF/androidx.savedstate_savedstate.version
+        signing: META-INF/androidx.startup_startup-runtime.version
+        signing: META-INF/androidx.tracing_tracing.version
+        signing: META-INF/androidx.versionedparcelable_versionedparcelable.version
+        signing: META-INF/kotlinx_coroutines_android.version
+        signing: META-INF/kotlinx_coroutines_core.version
+        signing: META-INF/com/android/build/gradle/app-metadata.properties
+        signing: assets/dexopt/baseline.prof
+        signing: assets/dexopt/baseline.profm
+        signing: classes.dex
+        signing: classes2.dex
+        signing: DebugProbesKt.bin
+        signing: META-INF/services/kotlinx.coroutines.CoroutineExceptionHandler
+        signing: META-INF/services/kotlinx.coroutines.internal.MainDispatcherFactory
+        signing: kotlin-tooling-metadata.json
+        signing: kotlin/annotation/annotation.kotlin_builtins
+        signing: kotlin/collections/collections.kotlin_builtins
+        signing: kotlin/coroutines/coroutines.kotlin_builtins
+        signing: kotlin/internal/internal.kotlin_builtins
+        signing: kotlin/kotlin.kotlin_builtins
+        signing: kotlin/ranges/ranges.kotlin_builtins
+        signing: kotlin/reflect/reflect.kotlin_builtins
+        signing: AndroidManifest.xml
+        signing: res/-6.webp
+        signing: res/0K.xml
+        signing: res/0Z.png
+        signing: res/0w.xml
+        signing: res/2K.9.png
+        signing: res/4j.xml
+        signing: res/4z.xml
+        signing: res/5P.png
+        signing: res/5c.png
+        signing: res/5v.png
+        signing: res/6P.png
+        signing: res/6d.png
+        signing: res/71.png
+        signing: res/7V.png
+        signing: res/7m.png
+        signing: res/8t.xml
+        signing: res/9m.xml
+        signing: res/Ac.xml
+        signing: res/Ag.png
+        signing: res/BT.png
+        signing: res/BW.xml
+        signing: res/C_.9.png
+        signing: res/Ck.png
+        signing: res/D-.xml
+        signing: res/Ec.png
+        signing: res/Fd.xml
+        signing: res/Ff.png
+        signing: res/G2.xml
+        signing: res/GY.png
+        signing: res/LO.png
+        signing: res/MD.png
+        signing: res/MO.webp
+        signing: res/Ma.9.png
+        signing: res/OM.png
+        signing: res/OX.png
+        signing: res/OX1.png
+        signing: res/Q-.png
+        signing: res/Qq.xml
+        signing: res/Qr.xml
+        signing: res/S8.xml
+        signing: res/Sn.webp
+        signing: res/Tl.xml
+        signing: res/Tr.png
+        signing: res/U-.9.png
+        signing: res/VW.png
+        signing: res/W5.png
+        signing: res/Ws.xml
+        signing: res/Y3.png
+        signing: res/Y9.png
+        signing: res/YD.png
+        signing: res/_H.xml
+        signing: res/_y.xml
+        signing: res/a0.xml
+        signing: res/aR.png
+        signing: res/aU.png
+        signing: res/bi.png
+        signing: res/c6.xml
+        signing: res/cV.xml
+        signing: res/color/vector_tint_color.xml
+        signing: res/color/vector_tint_theme_color.xml
+        signing: res/cr.xml
+        signing: res/d2.webp
+        signing: res/df.xml
+        signing: res/fq.webp
+        signing: res/gK.9.png
+        signing: res/gr.png
+        signing: res/iQ.xml
+        signing: res/j_.webp
+        signing: res/je.9.png
+        signing: res/kS.png
+        signing: res/lR.xml
+        signing: res/nz.xml
+        signing: res/o_.9.png
+        signing: res/p8.png
+        signing: res/pY.png
+        signing: res/pu.png
+        signing: res/qs.webp
+        signing: res/s4.png
+        signing: res/sA.9.png
+        signing: res/sK.webp
+        signing: res/td.png
+        signing: res/u5.webp
+        signing: res/vL.9.png
+        signing: res/w7.png
+        signing: res/wN.9.png
+        signing: res/xN.xml
+        signing: res/xa.9.png
+        signing: res/yw.webp
+        signing: res/z-.9.png
+        signing: res/zL.png
+        signing: res/zz.png
+        signing: resources.arsc
+
+        >>> Signer
+            X.509, EMAILADDRESS=product@klavis.com, CN=www.rsasigning.com, OU=Product Development, O=Klavis Kripta, L=Batam, ST=Kepulauan Riau, C=ID
+            Signature algorithm: SHA512withRSA, 2048-bit key
+            [trusted certificate]
+
+        jar signed.
+
+        Warning: 
+        The signer's certificate is self-signed.
+        POSIX file permission and/or symlink attributes detected. These attributes are ignored when signing and are not protected by the signature.
+
+
+#.  To verify the signed jar file, run the following command:
+
+    .. code-block:: console
+
+        $ jarsigner -verify -verbose /path/to/signed-app-release.apk
+
+
+
+Sign and Verify using Apksigner
+-------------------------------
+
+Currently, Kripta Key supports connections with Apksigner version 0.9 and requires at least Android SDK 18. Apksigner retrieves the signing key from 
+the configuration file. This tool can be used to sign APKs, and the signatures can be successfully verified on all Android platform versions supported 
+by the APK.
+
+
+#.  To sign an APK with the apksigner tool, run the following command:
+
+    .. code-block:: console
+
+        $ apksigner sign --ks-provider-name KKCryptoki --ks-type PKCS11 --ks NONE --in /path/to/app-release.apk --out /path/to/signed-app-release.apk --min-sdk-version 18
+
+    By default, apksigner will sign the plain APK file by using sha256Hashed.
+
+    Notes:
+
+    *   --ks-provider-name : Specifies the provider name that set in ``kk-sunp11.cfg`` (such as KKCryptoki).
+    *   --ks-type : Defines the keystore type to be instantiated. For this case, the store type should be set to "PKCS11".
+    *   --ks : The keystore location. Keystore is NONE if the keypair is stored in Kripta Key.
+    *   --in : Specifies the plain (unsigned) APK to be signed.
+    *   --out : Defines the output file name and path for the signed APK.
+    *   --min-sdk-version :  Kripta Key library can support the APK signing with minimal SDK version 18.
+
+    Example:
+
+    below is an example with provider name ``KKCryptoki`` and signing key ID ``rsaSigning2048``.
+    
+    When prompted for the keystore password, enter the partition password.
+
+    .. code-block:: console
+
+        $ apksigner sign --ks-provider-name KKCryptoki --ks-type PKCS11 --ks NONE --in /home/user/Documents/app-release.apk --out /home/user/Documents/signed-app-release.apk --min-sdk-version 18
+        Keystore password for signer #1: 
+        Signed
+
+
+#.  To verify the signed jar file, run the following command:
+
+    .. code-block:: console
+
+        $ apksigner verify -v signed-app-release.apk
+
+

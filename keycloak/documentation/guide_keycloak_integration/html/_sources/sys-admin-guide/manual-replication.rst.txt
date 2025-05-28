@@ -1,0 +1,77 @@
+Manual replication
+==================
+
+All objects are stored in the main KK-Manager database, and are regularly replicated to KK-Cryptoservice
+and KK-Manager-DR instances for usage and redundancy. This replication is automatically done with a limit
+of 25 operations per replication. If automatic replication fails for any reason, then the database must be
+manually replicated.
+
+
+KK-Cryptoservice manual replication
+-----------------------------------
+
+#.  Stop the KK-Cryptoservice service.
+
+    .. code-block:: console
+
+        $ sudo systemctl stop kk-csd.service
+
+#.  Copy the most recent backup file from the main KK-Manager machine to the KK-Cryptoservice machine.
+
+#.  Add the backup file to the SELinux policy.
+
+    .. code-block:: console
+
+        $ sudo restorecon <backup file name>
+
+#.  Run the following command:
+
+    .. code-block:: console
+
+        $ sudo -u kripta kk-csd --replicate-from=/var/local/kk/kk-m/backup/20230327-16:20:23.KK-Mbackup
+
+        Commencing the manual replication process.
+        This will replicate the KK-Cryptoservice database from /var/local/kk/kk-m/backup/20230327-16:59:37.KK-Mbackup.
+        The original database will be copied to /tmp/restore-point-20230327-17:02:01.db.
+        Do not interrupt the process until the message "KK-Cryptoservice manual replication has been completed successfully." appears.
+        [-] Replicating the database...
+
+        KK-Cryptoservice manual replication has been completed successfully.
+
+#.  Restart the KK-Cryptoservice service.
+
+    .. code-block:: console
+
+        $ sudo systemctl start kk-csd.service
+
+
+KK-Manager-DR manual replication
+--------------------------------
+
+#.  Stop the KK-Manager-DR service.
+
+    .. code-block:: console
+
+        $ sudo systemctl stop kk-md-dr.service
+
+#.  Copy the most recent backup file from the main KK-Manager machine to the KK-Manager-DR machine.
+
+#.  Run the following command:
+
+    .. code-block:: console
+
+        $ sudo -u kripta kk-md --replicate-from=/var/local/kk/kk-m/backup/20230327-16:20:23.KK-Mbackup
+
+        Commencing the manual replication process.
+        This will replicate the KK-Manager-DR database from /var/local/kk/kk-m/20230327-16:59:37.KK-Mbackup.
+        The original database will be copied to /tmp/restore-point-20230327-16:06:43.db.
+        Do not interrupt the process until the message "KK-Manager-DR manual replication has been completed successfully." appears.
+        [-] Replicating the database...
+
+        KK-Manager-DR manual replication has been completed successfully.
+
+#.  Restart the KK-Manager-DR service.
+
+    .. code-block:: console
+
+        $ sudo systemctl start kk-md-dr.service

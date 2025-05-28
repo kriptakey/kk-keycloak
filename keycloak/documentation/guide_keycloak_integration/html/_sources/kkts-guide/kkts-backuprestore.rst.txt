@@ -1,0 +1,271 @@
+KK-Tokenization Service Backup and Restore 
+==========================================
+
+Backup
+------
+
+In Cassandra, there are two types of backups: **snapshot** and **incremental backup**. KK-TS only supports snapshot backup, which is a full backup.  
+A snapshot first flushes all in-memory writes to disk and then creates a hard 
+link to the SSTable files for each keyspace. You must have enough free disk space on the node to accommodate the creation of snapshots for 
+your data files. A single snapshot requires minimal disk space. However, snapshots can cause your disk usage to grow more quickly over time 
+because they prevent old, obsolete data files from being deleted. After the snapshot is complete, you can move the backup files to another 
+location if needed, or leave them in place.
+
+To do backup with snapshot , follow these steps:
+
+#.  Run nodetool cleanup to ensure that invalid replicas are removed.
+
+    .. code-block:: console
+
+        $ nodetool cleanup kkts
+
+#.  Run the nodetool snapshot command. Please note that this command will output the snapshot directory name.
+
+    .. code-block:: console
+
+        $ nodetool snapshot kkts
+        Requested creating snapshot(s) for [kkts] with snapshot name [xxxxxxxxxxxxx] and options {skipFlush=false}
+        Snapshot directory: xxxxxxxxxxxxx
+
+#.  In cassandra snapshot will be created for each table. For this case (KK-TS) , snapshot will be created for 
+    `appconfig`, `appconfigacl`, `appname`, `dataconfig`, and each table representing `configId` created by the user.
+
+    .. code-block:: console
+
+        $ ls /var/lib/cassandra/data/kkts/
+
+#.  The snapshot is created in `data_directory/keyspace_name/table_nmae-UUID/snapshots/snapshot_name` directory.
+    Each snapshot directory contains numerous .db files that contain the data at the time of the snapshot. User need to back up
+    this folder safely.
+
+
+Restore
+-------
+
+Restore on the Same Cluster
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#.  Make sure the table schema exists. Cassandra can only restore data from a snapshot when the table schema exists. 
+    If the schema does not exist and has not been backed up, you must recreate the schema.
+
+#.  Locate the most recent snapshot folder. For example: `/var/lib/cassandra/data/kkts/table_name-UUID/snapshots/snapshot_name`.
+
+#.  Copy the most recent snapshot SSTable directory to the `/var/lib/cassandra/data/kkts/table_name-UUID` directory.
+
+#.  Run `nodetool refresh` and restart your nodes. 
+
+    .. code-block:: console
+
+        $ nodetool refresh
+        $ systemctl start cassandra
+
+
+Restore on the Different Cluster
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#.  From the old cluster, retrieve the list of tokens associated with each node's IP:
+
+    .. code-block:: console
+
+        $ nodetool ring | grep -w ip_address_of_node | awk '{print $NF ","}' | xrags
+
+#.  Since KK-TS have 3 nodes for Cassandra, the user is required to get 16 tokens from each node
+    using the command in step 1.
+
+#.  In the cassandra.yaml file for each node in the new cluster, add the list of tokens you obtained
+    in the previous step to the `initial_token` parameter, using the same `num_tokens` setting as in the old 
+    cluster.
+    Example of cassandra.yaml:
+
+    .. code-block:: console
+
+        num_tokens: 16
+        initial_token: -8606783460167362704, -7628638007651248628, -5850003706827661499, -4753961806592723210, -3662664695900510950, -2818288048409349194, -1378019818506765954, -306519202166733142, 711332202575693873, 1529004135188044667, 2604760016413624206, 3340675709124517847, 4420048516572119505, 5663568522252711477, 6630932765331246976, 8220937317845145614,
+
+#.  Get keyspace information from the old cluster.
+
+    .. code-block:: console
+
+        cqlsh 10.100.108.3 -u cassandra --ssl -e "DESC KEYSPACE kkts;" > keyspace_schema.cql
+
+    Example of keyspace_schema.cql
+
+    .. code-block:: console
+
+        CREATE KEYSPACE kkts WITH replication = {'class': 'NetworkTopologyStrategy', 'dc1': '3'}  AND durable_writes = true;
+
+        CREATE TABLE kkts.appconfig (
+            m_appski text PRIMARY KEY,
+            m_keyid text,
+            m_partitionid bigint
+        ) WITH additional_write_policy = '99p'
+            AND bloom_filter_fp_chance = 0.1
+            AND caching = {'keys': 'ALL', 'rows_per_partition': 'ALL'}
+            AND cdc = false
+            AND comment = ''
+            AND compaction = {'class': 'org.apache.cassandra.db.compaction.LeveledCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+            AND compression = {'chunk_length_in_kb': '4', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+            AND memtable = 'default'
+            AND crc_check_chance = 1.0
+            AND default_time_to_live = 0
+            AND extensions = {}
+            AND gc_grace_seconds = 864000
+            AND max_index_interval = 2048
+            AND memtable_flush_period_in_ms = 0
+            AND min_index_interval = 128
+            AND read_repair = 'BLOCKING'
+            AND speculative_retry = '99p';
+
+        CREATE TABLE kkts.appconfigacl (
+            m_masterappski text,
+            m_slaveappski text,
+            PRIMARY KEY ((m_masterappski, m_slaveappski))
+        ) WITH additional_write_policy = '99p'
+            AND bloom_filter_fp_chance = 0.1
+            AND caching = {'keys': 'ALL', 'rows_per_partition': 'ALL'}
+            AND cdc = false
+            AND comment = ''
+            AND compaction = {'class': 'org.apache.cassandra.db.compaction.LeveledCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+            AND compression = {'chunk_length_in_kb': '16', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+            AND memtable = 'default'
+            AND crc_check_chance = 1.0
+            AND default_time_to_live = 0
+            AND extensions = {}
+            AND gc_grace_seconds = 864000
+            AND max_index_interval = 2048
+            AND memtable_flush_period_in_ms = 0
+            AND min_index_interval = 128
+            AND read_repair = 'BLOCKING'
+            AND speculative_retry = '99p';
+
+        CREATE TABLE kkts.appname (
+            m_appname text PRIMARY KEY,
+            m_appski text
+        ) WITH additional_write_policy = '99p'
+            AND bloom_filter_fp_chance = 0.1
+            AND caching = {'keys': 'ALL', 'rows_per_partition': 'ALL'}
+            AND cdc = false
+            AND comment = ''
+            AND compaction = {'class': 'org.apache.cassandra.db.compaction.LeveledCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+            AND compression = {'chunk_length_in_kb': '4', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+            AND memtable = 'default'
+            AND crc_check_chance = 1.0
+            AND default_time_to_live = 0
+            AND extensions = {}
+            AND gc_grace_seconds = 864000
+            AND max_index_interval = 2048
+            AND memtable_flush_period_in_ms = 0
+            AND min_index_interval = 128
+            AND read_repair = 'BLOCKING'
+            AND speculative_retry = '99p';
+
+        CREATE TABLE kkts.dataconfig (
+            m_appski text,
+            m_configid text,
+            m_formattingcharacters text,
+            m_minimumlength bigint,
+            m_tokenizedwith bigint,
+            m_tokentype bigint,
+            PRIMARY KEY (m_appski, m_configid)
+        ) WITH CLUSTERING ORDER BY (m_configid ASC)
+            AND additional_write_policy = '99p'
+            AND bloom_filter_fp_chance = 0.1
+            AND caching = {'keys': 'ALL', 'rows_per_partition': 'ALL'}
+            AND cdc = false
+            AND comment = ''
+            AND compaction = {'class': 'org.apache.cassandra.db.compaction.LeveledCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+            AND compression = {'chunk_length_in_kb': '4', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+            AND memtable = 'default'
+            AND crc_check_chance = 1.0
+            AND default_time_to_live = 0
+            AND extensions = {}
+            AND gc_grace_seconds = 864000
+            AND max_index_interval = 2048
+            AND memtable_flush_period_in_ms = 0
+            AND min_index_interval = 128
+            AND read_repair = 'BLOCKING'
+            AND speculative_retry = '99p';
+
+        CREATE TABLE kkts.mt_371aae006c01a0e9d3421e46de59a41b19cc4a3a_config1 (
+            m_token text PRIMARY KEY,
+            m_metadata blob
+        ) WITH additional_write_policy = '99p'
+            AND bloom_filter_fp_chance = 0.1
+            AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+            AND cdc = false
+            AND comment = ''
+            AND compaction = {'class': 'org.apache.cassandra.db.compaction.LeveledCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+            AND compression = {'chunk_length_in_kb': '4', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+            AND memtable = 'default'
+            AND crc_check_chance = 1.0
+            AND default_time_to_live = 0
+            AND extensions = {}
+            AND gc_grace_seconds = 864000
+            AND max_index_interval = 2048
+            AND memtable_flush_period_in_ms = 0
+            AND min_index_interval = 128
+            AND read_repair = 'BLOCKING'
+            AND speculative_retry = '99p';
+
+        CREATE TABLE kkts.mt_d4f495a93dafa5791c1d1f7be3d41897b336d991_config1 (
+            m_token text PRIMARY KEY,
+            m_metadata blob
+        ) WITH additional_write_policy = '99p'
+            AND bloom_filter_fp_chance = 0.1
+            AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+            AND cdc = false
+            AND comment = ''
+            AND compaction = {'class': 'org.apache.cassandra.db.compaction.LeveledCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+            AND compression = {'chunk_length_in_kb': '4', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+            AND memtable = 'default'
+            AND crc_check_chance = 1.0
+            AND default_time_to_live = 0
+            AND extensions = {}
+            AND gc_grace_seconds = 864000
+            AND max_index_interval = 2048
+            AND memtable_flush_period_in_ms = 0
+            AND min_index_interval = 128
+            AND read_repair = 'BLOCKING'
+            AND speculative_retry = '99p';
+
+#.  Clear the system table data from each new node.
+
+    .. code-block:: console
+
+        $ sudo rm -rf /var/lib/cassandra/data/system/*
+
+#.  Start each node on the new cluster.
+
+    .. code-block:: console
+
+        $ systemctl start cassandra
+
+#.  On a new node in a new cluster, create KK-TS keyspace using keyspace information 
+    from step 4. 
+
+#.  Stop each node in a new cluster.
+
+    .. code-block:: console
+
+        $ systemctl stop cassandra
+
+#.  Restore the data inside backup snapshot folder `backup_folder/table_name/snapshots/snapshot_name/`
+    to current node data folder in `/var/lib/cassandra/data/kkts/table_name-UUID`. Please do this for 
+    every table the snapshotes created. 
+    Example:
+
+    .. code-block:: console
+
+        $ sudo cp appconfig-5747648698797987/hdkhu6579/snapshots/hflkshlfhlifh/ /var/lib/cassandra/data/kkts/appconfig-69370247047659
+
+#.  Change the ownership of the restored file to the Cassandra user.
+
+    .. code-block:: console
+
+        $ sudo chown -R cassandra:cassandra /var/lib/cassandra/data/
+
+#.  Start each node again.
+
+    .. code-block:: console
+    
+        $ sudo systemctl start cassandra

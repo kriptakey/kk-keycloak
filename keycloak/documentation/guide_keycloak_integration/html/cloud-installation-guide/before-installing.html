@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Before installing on cloud &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Installing KK-Cryptoservice on cloud" href="cloud-installation.html" />
+    <link rel="prev" title="Cloud Installation Guide" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Cloud Installation Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Before installing on cloud</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cloud-platform-configuration">Cloud platform configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cloud-installation.html">Installing KK-Cryptoservice on cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="misc-actions.html">Miscellaneous operations</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kkts-guide/index.html">KK-TS Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Cloud Installation Guide</a></li>
+      <li class="breadcrumb-item active">Before installing on cloud</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cloud-installation-guide/before-installing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="before-installing-on-cloud">
+<h1>Before installing on cloud<a class="headerlink" href="#before-installing-on-cloud" title="Link to this heading"></a></h1>
+<p>This guide assumes Alibaba Cloud as the platform of installation. It may be possible to install
+a KK-Cryptoservice instance on a different cloud platform. However, Klavis Kripta will not provide
+official support for installing and/or troubleshoot issues that may occur.</p>
+<p>Before configuring the cloud platform, it is highly recommended to set the region to one
+that is geographically closest, and to comply with the region’s regulations. This region should be
+used in the configuration settings provided below wherever applicable. This guide will be using
+<strong>Indonesia (Jakarta)</strong> as its preferred region.</p>
+<section id="cloud-platform-configuration">
+<h2>Cloud platform configuration<a class="headerlink" href="#cloud-platform-configuration" title="Link to this heading"></a></h2>
+<p>Perform the following steps to prepare Alibaba Cloud for KK-Cryptoservice installation.</p>
+<ul>
+<li><p>Create a resource group.</p>
+<p>Resource groups are used to group resources based on usage, permissions, and regions. This allows
+the resources to be managed in a hierarchical manner based on users and projects.</p>
+<ol class="arabic">
+<li><p>Navigate to the Resource Management Console.</p></li>
+<li><p>Click <strong>Resource Group</strong> on the left panel.</p></li>
+<li><p>Click the <strong>Create Resource Group</strong> button.</p></li>
+<li><p>Configure the following settings on the right panel, and then click the <strong>OK</strong> button.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Config Name</p></th>
+<th class="head"><p>Config Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Resource Group Identifier</p></td>
+<td><p>kk-resource-group</p></td>
+</tr>
+<tr class="row-odd"><td><p>Display Name</p></td>
+<td><p>KK Resource Group</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+</li>
+<li><p>Create an SSH key pair.</p>
+<p>Alibaba Cloud allows users to access their instances via SSH. For a more detailed explanation,
+please refer to the <a class="reference external" href="https://www.alibabacloud.com/help/en/ecs/user-guide/overview-ssh">SSH key pair article</a> at Alibaba Cloud’s website.</p>
+<p>The SSH key pair will be used to set up connection between the KK-Cryptoservice instance on cloud
+and the KK-Manager instance on premise.</p>
+<ol class="arabic">
+<li><p>Navigate to the Elastic Compute Service page, and then choose Network &amp; Security.</p></li>
+<li><p>Click <strong>SSH Key Pairs</strong> on the left panel.</p></li>
+<li><p>In the top navigation bar, select an appropriate region.</p></li>
+<li><p>Click the <strong>Create SSH Key Pair</strong> button.</p></li>
+<li><p>Configure the following settings, and then click the <strong>OK</strong> button.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Config Name</p></th>
+<th class="head"><p>Config Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SSH Key Pair Name</p></td>
+<td><p>kk-keypair</p></td>
+</tr>
+<tr class="row-odd"><td><p>Creation Type</p></td>
+<td><p>Auto-create</p></td>
+</tr>
+<tr class="row-even"><td><p>Resource Group</p></td>
+<td><p>KK Resource Group</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tag</p></td>
+<td><p>Add/select deployment: kk tag</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+<p>This downloads the file <code class="docutils literal notranslate"><span class="pre">kk-keypair.pem</span></code>. Make sure to keep this file safe and secure, as anyone
+with access to this file will be able to access the server that runs the KK-Cryptoservice instance.</p>
+</li>
+<li><p>Create a security group.</p>
+<p>A <a class="reference external" href="https://www.alibabacloud.com/help/en/ecs/user-guide/security-groups-1/">security group</a> acts as a virtual firewall that can control inbound and outbound traffic for ECS instances.
+By configuring inbound and outbound rules, traffic into and out of the ECS instance can be controlled.
+An ECS instance may have multiple security groups assigned to it.</p>
+<p>Here, the ECS instance is configured to accept incoming REST API and SDK API traffic for the KK-Cryptoservice
+instance.</p>
+<ol class="arabic">
+<li><p>Navigate to the Elastic Compute Service page, and then choose Network &amp; Security.</p></li>
+<li><p>Click <strong>Security Group</strong> on the left panel.</p></li>
+<li><p>Click the <strong>Create Security Group</strong> button.</p></li>
+<li><p>Configure the following settings.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Config Name</p></th>
+<th class="head"><p>Config Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Security group Name</p></td>
+<td><p>kk-security-group</p></td>
+</tr>
+<tr class="row-odd"><td><p>Network</p></td>
+<td><p>Select default VPC</p></td>
+</tr>
+<tr class="row-even"><td><p>Security group Name</p></td>
+<td><p>Basic Security Group</p></td>
+</tr>
+<tr class="row-odd"><td><p>Description</p></td>
+<td><p>KK Security Group</p></td>
+</tr>
+<tr class="row-even"><td><p>Resource Group</p></td>
+<td><p>KK Resource Group</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tag</p></td>
+<td><p>Add/select deployment: kk tag</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Add the following Inbound Rule.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Action</p></th>
+<th class="head"><p>Priority</p></th>
+<th class="head"><p>Protocol Type</p></th>
+<th class="head"><p>Port Range</p></th>
+<th class="head"><p>Authorization Object</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Allow</p></td>
+<td><p>1</p></td>
+<td><p>Custom TCP</p></td>
+<td><p>8083</p></td>
+<td><p>0.0.0.0/0</p></td>
+<td><p>REST API Endpoint Port</p></td>
+</tr>
+<tr class="row-odd"><td><p>Allow</p></td>
+<td><p>1</p></td>
+<td><p>Custom TCP</p></td>
+<td><p>8084</p></td>
+<td><p>0.0.0.0/0</p></td>
+<td><p>SDK Endpoint Port</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Click the Create Security Group button.</p></li>
+</ol>
+</li>
+<li><p>Create a deployment set.</p>
+<p>A <a class="reference external" href="https://www.alibabacloud.com/help/en/ecs/user-guide/overview-43?spm=a2c63.p38356.0.0.77e12eb1V5BvIF">deployment set</a> is a policy that controls the distribution of the ECS instances.</p>
+<p>KK-Cryptoservice instances must be deployed in different machines to ensure unique hardware-based root of trust
+and service availability when the ECS instances are created. Therefore, the deployment set’s strategy
+must be set to High Availability.</p>
+<ol class="arabic">
+<li><p>Navigate to the Elastic Compute Service page, and then choose <strong>Deployment &amp; Elasticity</strong>.</p></li>
+<li><p>Click <strong>Deployment Sets</strong> on the left panel.</p></li>
+<li><p>In the top navigation bar, select a region to Indonesia(Jakarta).</p></li>
+<li><p>Configure the following settings, and then click the <strong>OK</strong> button.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Config Name</p></th>
+<th class="head"><p>Config Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Name</p></td>
+<td><p>kk-deployment-set</p></td>
+</tr>
+<tr class="row-odd"><td><p>Description</p></td>
+<td><p>KK Deployment Set</p></td>
+</tr>
+<tr class="row-even"><td><p>Strategy</p></td>
+<td><p>High Availability</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+</li>
+<li><p>Configure the VPN gateway.</p>
+<p>The VPN Gateway is used to transmit encrypted traffic between Alibaba Cloud’s virtual private cloud
+and the KK-Manager instance or the KK-Manager-DR instances on premise.</p>
+<ol class="arabic">
+<li><p>Navigate to the Elastic Compute Service page, and then choose <strong>Network &amp; Security</strong>.</p></li>
+<li><p>Click <strong>Virtual Private Cloud</strong> on the left-side navigation pane.</p></li>
+<li><p>Navigate to <strong>Interconnections</strong> → <strong>VPN</strong> → <strong>VPN Gateways</strong>.</p></li>
+<li><p>Click <strong>Create VPN Gateway</strong> on the right panel.</p></li>
+<li><p>Configure the following settings, and then click the <strong>Buy Now</strong> button.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Config Name</p></th>
+<th class="head"><p>Config Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Name</p></td>
+<td><p>kk-vpn-gateway</p></td>
+</tr>
+<tr class="row-odd"><td><p>Resource Group</p></td>
+<td><p>KK Resource Group</p></td>
+</tr>
+<tr class="row-even"><td><p>Region</p></td>
+<td><p>Indonesia (Jakarta)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Gateway Type</p></td>
+<td><p>Standard</p></td>
+</tr>
+<tr class="row-even"><td><p>Network Type</p></td>
+<td><p>Public</p></td>
+</tr>
+<tr class="row-odd"><td><p>VPC</p></td>
+<td><p>Select default VPC</p></td>
+</tr>
+<tr class="row-even"><td><p>Specify VSwitch</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>Maximum Bandwidth</p></td>
+<td><p>100 Mbit/s</p></td>
+</tr>
+<tr class="row-even"><td><p>Traffic</p></td>
+<td><p>Pay-by-data-transfer</p></td>
+</tr>
+<tr class="row-odd"><td><p>IPsec-VPN</p></td>
+<td><p>Disable</p></td>
+</tr>
+<tr class="row-even"><td><p>SSL-VPN</p></td>
+<td><p>Enable</p></td>
+</tr>
+<tr class="row-odd"><td><p>SSL-Connections</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-even"><td><p>Duration</p></td>
+<td><p>By Hour</p></td>
+</tr>
+<tr class="row-odd"><td><p>Service-linked Role</p></td>
+<td><p>Create a service link role</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Review your order on the Confirm Order page, and then tick the VPN Gateway Agreement of Service box.</p></li>
+<li><p>Click the <strong>Activate Now</strong> button.</p></li>
+</ol>
+</li>
+<li><p>Configure the SSL server.</p>
+<p>SSL-VPN allows remote clients to connect to a VPC and access the applications or services that are deployed
+in the VPC in a secure manner.</p>
+<ol class="arabic">
+<li><p>Navigate to the VPN Gateway page, and then click <strong>SSL Servers</strong> on the left panel.</p></li>
+<li><p>Click the <strong>Create SSL Server</strong> button.</p></li>
+<li><p>Configure the following settings, and then click the <strong>OK</strong> button.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Config Name</p></th>
+<th class="head"><p>Config Value</p></th>
+<th class="head"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Name</p></td>
+<td><p>kk-ssl-server</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>VPN Gateway</p></td>
+<td><p>Select the previously created VPN gateway</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Local Network</p></td>
+<td><p>Specify the default VPC CIDR (Check on VPC page)</p></td>
+<td><p>example: 172.16.0.0/12</p></td>
+</tr>
+<tr class="row-odd"><td><p>Client Subnet</p></td>
+<td><p>Specify client CIDR for KK-Manager and KK-Cryptoservice connection</p></td>
+<td><p>example: 192.168.0.0/16</p></td>
+</tr>
+<tr class="row-even"><td><p>Advanced Configuration</p></td>
+<td><p>Leave the default configuration as is</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+</li>
+<li><p>Create the SSL client certificate.</p>
+<p>An SSL client certificate is required for the Kripta Key instances to join the VPN through the OpenVPN protocol.</p>
+<ol class="arabic">
+<li><p>Navigate to SSL Client page, and then click <strong>SSL Clients</strong> on the left panel.</p></li>
+<li><p>Click the <strong>Create Client Certificate</strong> button.</p></li>
+<li><p>Configure the following settings, and then click the <strong>OK</strong> button.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Config Name</p></th>
+<th class="head"><p>Config Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Name</p></td>
+<td><p>kk-ssl-client</p></td>
+</tr>
+<tr class="row-odd"><td><p>SSL Server</p></td>
+<td><p>Select the previously created SSL server</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Under the Actions tab on the right pane, click <strong>Download Certificate link</strong> to download
+the client certificate file.</p></li>
+</ol>
+<p>This downloads the file <code class="docutils literal notranslate"><span class="pre">certs.zip</span></code>. Make sure to keep this file safe and secure.</p>
+</li>
+<li><p>Create a g7t vSGX instance.</p>
+<p>To run KK-Cryptoservice, the ECS instance must support SGX or Virtual SGX (vSGX). Alibaba Cloud provides
+various ECS instance families, each tailored to a specific use scenario or workload. Among the instance families
+offered by Alibaba Cloud, instance families such as g7t, c7t, and r7t support <a class="reference external" href="https://www.alibabacloud.com/help/en/ecs/user-guide/build-an-sgx-encrypted-computing-environment">vSGX</a>. Hence, it is possible
+to install KK-Cryptoservice on such instances.</p>
+<p>This guide elects to use an instance from the g7t family, designed for general-purpose computing.</p>
+<ol class="arabic">
+<li><p>Navigate to the Elastic Compute Service page, and then choose Instances &amp; Images.</p></li>
+<li><p>Click <strong>Create Instances</strong> on the left panel.</p></li>
+<li><p>Configure the following settings on the Basic Configuration page.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Config Name</p></th>
+<th class="head"><p>Config Value</p></th>
+<th class="head"><p>Remark</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Billing Method</p></td>
+<td><p>Pay-as-you-go</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Region</p></td>
+<td><p>Indonesia (Jakarta) / Zone A</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Instance Type</p></td>
+<td><p>ecs.g7t.large</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Quantity</p></td>
+<td><p>1</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Image</p></td>
+<td><p>Alibaba Cloud Linux 3 (UEFI)</p></td>
+<td><p>Tick the Security Hardening and Trusted System box.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Storage</p></td>
+<td><p>Default</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Snapshot</p></td>
+<td><p>Create snapshot policy for backup purpose</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Configure the following settings on the Networking page.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Config Name</p></th>
+<th class="head"><p>Config Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Network Type</p></td>
+<td><p>VPC (select the default VPC)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Public IP Address</p></td>
+<td><p>Tick Assign Public IPv4 Address</p></td>
+</tr>
+<tr class="row-even"><td><p>Bandwidth Billing</p></td>
+<td><p>Pay-By-Traffic</p></td>
+</tr>
+<tr class="row-odd"><td><p>Peak Bandwidth</p></td>
+<td><p>25 Mbps</p></td>
+</tr>
+<tr class="row-even"><td><p>Security Group</p></td>
+<td><p>Select previously created security group</p></td>
+</tr>
+<tr class="row-odd"><td><p>Elastic Network</p></td>
+<td><p>Default</p></td>
+</tr>
+<tr class="row-even"><td><p>IPv6</p></td>
+<td><p>Default</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Configure the following settings on the System Configuration page.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Config Name</p></th>
+<th class="head"><p>Config Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Logon Credentials</p></td>
+<td><p>Key Pair</p></td>
+</tr>
+<tr class="row-odd"><td><p>Logon Username</p></td>
+<td><p>root</p></td>
+</tr>
+<tr class="row-even"><td><p>Key Pair</p></td>
+<td><p>Select previously created keypair</p></td>
+</tr>
+<tr class="row-odd"><td><p>Instance Name</p></td>
+<td><p>KK-Cryptoservice-ali-image</p></td>
+</tr>
+<tr class="row-even"><td><p>Descryption</p></td>
+<td><p>KK-Cryptoservice instance with Alibaba Image</p></td>
+</tr>
+<tr class="row-odd"><td><p>Host</p></td>
+<td><p>KK-Cryptoservice-ali</p></td>
+</tr>
+<tr class="row-even"><td><p>Sequential Suffix</p></td>
+<td><p>Default</p></td>
+</tr>
+<tr class="row-odd"><td><p>Release Protection</p></td>
+<td><p>Default</p></td>
+</tr>
+<tr class="row-even"><td><p>RAM Role</p></td>
+<td><p>Select/create AliyunECSInstanceForYundunSysTrustRole RAM role</p></td>
+</tr>
+<tr class="row-odd"><td><p>Instance metadata account</p></td>
+<td><p>Default</p></td>
+</tr>
+<tr class="row-even"><td><p>User data</p></td>
+<td><p>Default</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Configure the following settings on the Grouping page.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Config Name</p></th>
+<th class="head"><p>Config Value</p></th>
+<th class="head"><p>Remark</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Tags</p></td>
+<td><p>Add/select deployment: Kripta Key tag</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Resource Group</p></td>
+<td><p>Select previously created resource group</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Deployment set</p></td>
+<td><p>Select previously created deployment set</p></td>
+<td><p>Important to ensure the KK-Cryptoservice instances are deployed in different machines.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dedicated host</p></td>
+<td><p>Default</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Private Pool Type</p></td>
+<td><p>Default</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Tick the ECS Terms of Service and Product Terms of Service box in the Grouping page.</p></li>
+<li><p>Double check all settings. If everything is correct, click the <strong>Create Instance</strong> button.</p></li>
+</ol>
+</li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Cloud Installation Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cloud-installation.html" class="btn btn-neutral float-right" title="Installing KK-Cryptoservice on cloud" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

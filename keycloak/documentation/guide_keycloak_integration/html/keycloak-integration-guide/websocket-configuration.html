@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebSocket configuration &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Register Client Application and User" href="register-client-and-user.html" />
+    <link rel="prev" title="KeyCloak Integration with Kripta Key" href="keycloak-integration.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kkts-guide/index.html">KK-TS Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">KeyCloak Integration Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keycloak-integration.html">KeyCloak Integration with Kripta Key</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">WebSocket configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="register-client-and-user.html">Register Client Application and User</a></li>
+<li class="toctree-l2"><a class="reference internal" href="import-users.html">Import Users to KeyCloak DB</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">KeyCloak Integration Guide</a></li>
+      <li class="breadcrumb-item active">WebSocket configuration</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/keycloak-integration-guide/websocket-configuration.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="websocket-configuration">
+<h1>WebSocket configuration<a class="headerlink" href="#websocket-configuration" title="Link to this heading"></a></h1>
+<p>To be able in accessing QRCode during on-boarding and login, a WSS must be configured securely. Therefore, it is necessary
+to configure TLS connection for WSS. Follow the below steps to generate TLS certificate for WSS:</p>
+<ol class="arabic">
+<li><p>Generate keypair for WSS</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>genrsa<span class="w"> </span>-out<span class="w"> </span>wss.key<span class="w"> </span><span class="m">4096</span>
+</pre></div>
+</div>
+</li>
+<li><p>Generate WSS CSR and ensure WSS CN is aligned to WSS hostname. If WSS is configured in the same host with Keycloak, then
+it can use Keycloak hostname</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>req<span class="w"> </span>-new<span class="w"> </span>-key<span class="w"> </span>-wss.key<span class="w"> </span>-out<span class="w"> </span>wss.csr<span class="w">   </span>-subj<span class="w"> </span><span class="s2">&quot;/C=US/ST=CA/L=SanFrancisco/O=MyOrg/OU=MyUnit/CN=wss-hostname.com&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Sign WSS CSR with CA private key and passing the same configuration file <code class="docutils literal notranslate"><span class="pre">selfsigned.conf</span></code></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>x509<span class="w"> </span>-req<span class="w"> </span>-in<span class="w"> </span>wss.csr<span class="w"> </span>-CA<span class="w"> </span>ca.crt<span class="w"> </span>-CAkey<span class="w"> </span>ca.key<span class="w"> </span>-CAcreateserial<span class="w">   </span>-out<span class="w"> </span>wss.crt<span class="w"> </span>-days<span class="w"> </span><span class="m">825</span><span class="w"> </span>-extfile<span class="w"> </span>selfsigned.conf<span class="w"> </span>-extensions<span class="w"> </span>v3_ext
+</pre></div>
+</div>
+</li>
+<li><p>After that, go to NGINX Settings, and adjust its configuration especially to set the correct paths of wss certificate and
+private as followings</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">server {</span>
+<span class="go">    listen 8089 ssl;</span>
+<span class="go">    listen [::]:8089 ssl;</span>
+<span class="go">    server_name localhost;</span>
+
+<span class="gp">    # </span>SSL<span class="w"> </span>configuration
+<span class="go">    ssl_certificate /etc/nginx/certs/wss.crt;</span>
+<span class="go">    ssl_certificate_key /etc/nginx/certs/wss.key;</span>
+
+<span class="gp">    # </span>Optional:<span class="w"> </span>Strengthen<span class="w"> </span>SSL<span class="w"> </span>security
+<span class="go">    ssl_protocols TLSv1.2 TLSv1.3;</span>
+<span class="go">    ssl_prefer_server_ciphers on;</span>
+<span class="go">    ssl_ciphers EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH;</span>
+
+<span class="gp">    # </span>WebSocket<span class="w"> </span>proxy
+<span class="go">    location / {</span>
+<span class="go">        proxy_pass http://localhost:8090;</span>
+<span class="go">        proxy_http_version 1.1;</span>
+<span class="go">        proxy_set_header Upgrade $http_upgrade;</span>
+<span class="go">        proxy_set_header Connection &quot;upgrade&quot;;</span>
+<span class="go">        proxy_set_header Host $host;</span>
+<span class="go">        proxy_set_header X-Real-IP $remote_addr;</span>
+<span class="go">    }</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>Run the following command to connect wss to NGINX</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>wscat<span class="w"> </span>-c<span class="w"> </span>wss://localhost:8081<span class="w"> </span>--no-check
+</pre></div>
+</div>
+<p>Ensure that wss is connected.</p>
+</li>
+</ol>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="keycloak-integration.html" class="btn btn-neutral float-left" title="KeyCloak Integration with Kripta Key" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="register-client-and-user.html" class="btn btn-neutral float-right" title="Register Client Application and User" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

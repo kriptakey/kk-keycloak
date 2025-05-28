@@ -1,0 +1,25 @@
+KK-TS Guide
+===========
+
+Preface
+-------
+
+Intended reader
+~~~~~~~~~~~~~~~
+
+This document is intended for experienced application developers and system administrators as a guide to using
+Kripta Key Tokenization Service (KK-TS).
+
+
+Document scope
+~~~~~~~~~~~~~~
+
+This document explains the usage of Kripta Key Tokenization Service: its API endpoints, its command line interface,
+and its configurations.
+
+
+Related documents
+~~~~~~~~~~~~~~~~~
+
+*   :doc:`/sys-admin-guide/index`
+*   :doc:`/dev-guide/index`

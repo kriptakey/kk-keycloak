@@ -1,0 +1,62 @@
+Kripta Key licensing
+====================
+
+Introduction
+------------
+
+Kripta Key licensing is a formal commitment from Klavis Kripta to customers who use Kripta Key
+as part of their solutions. There are several types of license available for Kripta Key,
+each catering to a different customer need.
+
+A Kripta Key license is valid for a certain amount of time, and may be renewed at the end of its validity period.
+A single license is valid for a single Kripta Key deployment, which includes the main KK-Manager instance,
+several KK-Cryptoservice instances, a KK-Auditor instance, and several KK-Manager-DR instances.
+
+
+License model
+-------------
+
+Kripta Key comes with an evaluation license upon deployment. This evaluation license is valid for 30 days.
+To continue using Kripta Key, a valid license must be applied. For this version of Kripta Key, the license
+comes in two different models: **Subscription** and **Perpetual**.
+
+*   **Subscription**: On this license model, the customer must specify the duration of license (1, 3, or 5 years),
+    the number of KK-Cryptoservice instances, and the number of KK-Manager-DR instances while applying
+    for the license. The **subscription** license has two editions:
+
+    *   **Standard**: all REST API endpoints are available except E2EE endpoints.
+    *   **Enterprise**: all REST API endpoints are available.
+
+*   **Perpetual**: On this license model, the license is valid in perpetuity. Customers need only to pay
+    the cost of technical support annually --- this is called the Annual Technical Support (ATS) cost.
+    This license is only available for appliance packages, and only **Enterprise** edition is available.
+
+
+Add-on features
+---------------
+
+While applying for a license, the customer may also opt in for additional features, subject to requirements.
+Currently, on this version of Kripta Key, Klavis Kripta offers three add-on feature: SNAP BI, Vaultless Format Preserving Encryption (FPE), Functional Module (FM).
+
+
+SNAP BI
+~~~~~~~
+
+SNAP BI (Standar Nasional Open API Pembayaran) is a payment policy released by Bank Indonesia
+for the payment industry. This add-on feature is only granted to banks that comply to this standard.
+This feature enables certain services that is required to conform to the policies set forth by Bank Indonesia.
+
+Vaultless Format Preserving Encryption (FPE)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Vaultless Format-Preserving Encryption (FPE) is a cryptographic technique that encrypts data while preserving its original format.
+It is a vaultless tokenization method, meaning the token and metadata are stored by the user. It implements the FPE algorithm, specifically FF1. 
+However, the FF1 algorithm is considered broken. We implement FF1 instead of AES for this API because of its format-preserving properties. 
+Therefore, this add-on feature only for specific use cases.
+
+Functional Module (FM)
+~~~~~~~~~~~~~~~~~~~~~~
+
+Functional Module (FM) is a component that contains APIs designed to execute scripts that establish custom relationships between APIs
+within the KK-CS system. Users can customize how these APIs interact, allowing for efficient execution of multiple KK-CS functions in a single operation.
+This service helps users create scripts that call multiple KK-CS functions at once, reducing execution time and improving efficiency. 

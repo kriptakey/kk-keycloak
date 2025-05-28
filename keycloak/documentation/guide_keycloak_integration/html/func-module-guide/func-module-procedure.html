@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Functional Module Procedure &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Functional Module Command line interface" href="command-line-interface.html" />
+    <link rel="prev" title="Functional Module Guide" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kkts-guide/index.html">KK-TS Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Functional Module Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Functional Module Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command-line-interface.html">Functional Module Command line interface</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Functional Module Guide</a></li>
+      <li class="breadcrumb-item active">Functional Module Procedure</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/func-module-guide/func-module-procedure.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="functional-module-procedure">
+<h1>Functional Module Procedure<a class="headerlink" href="#functional-module-procedure" title="Link to this heading"></a></h1>
+<p>Kripta Key functional module is a self-contained component within its API that performs a specific function or a set of related functions.
+The Kripta Key functional module is loaded dynamically in a JavaScript environment using Duktape. In Duktape, we fully support ECMAScript 5
+and provide partial support for ECMAScript 6 and ECMAScript 7.</p>
+<p>List of functions:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">kkAuth</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkRefresh</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkRNG</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkMACGenerate</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkMACVerify</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkSeal</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkUnseal</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkRNG</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkMACGenerate</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkMACVerify</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkSeal</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkUnseal</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkEncrypt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkDecrypt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkReencrypt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkTokenize</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkDetokenize</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkFPETokenize</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkFPEDetokenize</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkSign</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkVerify</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkSign</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkVerify</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkCertSign</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkCertVerify</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkKeyInfo</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkKeyInfo</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkAppstoredKeyGenerate</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkAppstoredKeypairGenerate</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkAppstoredMacGenerate</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkAppstoredMacVerify</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkAppstoredSeal</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkAppstoredUnseal</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkAppstoredEncrypt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkAppstoredDecrypt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkAppstoredTokenize</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkAppstoredDetokenize</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkAppstoredSign</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkAppstoredVerify</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkE2EEReencryptFromSessionKeyToPermanentKey</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkE2EECompare</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkE2EEReencryptFromPermanentKeyToClientKey</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkE2EEDecryptFromSessionKey</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkE2EEencryptToClientKey</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kkSecretGet</span></code></p></li>
+</ul>
+<p>For seamless implementation, our procedure mandate test the functional module first before using it.</p>
+<p>The following are procedure to implement functional module:</p>
+<ol class="arabic">
+<li><p>Create script based on your goal. The script must be involve Kripta Key cryptographic APIs listed above and the script
+must be in javascript format (.js). Sample script provided below:</p>
+<p>The script must be maximum 500KB.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">// Generate random pin</span>
+<span class="go">function makePIN(length) {</span>
+<span class="go">    var result = &quot;&quot;;</span>
+<span class="go">    const characters = &#39;0123456789&#39;;</span>
+<span class="go">    var counter = 0;</span>
+<span class="go">    while (counter &lt; length) {</span>
+<span class="go">        result += characters.charAt(Math.floor(Math.random() * length));</span>
+<span class="go">        counter += 1;</span>
+<span class="go">    }</span>
+<span class="go">    return result;</span>
+<span class="go">}</span>
+
+<span class="go">function sealedPinGeneration(inputJSON) {</span>
+<span class="go">    var parsedInput = JSON.parse(inputJSON);</span>
+
+<span class="go">    // Random 6 character to be used as PIN</span>
+<span class="go">    var pin = makePIN(6);</span>
+
+<span class="go">    // Generate appstored AES key</span>
+<span class="go">    var generateKeyParam = {</span>
+<span class="go">        &quot;sessionToken&quot;: parsedInput.sessionToken,</span>
+<span class="go">        &quot;wrappingMethod&quot;: &quot;internalKey&quot;,</span>
+<span class="go">        &quot;algo&quot;: &quot;AES&quot;,</span>
+<span class="go">        &quot;algoLength&quot;: 256,</span>
+<span class="go">        &quot;internalWrappingKeyId&quot;: parsedInput.wrappingKeyId,</span>
+<span class="go">        &quot;partitionId&quot;: parsedInput.partitionId,</span>
+<span class="go">    }</span>
+
+<span class="go">    var generateKeyJSON = JSON.parse(kkAppstoredKeyGenerate(JSON.stringify(generateKeyParam)));</span>
+<span class="go">    if (generateKeyJSON.fault != null) {</span>
+<span class="go">        generateKeyJSON.message = &quot;Appstored AES-256 key generation failed!&quot;;</span>
+<span class="go">        return JSON.stringify(generateKeyJSON);</span>
+<span class="go">    }</span>
+
+<span class="go">    // Sealing</span>
+<span class="go">    var sealParam = {</span>
+<span class="go">        &quot;sessionToken&quot;: parsedInput.sessionToken,</span>
+<span class="go">        &quot;wrappingKeyId&quot;: parsedInput.wrappingKeyId,</span>
+<span class="go">        &quot;wrappedKey&quot;: generateKeyJSON.result.wrappedKey,</span>
+<span class="go">        &quot;plaintext&quot;: [pin],</span>
+<span class="go">        &quot;partitionId&quot;: parsedInput.partitionId,</span>
+<span class="go">    };</span>
+<span class="go">    var sealJSON = JSON.parse(kkAppstoredSeal(JSON.stringify(sealParam)));</span>
+<span class="go">    if (sealJSON.fault != null) {</span>
+<span class="go">        sealJSON.message = &quot;Data sealing failed!&quot;;</span>
+<span class="go">        return JSON.stringify(sealJSON);</span>
+<span class="go">    }</span>
+
+<span class="go">    // Output</span>
+<span class="go">    var output = {</span>
+<span class="go">        &quot;wrappedKey&quot;: generateKeyJSON.result.wrappedKey,</span>
+<span class="go">        &quot;sealedPIN&quot;: sealJSON.result.ciphertext[0],</span>
+<span class="go">    }</span>
+<span class="go">    return JSON.stringify(output);</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>Upload the script for testing mode via API <code class="docutils literal notranslate"><span class="pre">v24.1/fm/test/add</span></code>.</p></li>
+<li><p>Execute the script in testing mode via the API <code class="docutils literal notranslate"><span class="pre">v24.1/fm/test/execute</span></code>. If it succeeds, it returns the module hash value, and the script can be used.
+The return of this API depends on the script.</p></li>
+<li><p>Add the functional module script to KK-M using the command <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">func-module</span> <span class="pre">add</span></code>, please refer to  <a class="reference internal" href="command-line-interface.html#functional-module-command-line-interface"><span class="std std-ref">Functional Module Command line interface</span></a>.
+Ensure you pass the correct hash value.</p></li>
+<li><p>Execute the functional module script by calling API <code class="docutils literal notranslate"><span class="pre">v24.1/fm/execute</span></code>. The return of this API depends on the script.</p></li>
+<li><p>To display the list and details of functional module scripts, please refer to <a class="reference internal" href="command-line-interface.html#functional-module-command-line-interface"><span class="std std-ref">Functional Module Command line interface</span></a></p></li>
+<li><p>Deleting a functional module is also available, but ensure that no applications are using the functional module before deleting it.</p></li>
+</ol>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Functional Module Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="command-line-interface.html" class="btn btn-neutral float-right" title="Functional Module Command line interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

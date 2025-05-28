@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Appendix &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Protecting Data Confidentiality with Encryption, Tokenization, and Masking" href="whitepaper/protecting-data-confidentiality.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="kkts-guide/index.html">KK-TS Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Appendix</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#glossary">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-kripta-key-errors">Common Kripta Key errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performing-integrity-checks">Performing integrity checks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#obtaining-intel-api-key">Obtaining Intel API key</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checking-for-sgx2-support">Checking for SGX2 support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#snmp-configuration">SNMP configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#kripta-key-directory-structure">Kripta Key directory structure</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Appendix</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/appendix.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="appendix">
+<h1>Appendix<a class="headerlink" href="#appendix" title="Link to this heading"></a></h1>
+<section id="glossary">
+<h2>Glossary<a class="headerlink" href="#glossary" title="Link to this heading"></a></h2>
+<p>The following is a list of the terms used in this document. The list is not intended to be either exhaustive or precise.
+The terms are explained in the context of Kripta Key.</p>
+<dl class="simple glossary">
+<dt id="term-API">API<a class="headerlink" href="#term-API" title="Link to this term"></a></dt><dd><p>Application Programming Interface: an interface that allows two or more applications to communicate
+with each other where, typically, one application is providing services for the others.</p>
+</dd>
+<dt id="term-audit-log">audit log<a class="headerlink" href="#term-audit-log" title="Link to this term"></a></dt><dd><p>a chronological record of security-relevant events and changes in the KK-Manager, to be used
+for post-accident audit and analysis whenever necessary.</p>
+</dd>
+<dt id="term-certificate">certificate<a class="headerlink" href="#term-certificate" title="Link to this term"></a></dt><dd><p>an electronic document or file that proves the validity of a public key.</p>
+</dd>
+<dt id="term-certificate-pinning">certificate pinning<a class="headerlink" href="#term-certificate-pinning" title="Link to this term"></a></dt><dd><p>the process where a known server certificate is distributed with a client app, requiring any connection
+with the server to be validated against the known copy.</p>
+</dd>
+<dt id="term-CLIKK">CLIKK<a class="headerlink" href="#term-CLIKK" title="Link to this term"></a></dt><dd><p>Kripta Key application that connects to the KK-Manager to provides interface for management services
+to the administrators.</p>
+</dd>
+<dt id="term-CSR">CSR<a class="headerlink" href="#term-CSR" title="Link to this term"></a></dt><dd><p>Certificate Signing Request: a request from an applicant to a certificate authority to certify
+that a particular public key and its parameters as valid and belonging to the applicant.</p>
+</dd>
+<dt id="term-CUD">CUD<a class="headerlink" href="#term-CUD" title="Link to this term"></a></dt><dd><p>Create, Update, Delete: a subset of commands that operate on a database that covers all operations
+that modify the database. Prohibiting CUD commands is effectively equivalent to only allowing read operations.</p>
+</dd>
+<dt id="term-device-binding">device binding<a class="headerlink" href="#term-device-binding" title="Link to this term"></a></dt><dd><p>the process where a device is associated as a credential to an application, allowing the user to use
+the device to authenticate.</p>
+</dd>
+<dt id="term-DR">DR<a class="headerlink" href="#term-DR" title="Link to this term"></a></dt><dd><p>Disaster Recovery: the process of maintaining or reestablishing vital infrastructure and systems
+following a natural or human-induced disaster. A KK-Manager-DR instance allows Kripta Key to continue
+providing service even when the main KK-Manager instance has been rendered out of service.</p>
+</dd>
+<dt id="term-dual-control">dual control<a class="headerlink" href="#term-dual-control" title="Link to this term"></a></dt><dd><p>an authentication method where two distinct privileged users must authorize an action simultaneously.</p>
+</dd>
+<dt id="term-E2EE">E2EE<a class="headerlink" href="#term-E2EE" title="Link to this term"></a></dt><dd><p>End to End Encryption: a method of securing communication such that only participating users are privy
+to the contents of the communication.</p>
+</dd>
+<dt id="term-ECS">ECS<a class="headerlink" href="#term-ECS" title="Link to this term"></a></dt><dd><p>Elastic Compute Service: a service that provides computing services with the ability to quickly expand
+or decrease resources to meet fluctuating demands.</p>
+</dd>
+<dt id="term-instance">instance<a class="headerlink" href="#term-instance" title="Link to this term"></a></dt><dd><p>a copy of the Kripta Key component software that is running on a machine. This term may also refer
+to the machine that is running a particular Kripta Key component software.</p>
+</dd>
+<dt id="term-key-distribution">key distribution<a class="headerlink" href="#term-key-distribution" title="Link to this term"></a></dt><dd><p>the process of distributing cryptographic keys from a KK-Manager to a KK-Cryptoservice.</p>
+</dd>
+<dt id="term-key-generation">key generation<a class="headerlink" href="#term-key-generation" title="Link to this term"></a></dt><dd><p>the process of creating cryptographic keys by using a true random generator and the appropriate algorithm.</p>
+</dd>
+<dt id="term-key-rotation">key rotation<a class="headerlink" href="#term-key-rotation" title="Link to this term"></a></dt><dd><p>the process of retiring the current key material and generating a new key material under the same key ID.</p>
+</dd>
+<dt id="term-KK">KK<a class="headerlink" href="#term-KK" title="Link to this term"></a></dt><dt id="term-Kripta-Key">Kripta Key<a class="headerlink" href="#term-Kripta-Key" title="Link to this term"></a></dt><dd><p>This product’s name.</p>
+</dd>
+<dt id="term-KK-A">KK-A<a class="headerlink" href="#term-KK-A" title="Link to this term"></a></dt><dt id="term-KK-Auditor">KK-Auditor<a class="headerlink" href="#term-KK-Auditor" title="Link to this term"></a></dt><dd><p>Kripta Key application that stores the audit logs.</p>
+</dd>
+<dt id="term-KK-CS">KK-CS<a class="headerlink" href="#term-KK-CS" title="Link to this term"></a></dt><dt id="term-KK-Cryptoservice">KK-Cryptoservice<a class="headerlink" href="#term-KK-Cryptoservice" title="Link to this term"></a></dt><dd><p>Kripta Key application that provides cryptographic services.</p>
+</dd>
+<dt id="term-KK-M">KK-M<a class="headerlink" href="#term-KK-M" title="Link to this term"></a></dt><dt id="term-KK-Manager">KK-Manager<a class="headerlink" href="#term-KK-Manager" title="Link to this term"></a></dt><dd><p>Kripta Key application that provides a centralized key management system for the KK-CSs.</p>
+</dd>
+<dt id="term-mTLS">mTLS<a class="headerlink" href="#term-mTLS" title="Link to this term"></a></dt><dd><p>Mutual TLS: A subset of <a class="reference internal" href="#term-TLS"><span class="xref std std-term">TLS</span></a> protocol where both the client and the server authenticates each other,
+instead of only authenticating the server.</p>
+</dd>
+<dt id="term-NTP">NTP<a class="headerlink" href="#term-NTP" title="Link to this term"></a></dt><dd><p>Network Time Protocol: a protocol that allows computers and devices to synchronize their clocks.</p>
+</dd>
+<dt id="term-OAEP">OAEP<a class="headerlink" href="#term-OAEP" title="Link to this term"></a></dt><dd><p>Optimal Asymmetric Encryption Padding: a padding scheme often used together with RSA encryption
+that adds randomness to a deterministic encryption scheme.</p>
+</dd>
+<dt id="term-OAEP-label">OAEP label<a class="headerlink" href="#term-OAEP-label" title="Link to this term"></a></dt><dd><p>an arbitrary label to be used with the OAEP scheme.</p>
+</dd>
+<dt id="term-PGP">PGP<a class="headerlink" href="#term-PGP" title="Link to this term"></a></dt><dd><p>Pretty Good Privacy: a cryptographic program that provides encryption and authentication for privacy
+of emails and files.</p>
+</dd>
+<dt id="term-pinned-certificate">pinned certificate<a class="headerlink" href="#term-pinned-certificate" title="Link to this term"></a></dt><dd><p>see <a class="reference internal" href="#term-certificate-pinning"><span class="xref std std-term">certificate pinning</span></a>.</p>
+</dd>
+<dt id="term-PKCS-11">PKCS#11<a class="headerlink" href="#term-PKCS-11" title="Link to this term"></a></dt><dd><p>Public-Key Cryptography Standards #11: a set of standard protocols for cryptographic tokens
+for interoperability.</p>
+</dd>
+<dt id="term-PKCS-12">PKCS#12<a class="headerlink" href="#term-PKCS-12" title="Link to this term"></a></dt><dd><p>Public-Key Cryptography Standards #12: a set of standards for the storage of keys and certificates.</p>
+</dd>
+<dt id="term-replay-attack">replay attack<a class="headerlink" href="#term-replay-attack" title="Link to this term"></a></dt><dd><p>a network attack where an attacker captures a valid message and retransmits it, tricking the system
+into accepting the retransmission as a legitimate message.</p>
+</dd>
+<dt id="term-REST-API">REST API<a class="headerlink" href="#term-REST-API" title="Link to this term"></a></dt><dd><p>Representational State Transfer API: a simple and flexible way of accessing web services
+by using HTTP technology.</p>
+</dd>
+<dt id="term-root-provisioning-key">root provisioning key<a class="headerlink" href="#term-root-provisioning-key" title="Link to this term"></a></dt><dd><p>a unique AES key which was permanently burnt by Intel in every CPU at production.</p>
+</dd>
+<dt id="term-SDK">SDK<a class="headerlink" href="#term-SDK" title="Link to this term"></a></dt><dd><p>Software Development Kit: a collection of software development tools in one installable package.</p>
+</dd>
+<dt id="term-sealing">sealing<a class="headerlink" href="#term-sealing" title="Link to this term"></a></dt><dd><p>the process of encrypting confidential data inside secure memory for storage in an insecure environment.
+Normally, the encrypted file may only be decrypted by the secure memory that encrypted it. However,
+in this context, the encrypted file may only be decrypted by the Kripta Key deployment that encrypted it.</p>
+</dd>
+<dt id="term-secure-memory">secure memory<a class="headerlink" href="#term-secure-memory" title="Link to this term"></a></dt><dd><p>a protected area created for a running program to ensure confidentiality and integrity of the executed codes.
+A secure memory is not accessible to privileged operating system components. In Kripta Key, a secure memory is created
+by using the SGX instruction set provided by an Intel-SGX capable CPU.</p>
+</dd>
+<dt id="term-SGX">SGX<a class="headerlink" href="#term-SGX" title="Link to this term"></a></dt><dd><p>Software Guard Extensions: an Intel® architecture extension designed to increase the security
+of selected application code and data.</p>
+</dd>
+<dt id="term-TDP">TDP<a class="headerlink" href="#term-TDP" title="Link to this term"></a></dt><dd><p>Transparent Data Protection: a mechanism of data protection that allows data to still be searched
+for despite being encrypted.</p>
+</dd>
+<dt id="term-TEE">TEE<a class="headerlink" href="#term-TEE" title="Link to this term"></a></dt><dd><p>Trusted Execution Environment: a secure and isolated environment that provides critical functionality
+for a running program that particularly requires trust or security assurance.</p>
+</dd>
+<dt id="term-TLS">TLS<a class="headerlink" href="#term-TLS" title="Link to this term"></a></dt><dd><p>Transport Layer Security: a network protocol used to secure data sent over an insecure channel.</p>
+</dd>
+<dt id="term-wrapping">wrapping<a class="headerlink" href="#term-wrapping" title="Link to this term"></a></dt><dd><p>the process of securing key material by encrypting it with another key.</p>
+</dd>
+</dl>
+</section>
+<section id="common-kripta-key-errors">
+<h2>Common Kripta Key errors<a class="headerlink" href="#common-kripta-key-errors" title="Link to this heading"></a></h2>
+<p>When Kripta Key encounters an error, a SNMP message will be emitted and the error will be logged. To investigate
+the issue, check the SNMP message or the error log at <code class="docutils literal notranslate"><span class="pre">/var/log/kriptakey/</span></code>. The following list describes
+common errors that may be encountered.</p>
+<ul>
+<li><p><strong>Error message</strong>: <code class="docutils literal notranslate"><span class="pre">APP_UNAUTHORIZED</span></code></p>
+<p><strong>Cause</strong>: KK-Cryptoservice have not replicated the application data.</p>
+<p><strong>Solution</strong>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Wait 1 minute for automatic replication to happen.</p></li>
+<li><p>If after 1 minute this error still occurs, perform manual replication by running
+<code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">kripta</span> <span class="pre">kk-csd</span> <span class="pre">--replicate-with=/path/to/backup.db</span></code>.</p></li>
+<li><p>Ensure the application certificate is correct.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>Error message</strong>: <code class="docutils literal notranslate"><span class="pre">APP_IS_LOCKED_ON_PARTITION</span></code></p>
+<p><strong>Cause</strong>: An application is locked on a particular partition.</p>
+<p><strong>Solution</strong>: Unlock the app using <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">partition</span> <span class="pre">unlock-app</span></code>.</p>
+</li>
+<li><p><strong>Error message</strong>: Authentication failed!</p>
+<p><strong>Cause</strong>: Administrator entered the wrong password.</p>
+<p><strong>Solution</strong>: If an administrator has forgotten the account’s password, reset it using
+<code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">admin</span> <span class="pre">reset-password</span></code>. This requires <a class="reference internal" href="#term-dual-control"><span class="xref std std-term">dual control</span></a>.</p>
+</li>
+<li><p><strong>Error message</strong>: Password reset can only be done by other administrators!</p>
+<p><strong>Cause</strong>: A regular password reset was attempted when there are only two administrator accounts.</p>
+<p><strong>Solution</strong>: Reset the administrator’s password using <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">admin</span> <span class="pre">reset-password</span> <span class="pre">--with-recovery-cards</span></code></p>
+</li>
+<li><p><strong>Error message</strong>:</p>
+<ul class="simple">
+<li><p>Authentication failed!</p></li>
+<li><p>Recovery card verification failed! Here is a list of corrupted cards:</p></li>
+</ul>
+<p><strong>Cause</strong>: A command that requires recovery cards was executed and one of the cards is corrupted.</p>
+<p><strong>Solution</strong>: Regenerate the recovery cards by running <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">kk-manager</span> <span class="pre">regenerate-backup-key</span></code>.</p>
+</li>
+<li><p><strong>Error message</strong>: Please wait 30 minutes after account is locked before re-attempting login!</p>
+<p><strong>Cause</strong>: Too many failed login attempts in a short time.</p>
+<p><strong>Solution</strong>: Wait 30 minutes, or have another administrator run <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">admin</span> <span class="pre">unlock</span></code>.</p>
+</li>
+<li><p><strong>Error message</strong>: <code class="docutils literal notranslate"><span class="pre">DATABASE_TAMPERED</span></code></p>
+<p><strong>Cause</strong>: KK-Cryptoservice’s database has been tampered or is corrupted.</p>
+<p><strong>Solution</strong>: Manually replicate the database by running <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">kripta</span> <span class="pre">kk-csd</span> <span class="pre">--replicate-with=/path/to/backup.db</span></code>.</p>
+</li>
+<li><p><strong>Error message</strong>: <code class="docutils literal notranslate"><span class="pre">KEY_IS_TAMPERED</span></code></p>
+<p><strong>Cause</strong>: The key data has been tampered or is corrupted.</p>
+<p><strong>Solution</strong>: Manually replicate the database by running <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">kripta</span> <span class="pre">kk-csd</span> <span class="pre">--replicate-with=/path/to/backup.db</span></code>.</p>
+</li>
+<li><p><strong>Error message</strong>: <code class="docutils literal notranslate"><span class="pre">SECRET_IS_TAMPERED</span></code></p>
+<p><strong>Cause</strong>: The secret data has been tampered or is corrupted.</p>
+<p><strong>Solution</strong>: Manually replicate the database by running <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">kripta</span> <span class="pre">kk-csd</span> <span class="pre">--replicate-with=/path/to/backup.db</span></code>.</p>
+</li>
+<li><p><strong>Error message</strong>: KK-Manager database has been tampered!</p>
+<p><strong>Cause</strong>: KK-Manager’s database has been tampered or is corrupted.</p>
+<p><strong>Solution</strong>: The recovery account holder must restore the database from the most recent valid backup. Afterwards,
+perform manual replication by running <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">kripta</span> <span class="pre">kk-csd</span> <span class="pre">--replicate-with=/path/to/backup.db</span></code>.</p>
+</li>
+<li><p><strong>Error message</strong>: KK-Cryptoservice database has been tampered!</p>
+<p><strong>Cause</strong>: KK-Manager’s KK-Cryptoservice instance database has been tampered or is corrupted.</p>
+<p><strong>Solution</strong>: The recovery account holder must restore the database from the most recent valid backup. Afterwards,
+perform manual replication by running <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">kripta</span> <span class="pre">kk-csd</span> <span class="pre">--replicate-with=/path/to/backup.db</span></code>.</p>
+</li>
+<li><p><strong>Error message</strong>: User data has been tampered!</p>
+<p><strong>Cause</strong>: KK-Manager’s user database has been tampered or is corrupted.</p>
+<p><strong>Solution</strong>: The recovery account holder must restore the database from the most recent valid backup. Afterwards,
+perform manual replication by running <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">kripta</span> <span class="pre">kk-csd</span> <span class="pre">--replicate-with=/path/to/backup.db</span></code>.</p>
+</li>
+<li><p><strong>Error message</strong>: Partition has been tampered!</p>
+<p><strong>Cause</strong>: KK-Manager’s partition database has been tampered or is corrupted.</p>
+<p><strong>Solution</strong>: The recovery account holder must restore the database from the most recent valid backup. Afterwards,
+perform manual replication by running <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">kripta</span> <span class="pre">kk-csd</span> <span class="pre">--replicate-with=/path/to/backup.db</span></code>.</p>
+</li>
+<li><p><strong>Error message</strong>: Key has been tampered!</p>
+<p><strong>Cause</strong>: KK-Manager’s key database has been tampered or is corrupted.</p>
+<p><strong>Solution</strong>: The recovery account holder must restore the database from the most recent valid backup. Afterwards,
+perform manual replication by running <code class="docutils literal notranslate"><span class="pre">kk-csd</span> <span class="pre">--replicate-with=/path/to/backup.db</span></code>.</p>
+</li>
+<li><p><strong>Error message</strong>: Secret has been tampered!</p>
+<p><strong>Cause</strong>: KK-Manager’s secret database has been tampered or is corrupted.</p>
+<p><strong>Solution</strong>: The recovery account holder must restore the database from the most recent valid backup. Afterwards,
+perform manual replication by running <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">kripta</span> <span class="pre">kk-csd</span> <span class="pre">--replicate-with=/path/to/backup.db</span></code>.</p>
+</li>
+<li><p><strong>Error message</strong>: KK-Auditor service database has been tampered!</p>
+<p><strong>Cause</strong>: KK-Auditor’s database has been tampered or is corrupted.</p>
+<p><strong>Solution</strong>: Purge KK-Auditor’s database by running <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">kk-auditor</span> <span class="pre">archive</span> <span class="pre">--all</span></code>.</p>
+</li>
+<li><p><strong>Error message</strong>: <code class="docutils literal notranslate"><span class="pre">INTERNAL_KK-CS_ERROR</span></code></p>
+<p><strong>Cause</strong>: Various causes, cannot be listed exhaustively.</p>
+<p><strong>Solution</strong>: Check the log in <code class="docutils literal notranslate"><span class="pre">/var/log/kriptakey/</span></code>, and send it to Kripta Key’s support team.</p>
+</li>
+<li><p><strong>Error message</strong>: Cannot connect to KK-Manager!</p>
+<p><strong>Cause</strong>: Network issues, or secure memory failure.</p>
+<p><strong>Solution</strong>: If not caused by network issues, check the log in <code class="docutils literal notranslate"><span class="pre">/var/log/kriptakey/</span></code>, and send it
+to Kripta Key’s support team.</p>
+</li>
+</ul>
+</section>
+<section id="performing-integrity-checks">
+<h2>Performing integrity checks<a class="headerlink" href="#performing-integrity-checks" title="Link to this heading"></a></h2>
+<p>Kripta Key installers and related documents are distributed to customers via email from <a class="reference external" href="mailto:support&#37;&#52;&#48;klaviskripta&#46;com">support<span>&#64;</span>klaviskripta<span>&#46;</span>com</a>.
+The files are protected using a <a class="reference internal" href="#term-PGP"><span class="xref std std-term">PGP</span></a> key. The email should also contain the Deployment ID and the Customer ID.</p>
+<p>To check their integrity, fetch the digests for this particular version of Kripta Key on the <a class="reference external" href="www.klaviskripta.com">Klavis Kripta website</a>.
+Then, compute the SHA-256 hashes of the files:</p>
+<ul>
+<li><p>On Windows, execute:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>certutil<span class="w"> </span>-hashfile<span class="w"> </span><span class="s2">&quot;filename.ext&quot;</span><span class="w"> </span>SHA256
+</pre></div>
+</div>
+</li>
+<li><p>On Linux, execute:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sha256sum<span class="w"> </span><span class="s2">&quot;filename.ext&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Alternatively, if OpenSSL is installed, execute:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>dgst<span class="w"> </span>-sha256<span class="w"> </span><span class="s2">&quot;filename.ext&quot;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>If a digest mismatch is found, the customer may request the file to be resent, either by sending an email
+to <a class="reference external" href="mailto:support&#37;&#52;&#48;klaviskripta&#46;com">support<span>&#64;</span>klaviskripta<span>&#46;</span>com</a> or by calling the designated contact number at www.klaviskripta.com.</p>
+</section>
+<section id="obtaining-intel-api-key">
+<h2>Obtaining Intel API key<a class="headerlink" href="#obtaining-intel-api-key" title="Link to this heading"></a></h2>
+<p>Since Kripta Key requires Intel® SGX, each machine must contact Intel to ensure that it runs Kripta Key
+on trusted environment. Prior to verifying a machine, you need to register to <a class="reference external" href="https://api.portal.trustedservices.intel.com/provisioning-certification">Intel® Trusted Services
+API Management Developer Portal</a> to get the Intel API key. This key authenticates the user in the Intel Server,
+allowing multiple machines to use one API key. To get the API key one performs the following steps:</p>
+<ol class="arabic">
+<li><p>Go to Intel® Trusted Services API Management Developer Portal to sign up and fill in the required information.</p>
+<img alt="_images/intel_api_key_1.png" src="_images/intel_api_key_1.png" />
+<img alt="_images/intel_api_key_2.png" src="_images/intel_api_key_2.png" />
+<img alt="_images/intel_api_key_3.png" src="_images/intel_api_key_3.png" />
+</li>
+<li><p>Verify your email by supplying the verification code and clicking create an account.</p></li>
+<li><p>Upon successful registration, log in to your account, go to Intel SGX and Intel TDX Provisioning Certification
+Service.</p>
+<img alt="_images/intel_api_key_4.png" src="_images/intel_api_key_4.png" />
+</li>
+<li><p>Click subscribe on the Get PCK Certificate/s section</p>
+<img alt="_images/intel_api_key_5.png" src="_images/intel_api_key_5.png" />
+</li>
+<li><p>Click subscribe to get an API key.</p>
+<img alt="_images/intel_api_key_6.png" src="_images/intel_api_key_6.png" />
+</li>
+<li><p>You will get two keys, namely the primary and the secondary. Use either one of them as an API key.
+Click show to use that key.</p>
+<img alt="_images/intel_api_key_7.png" src="_images/intel_api_key_7.png" />
+</li>
+</ol>
+<p>If you have been registered to Intel® Trusted Services API Management Developer Portal and you already have
+an Intel API key, check your Intel API key by performing the following steps:</p>
+<ol class="arabic">
+<li><p>Go to Intel® Trusted Services API Management Developer Portal, click sign in and fill in your email and password.</p>
+<img alt="_images/intel_api_key_8.png" src="_images/intel_api_key_8.png" />
+</li>
+<li><p>Once logged in, go to your profile and click manage subscription.</p>
+<img alt="_images/intel_api_key_9.png" src="_images/intel_api_key_9.png" />
+</li>
+<li><p>The list of your Intel API keys is on that page.</p></li>
+</ol>
+</section>
+<section id="checking-for-sgx2-support">
+<h2>Checking for SGX2 support<a class="headerlink" href="#checking-for-sgx2-support" title="Link to this heading"></a></h2>
+<p>For systems running Linux, <code class="docutils literal notranslate"><span class="pre">cpuid</span></code> outputs information about the processor, including whether
+SGX2 is supported or not. Run the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cpuid<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>sgx
+</pre></div>
+</div>
+<p>If SGX2 is supported by the processor, the command will output the following:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">SGX supported = True</span>
+</pre></div>
+</div>
+</section>
+<section id="snmp-configuration">
+<h2>SNMP configuration<a class="headerlink" href="#snmp-configuration" title="Link to this heading"></a></h2>
+<p>Setting up a SNMP server for Kripta Key is optional. However, it is strongly recommended to set up and
+configure the SNMP server so that critical alerts from Kripta Key can be noticed promptly.</p>
+<p>Kripta Key supports Net-SNMP version 5.9.3.</p>
+<p>When an error occurs, KK-Manager, KK-Cryptoservice, and KK-Auditor will send an SNMP trap message to a user-defined
+SNMP manager. It also includes crucial system information (CPU, memory, and disk utilization), which is sent every
+minute. The SNMP configuration can be set either during initialization or by running the configuration script.</p>
+<p>To configure the SNMP object identifier, upload <code class="docutils literal notranslate"><span class="pre">KLAVISKRIPTA-CUSTOM-MIB.txt</span></code> to the SNMP manager.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Ensure that the user registered to the SNMP manager is using SHA <code class="docutils literal notranslate"><span class="pre">authProtocol</span></code> and AES <code class="docutils literal notranslate"><span class="pre">privProtocol</span></code>.
+The following line shows a simple example for SNMP user configuration:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">createUser</span> <span class="p">[</span><span class="n">username</span><span class="p">]</span> <span class="n">SHA</span> <span class="p">[</span><span class="n">authPassphrase</span><span class="p">]</span> <span class="n">AES</span> <span class="p">[</span><span class="n">privPassphrase</span><span class="p">]</span> <span class="n">authuser</span> <span class="n">log</span> <span class="p">[</span><span class="n">username</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Both the authentication password (<code class="docutils literal notranslate"><span class="pre">authPassphrase</span></code>) and the privacy password (<code class="docutils literal notranslate"><span class="pre">privPassphrase</span></code>)
+must be at least 9 characters long.</p>
+</div>
+</section>
+<section id="kripta-key-directory-structure">
+<h2>Kripta Key directory structure<a class="headerlink" href="#kripta-key-directory-structure" title="Link to this heading"></a></h2>
+<p>The following is the directory structure of Kripta Key.</p>
+<ul class="simple">
+<li><p>/usr/bin</p>
+<ul>
+<li><p>kk-ad</p></li>
+<li><p>kk-md</p></li>
+<li><p>kk-csd</p></li>
+<li><p>clikk</p></li>
+</ul>
+</li>
+<li><p>/etc/kriptakey/</p>
+<ul>
+<li><p>kk-ad.conf</p></li>
+<li><p>kk-ad.xml</p></li>
+<li><p>kk-md.conf</p></li>
+<li><p>kk-md.xml</p></li>
+<li><p>kk-csd.conf</p></li>
+<li><p>kk-csd.xml</p></li>
+</ul>
+</li>
+<li><p>/etc/systemd/system</p>
+<ul>
+<li><p>kk-ad.service</p></li>
+<li><p>kk-md.service</p></li>
+<li><p>kk-md-dr.service</p></li>
+<li><p>kk-csd.service</p></li>
+</ul>
+</li>
+<li><p>/etc/systemd/system/multi-user.target.wants</p>
+<ul>
+<li><p>kk-ad.service</p></li>
+<li><p>kk-md.service</p></li>
+<li><p>kk-md-dr.service</p></li>
+<li><p>kk-csd.service</p></li>
+</ul>
+</li>
+<li><p>/opt/kriptakey/</p>
+<ul>
+<li><p>kk-manager</p>
+<ul>
+<li><p>KLAVISKRIPTA-CUSTOM-MIB.txt</p></li>
+<li><p>kk-md</p></li>
+<li><p>kk-md-dr.service</p></li>
+<li><p>kk-md.rules</p></li>
+<li><p>kk-md.service</p></li>
+<li><p>kk-m.sh</p></li>
+</ul>
+</li>
+<li><p>kk-cryptoservice</p>
+<ul>
+<li><p>KLAVISKRIPTA-CUSTOM-MIB.txt</p></li>
+<li><p>kk-csd</p></li>
+<li><p>kk-csd.service</p></li>
+<li><p>kk-cs.sh</p></li>
+</ul>
+</li>
+<li><p>kk-auditor</p>
+<ul>
+<li><p>KLAVISKRIPTA-CUSTOM-MIB.txt</p></li>
+<li><p>kk-ad</p></li>
+<li><p>kk-ad.service</p></li>
+<li><p>kk-a.sh</p></li>
+</ul>
+</li>
+<li><p>CLIKK</p>
+<ul>
+<li><p>clikk</p></li>
+<li><p>clikk.rules</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>/var/log/kriptakey</p></li>
+<li><p>/var/local/kriptakey</p>
+<ul>
+<li><p>kk-auditor</p>
+<ul>
+<li><p>archive</p>
+<ul>
+<li><p>archived_audit_20230327_to_20230327_1.csv</p></li>
+</ul>
+</li>
+<li><p>db</p>
+<ul>
+<li><p>kk-auditord.db</p></li>
+</ul>
+</li>
+<li><p>export</p>
+<ul>
+<li><p>exported_audit_20230403_to_20230404.csv</p></li>
+</ul>
+</li>
+<li><p>sgxdata</p>
+<ul>
+<li><p>42Accc9FXXXXXXXXXXXXXXXXXXXXXXXX.json</p></li>
+<li><p>collateral_00A065XXXXXX.json</p></li>
+<li><p>pck_cert_42Accc9FXXXXXXXXXXXXXXXXXXXXXXXX.pem</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>kk-manager</p>
+<ul>
+<li><p>backup</p>
+<ul>
+<li><p>kkm-20230407-00:21:40.backup</p></li>
+<li><p>kkm-20230407-10:40:27-manual.backup</p></li>
+</ul>
+</li>
+<li><p>db</p>
+<ul>
+<li><p>kk-managerd.db</p></li>
+</ul>
+</li>
+<li><p>sgxdata</p>
+<ul>
+<li><p>42Accc9FXXXXXXXXXXXXXXXXXXXXXXXX.json</p></li>
+<li><p>collateral_00A065XXXXXX.json</p></li>
+<li><p>pck_cert_42Accc9FXXXXXXXXXXXXXXXXXXXXXXXX.pem</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>kk-cryptoservice</p>
+<ul>
+<li><p>backup</p></li>
+<li><p>db</p>
+<ul>
+<li><p>kk-cryptoserviced.db</p></li>
+</ul>
+</li>
+<li><p>sgxdata</p>
+<ul>
+<li><p>42Accc9FXXXXXXXXXXXXXXXXXXXXXXXX.json</p></li>
+<li><p>collateral_00A065XXXXXX.json</p></li>
+<li><p>pck_cert_42Accc9FXXXXXXXXXXXXXXXXXXXXXXXX.pem</p></li>
+</ul>
+</li>
+<li><p>txncount</p>
+<ul>
+<li><p>615948809A5A48524A0A2F996D94C338_202303</p></li>
+<li><p>TransactionCount_615948809A5A48524A0A2F996D94C338_20230304</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>/home/USER/.clikk</p>
+<ul>
+<li><p>clikk.conf</p></li>
+<li><p>clikk_env.conf</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="whitepaper/protecting-data-confidentiality.html" class="btn btn-neutral float-left" title="Protecting Data Confidentiality with Encryption, Tokenization, and Masking" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

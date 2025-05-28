@@ -1,0 +1,664 @@
+Installing Kripta Key
+=====================
+
+.. attention::
+
+    During installation below, it involves three important security attributes:
+    
+    #.  Secure Channel Code (SCC)
+        SCC is created during the key ceremony. It is an alphanumeric string that you must store securely. If you 
+        lose the SCC, there is a high probability that you lose your entire key data with no chance of ever recovering it.
+    #.  PIN of recovery cards
+        A recovery card is a higher authentication attribute to perform absolutely critical tasks. Each holder of a recovery 
+        card has the responsibility to remember or securely store and access his/her own PIN. Any leakage of PIN information 
+        to an unauthorized person compromises the security of the keys and the entire system.
+    #.  Recovery card
+        Two separate sets of recovery smartcards are provided for each deployment. The cards should never be mixed across 
+        the sets. Users are responsible for securely and separately storing the sets to avoid authentication failure.
+
+.. important::
+
+    Before running the installer, perform :ref:`an integrity check <appendix:performing integrity checks>` first.
+    Also, make sure that the installer is appropriate for the machine's OS.
+
+.. note::
+
+    If errors were encountered during installation, details will be logged to ``/var/log/kriptakey``.
+
+
+KK-Auditor setup and configuration
+----------------------------------
+
+Before setting up the KK-Manager instance, KK-Auditor must be installed and configured first, so that
+administrator actions on the KK-Manager instance can be recorded.
+
+
+Before installing KK-Auditor
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#.  Ensure that the server has been prepared as specified in :ref:`installation-guide/before-installing:preparatory steps`.
+
+#.  Download the `Intel SGX Platform Software`__. Run the following commands from the directory
+    where the archive is located:
+
+    __ https://download.01.org/intel-sgx/sgx-linux/2.23/distro/rhel9.2-server/sgx_rpm_local_repo.tgz
+
+    #.  Extract the packages.
+
+        .. code-block:: console
+
+            $ tar -xvf sgx_rpm_local_repo.tgz
+
+    #.  Navigate to the ``sgx_rpm_local_repo`` directory, and enable the repository.
+
+        .. code-block:: console
+
+            $ cd sgx_rpm_local_repo
+            $ sudo dnf config-manager --add-repo $(pwd)
+
+            Updating Subscription Management repositories.
+            Adding repo from: file:///home/user/sgx_rpm_local_repo
+
+
+Installing KK-Auditor
+~~~~~~~~~~~~~~~~~~~~~
+
+Once everything is all set, the administrator may begin installation of KK-Auditor on the server.
+
+#.  Install KK-Auditor from the RPM package. Note that KK-Auditor depends on the packages in ``sgx_rpm_local_repo``.
+    However, these packages are not signed with GPG. Hence, it must be installed without performing the GPG check.
+
+    .. code-block:: console
+
+        $ sudo dnf --nogpgcheck install kk-a-2.0-0000.el8.x86_64.rpm
+
+    .. note::
+
+        *   The installer automatically creates the user ``kripta``.
+        *   The user ``kripta`` can only read files from the working directory.
+        *   The administrator, using their usual user account, **cannot** write directly to the working directory.
+            Files must be moved as the user ``kripta`` to the working directory.
+        *   During the installation process, the location of the working directory must be specified.
+            It is highly recommended to use the default value.
+
+#.  After successfully installing KK-Auditor, it must be configured by running its configuration script.
+    This will configure settings such as port, log level, SNMP server, and so on. Do note the following
+    when running the configuration script:
+
+    *   The port may be any port from 1024 to 49151, inclusive.
+    *   Configuring the SNMP server is optional --- errors are still recorded to the log file. However, it is
+        strongly recommended to configure the SNMP server so that critical alerts from Kripta Key can be
+        noticed promptly. To configure the SNMP server, the administrator must prepare the SNMP host and port,
+        SNMP username, SNMP authentication passphrase, and SNMP privacy passphrase.
+    *   For some configuration fields, the script will set a default value if value is omitted when prompted.
+    *   The working directory must be writable by the ``kripta`` user. For this reason, it is recommended
+        to use the default value, ``/var/local/kriptakey/kk-auditor``.
+
+    .. code-block:: console
+        :caption: Sample output if SNMP server has not been configured.
+
+        $ sudo /opt/kriptakey/kk-auditor/kk-a.sh
+
+        KK-Auditor port for KK-Manager endpoint [7001]: 8083
+        SNMP server host and port in xxx.xxx.xxx.xxx:xxxx format []:
+        WARNING: SNMP server address is empty. KK-Auditor will not send SNMP alerts.
+        KK-Auditor log level (Option: ERROR/INFO/DEBUG) [ERROR]:
+        KK-Auditor working directory path [/var/local/kriptakey/kk-auditor]:
+
+        Relabeled /var/local/kriptakey/kk-auditor from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_ad_var_t:s0
+        Relabeled /var/local/kriptakey/kk-auditor/db from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_ad_var_t:s0
+        Relabeled /var/local/kriptakey/kk-auditor/archive from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_ad_var_t:s0
+        Relabeled /var/local/kriptakey/kk-auditor/export from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_ad_var_t:s0
+        Relabeled /var/local/kriptakey/kk-auditor/sgxdata from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_ad_var_t:s0
+        Relabeled /etc/kriptakey/kk-ad.conf from unconfined_u:object_r:etc_t:s0 to system_u:object_r:kk_ad_var_t:s0
+
+        WARNING: Configure your firewall to allow the KK-Auditor service.
+        Config file has been written successfully to /etc/kriptakey/kk-ad.conf.
+
+    .. code-block:: console
+        :caption: Sample output if SNMP server has been configured.
+
+        $ sudo /opt/kriptakey/kk-auditor/kk-a.sh
+
+        KK-Auditor port for KK-Manager endpoint [7001]: 8083
+        SNMP server host and port in xxx.xxx.xxx.xxx:xxxx format []: 192.168.0.5:1337
+        SNMP username []: klavis
+        SNMP authentication passphrase []: klavisauth
+        SNMP privacy passphrase []: klavisencrypt
+        KK-Auditor log level (Option: ERROR/INFO/DEBUG) [ERROR]:
+        KK-Auditor working directory path [/var/local/kriptakey/kk-auditor]:
+
+        Relabeled /var/local/kriptakey/kk-auditor from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_ad_var_t:s0
+        Relabeled /var/local/kriptakey/kk-auditor/db from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_ad_var_t:s0
+        Relabeled /var/local/kriptakey/kk-auditor/archive from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_ad_var_t:s0
+        Relabeled /var/local/kriptakey/kk-auditor/export from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_ad_var_t:s0
+        Relabeled /var/local/kriptakey/kk-auditor/sgxdata from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_ad_var_t:s0
+        Relabeled /etc/kriptakey/kk-ad.conf from unconfined_u:object_r:etc_t:s0 to system_u:object_r:kk_ad_var_t:s0
+
+        WARNING: Configure your firewall to allow the KK-Auditor service.
+        Config file has been written successfully to /etc/kriptakey/kk-ad.conf.
+
+    .. note::
+
+        *   To configure the SNMP server, please refer to :ref:`appendix:snmp configuration`.
+        *   To unset the SNMP configuration, omit the SNMP destination when prompted by the script.
+
+    .. important::
+
+        The configuration file for KK-Auditor is stored in ``/etc/kriptakey/kk-ad.conf``. Do not move
+        or remove the file to ensure the smooth operation of the service.
+
+#.  If you choose to enable SNMP, there is additional step.
+    Kripta Key appliance is accompanied by script that will send crucial system information (CPU, Memory and 
+    Disk utilization) using SNMP if SNMP is configured. The script will automatically send SNMP message every minute. 
+    To enable this script, execute command below:
+
+    .. code-block:: console
+
+        $ /opt/kriptakey/kk-sys_snmp.sh install
+
+#.  Check the version of the daemon to ensure that KK-Auditor has been installed properly.
+
+    .. code-block:: console
+
+        $ sudo -u kripta kk-ad --version
+
+        Module: kk-ad
+        Version: <version>
+
+#.  Reload the firewall service and set the zone as shown below. You can set the zone to either public or private.
+
+    .. code-block:: console
+
+        $ sudo firewall-cmd --permanent --zone=public --add-service=kk-ad
+
+        success
+
+        $ sudo firewall-cmd -–reload
+
+        success
+
+
+KK-Manager setup and configuration
+----------------------------------
+
+Before installing KK-Manager
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#.  Ensure that the server has been prepared as specified in :ref:`installation-guide/before-installing:preparatory steps`.
+
+#.  If the smartcard reader's driver has not been installed yet, install that before starting KK-Manager's installer.
+
+    #.  Download the smartcard reader driver (``acsccid-linux-bin-1.1.10-20230804.zip``) from `ACS's website`__.
+
+        __ https://www.acs.com.hk/download-driver-unified/13546/acsccid-linux-bin-1.1.10-20230804.zip
+
+    #.  Extract the package.
+
+        .. code-block:: console
+
+            $ unzip acsccid-linux-bin-1.1.10-20230804.zip
+
+    #.  Navigate to the ``acsccid-linux-bin-1.1.10-20230804.zip/epel/9`` directory and install the RPM.
+
+        .. code-block:: console
+
+            $ cd acsccid-linux-bin-1.1.10-20230804.zip/epel/9
+            $ sudo dnf install pcsc-lite-acsccid-1.1.10-1.el9.x86_64.rpm
+
+    #.  Enable the pcsc-lite service.
+
+        .. code-block:: console
+
+            $ sudo systemctl enable pcscd.service --now
+
+    #.  Make sure that the pcsc-lite service is running by examining the output of the following command.
+
+        .. code-block:: console
+
+            $ sudo systemctl status pcscd.service
+
+#.  Download the `Intel SGX Platform Software`__. Run the following commands from the directory
+    where the archive is located:
+
+    __ https://download.01.org/intel-sgx/sgx-linux/2.23/distro/rhel9.2-server/sgx_rpm_local_repo.tgz
+
+    #.  Extract the packages.
+
+        .. code-block:: console
+
+            $ tar -xvf sgx_rpm_local_repo.tgz
+
+    #.  Navigate to the ``sgx_rpm_local_repo`` directory, and enable the repository.
+
+        .. code-block:: console
+
+            $ cd sgx_rpm_local_repo
+            $ sudo dnf config-manager --add-repo $(pwd)
+
+            Updating Subscription Management repositories.
+            Adding repo from: file:///home/user/sgx_rpm_local_repo
+
+
+Installing KK-Manager
+~~~~~~~~~~~~~~~~~~~~~
+
+Once everything is all set, the administrator may begin installation of KK-Manager on the server.
+
+#.  Install KK-Manager from the RPM package. Note that KK-Manager depends on the packages in ``sgx_rpm_local_repo``.
+    However, these packages are not signed with GPG. Hence, it must be installed without performing the GPG check.
+
+    .. code-block:: console
+
+        $ sudo dnf --nogpgcheck install kk-m-2.0-0000.el8.x86_64.rpm
+
+    .. note::
+
+        *   The installer automatically creates the user ``kripta``.
+        *   The user ``kripta`` can only read files from the working directory.
+        *   The administrator, using their usual user account, **cannot** write directly to the working directory.
+            Files must be moved as the user ``kripta`` to the working directory.
+        *   During the installation process, the location of the working directory must be specified.
+            It is highly recommended to use the default value.
+
+#.  After successfully installing KK-Manager, it must be configured by running its configuration script.
+    This will configure settings such as port, log level, SNMP server, and so on. Do note the following
+    when running the configuration script:
+
+    *   The port may be any port from 1024 to 49151, inclusive.
+    *   Configuring the SNMP server is optional --- errors are still recorded to the log file. However, it is
+        strongly recommended to configure the SNMP server so that critical alerts from Kripta Key can be
+        noticed promptly. To configure the SNMP server, the administrator must prepare the SNMP host and port,
+        SNMP username, SNMP authentication passphrase, and SNMP privacy passphrase.
+    *   For some configuration fields, the script will set a default value if value is omitted when prompted.
+    *   The working directory must be writable by the ``kripta`` user. For this reason, it is recommended
+        to use the default value, ``/var/local/kriptakey/kk-manager``.
+
+    .. code-block:: console
+        :caption: Sample output if SNMP server has not been configured.
+
+        $ sudo /opt/kriptakey/kk-manager/kk-m.sh
+
+        KK-Manager mode (Option: main/DR) [main]: main
+        KK-Auditor instance host address []: 10.30.0.3
+        KK-Auditor instance port []: 8083
+        KK-Manager port for CLIKK endpoint [7002]: 8085
+        KK-Manager port for KK-Cryptoservice and KK-Manager-DR endpoint [7003]: 8086
+        SNMP server host and port in xxx.xxx.xxx.xxx:xxxx format []:
+        WARNING: SNMP server address is empty. KK-Manager will not send SNMP alerts.
+        KK-Manager log level (Option: ERROR/INFO/DEBUG) [ERROR]:
+        KK-Manager working directory path [/var/local/kriptakey/kk-manager]:
+
+        Relabeled /var/local/kriptakey/kk-manager from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0
+        Relabeled /var/local/kriptakey/kk-manager/db from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0
+        Relabeled /var/local/kriptakey/kk-manager/backup from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0
+        Relabeled /var/local/kriptakey/kk-manager/sgxdata from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0
+        Relabeled /etc/kriptakey/kk-md.conf from unconfined_u:object_r:etc_t:s0 to system_u:object_r:kk_md_var_t:s0
+
+        WARNING: Configure your firewall to allow the KK-Manager service.
+
+        Configuration file has been written successfully to /etc/kriptakey/kk-md.conf.
+
+    .. code-block:: console
+        :caption: Sample output if SNMP server has been configured.
+
+        $ sudo /opt/kriptakey/kk-manager/kk-m.sh
+
+        KK-Manager mode (Option: main/DR) [main]: main
+        KK-Auditor instance host address []: 10.30.0.3
+        KK-Auditor instance port []: 8083
+        KK-Manager port for CLIKK endpoint [7002]: 8085
+        KK-Manager port for KK-Cryptoservice and KK-Manager-DR endpoint [7003]: 8086
+        SNMP server host and port in xxx.xxx.xxx.xxx:xxxx format []: 192.168.0.5:1337
+        SNMP username []: klavis
+        SNMP authentication passphrase []: klavisauth
+        SNMP privacy passphrase []: klavisencrypt
+        KK-Manager log level (Option: ERROR/INFO/DEBUG) [ERROR]:
+        KK-Manager working directory path [/var/local/kriptakey/kk-manager]:
+
+        Relabeled /var/local/kriptakey/kk-manager from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0
+        Relabeled /var/local/kriptakey/kk-manager/db from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0
+        Relabeled /var/local/kriptakey/kk-manager/backup from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0
+        Relabeled /var/local/kriptakey/kk-manager/sgxdata from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0
+        Relabeled /etc/kriptakey/kk-md.conf from unconfined_u:object_r:etc_t:s0 to system_u:object_r:kk_md_var_t:s0
+
+        WARNING: Configure your firewall to allow the KK-Manager service.
+
+        Configuration file has been written successfully to /etc/kriptakey/kk-md.conf.
+
+    .. note::
+
+        *   To configure the SNMP server, please refer to :ref:`appendix:snmp configuration`.
+        *   To unset the SNMP configuration, omit the SNMP destination when prompted by the script.
+
+    .. important::
+
+        The configuration file for KK-Manager is stored in ``/etc/kriptakey/kk-md.conf``. Do not move
+        or remove the file to ensure the smooth operation of the service.
+
+#.  If you choose to enable SNMP, there is additional step.
+    Kripta Key appliance is accompanied by script that will send crucial system information (CPU, Memory and 
+    Disk utilization) using SNMP if SNMP is configured. The script will automatically send SNMP message every minute. 
+    To enable this script, execute command below:
+
+    .. code-block:: console
+
+        $ /opt/kriptakey/kk-sys_snmp.sh install
+
+#.  Check the version of the daemon to ensure that KK-Manager has been installed properly.
+
+    .. code-block:: console
+
+        $ sudo -u kripta kk-md --version
+
+        Module: kk-md
+        Version: <version>
+
+#.  Reload the firewall service and set the zone as shown below. You can set the zone to either public or private.
+
+    .. code-block:: console
+
+        $ sudo firewall-cmd --permanent --zone=public --add-service=kk-md
+
+        success
+
+        $ sudo firewall-cmd --reload
+
+        success
+
+
+Key ceremony
+------------
+
+Key ceremony is an important part of a Kripta Key installation. The following events all occur during key ceremony:
+
+    *   Initialization of the main KK-Manager instance.
+    *   Registration of the KK-Auditor instance to the main KK-Manager instance.
+    *   Creation of the database scheme.
+    *   Generation of the KK-Manager certificate, the deployment certificate, the genesis block of
+        KK-Auditor's audit log, and the system keys, such as the metadata encryption key, and the HMAC key.
+    *   Creation of three default administrators, named Admin1, Admin2, and Admin3.
+
+The following steps detail how to perform the key ceremony properly:
+
+The key ceremony starts with obtaining the machine platform information for the KK-Auditor and for the KK-Manager.
+
+#.  Fetch the machine platform information. Run the following command on the KK-Auditor machine.
+
+    .. code-block:: console
+
+        $ sudo -u kripta kk-ad --get-pck-id
+
+        Platform information has been written successfully to /var/local/kriptakey/kk-auditor/sgxdata/0323BC80XXXXXXXXXXXXXXXXXXXXXXXX.json.
+
+    Also, run the following command on the KK-Manager machine.
+
+    .. code-block:: console
+
+        $ sudo -u kripta kk-md --get-pck-id
+
+        Platform information has been written successfully to /var/local/kriptakey/kk-manager/sgxdata/FBCB327FXXXXXXXXXXXXXXXXXXXXXXXX.json.
+
+    .. warning::
+
+        Do NOT use PCK Retrieval Tool from Intel to fetch the collateral and PCK ID.
+
+#.  Copy the platform information of the KK-Manager and KK-Auditor machines to a device that has CLIKK installed.
+
+#.  :ref:`Obtain an API key from Intel <appendix:obtaining intel api key>` if the administrator lacks one.
+    This API key will be used to retrieve collateral from Intel using CLIKK. The collateral file contains information
+    that attests that the hardware in use truly came from Intel, as opposed to being simulated.
+
+#.  Run ``clikk conf get-collateral``, passing the API key and the path to the platform information to fetch
+    the collateral for the KK-Auditor and KK-Manager machines.
+
+    .. important::
+
+        The machine must be connected to the internet.
+
+    .. code-block:: console
+        :caption: Fetching the collateral of the KK-Auditor machine.
+
+        $ clikk conf get-collateral --intel-api-key=39949131XXXXXXXXXXXXXXXXXXXXXXX --platform-info-path=/home/user/documents/0323BC80XXXXXXXXXXXXXXXXXXXXXXXX.json --output-dir-path=/home/user/documents
+
+        This will fetch attestation material from Intel's trusted web service:
+            https://api.trustedservices.intel.com/sgx/certification/v4
+        Type `:.rzv` to continue, or press Enter to cancel.
+        > :.rzv
+
+        PCK certificate has been saved successfully to /home/user/documents/pck_cert_0323BC80XXXXXXXXXXXXXXXXXXXXXXXX.pem.
+        Quote collateral has been saved successfully to /home/user/documents/collateral_00906EXXXXXX.json.
+
+#.  Copy the respective PCK certificates and collaterals to the working directories of KK-Manager and KK-Auditor,
+    specifically in the folder "sgxdata" in their machines. Also, copy the KK-Auditor machine's collateral to KK-Manager's working directory as well.
+
+#.  Run KK-Auditor in registration mode, passing in the path to the KK-Auditor machine's PCK certificate.
+
+    .. code-block:: console
+
+        $ sudo -u kripta kk-ad --kk-auditor-pck-cert-path=/var/local/kriptakey/kk-auditor/sgxdata/pck_cert_0323BC80XXXXXXXXXXXXXXXXXXXXXXXX.pem
+
+        Commencing the KK-Auditor registration process.
+        This will initialize a KK-Auditor instance on this machine and register it to the KK-Manager instance.
+        Any existing KK-Auditor database file will be OVERWRITTEN.
+        Do not interrupt the process until the message "KK-Auditor has been registered successfully to KK-Manager." appears.
+        Are you sure you want to continue? Type `%\Ed_` to continue, or press Enter to cancel.
+        > %\Ed_
+
+        [-] Ready for initialization and registration.
+        [-] Listening on port 8083...
+        [-] Waiting for connection from KK-Manager...
+
+#.  Run KK-Manager in initialization mode. This action requires the KK-Manager machine's PCK certificate,
+    collateral, and the KK-Auditor machine's collateral. Additionally, the deployment ID, assigned to the customer
+    by Klavis Kripta, will be prompted for during initialization.
+
+    On top of that, the number of participants to the recovery account must be provided as well. Each participant
+    will be entrusted with two recovery cards, and a majority must agree to execute a command with an EMERGENCY
+    privilege level.
+
+    Finally, three administrators will be created. These administrators must then change their passwords using
+    ``clikk admin change-password``. This will bind an administrator card to the administrator, which is required
+    for certain privileged commands as the second factor of authentication.
+
+    .. note::
+
+        A Kripta Key installation may have any number of participants between 5 and 14, inclusive.
+        The recovery cards exist as two sets that are NOT interchangeable. Ensure that these recovery cards
+        are stored safely and securely, as loss of recovery cards may lead to irrecoverable data loss.
+
+    .. code-block:: console
+        :caption: Example with 5 participants forming the recovery account.
+
+        $ sudo -u kripta kk-md --initialize --kk-manager-pck-cert-path=/var/local/kriptakey/kk-manager/sgxdata/pck_cert_FBCB327FXXXXXXXXXXXXXXXXXXXXXXXX.pem --kk-manager-collateral-path=/var/local/kriptakey/kk-manager/sgxdata/collateral_00A065XXXXXX.json --kk-auditor-collateral-path=/var/local/kriptakey/kk-manager/sgxdata/collateral_00906EXXXXXX.json --participant-number=5
+
+        Commencing the key ceremony process.
+        This will initialize a KK-Manager instance on this machine.
+        Any existing KK-Manager database file will be OVERWRITTEN.
+        Do not interrupt the process until the message "KK-Manager has been initialized successfully!" appears.
+
+        Are you sure you want to continue? Type `Ur^%:` to continue, or press Enter to cancel.
+        > Ur^%:
+
+        Creating admin admin1.
+
+        Enter password: 
+        Re-enter password: 
+        Admin ID admin1 has been created successfully.
+
+        Creating admin admin2.
+
+        Enter password: 
+        Re-enter password: 
+        Admin ID admin2 has been created successfully.
+
+        Creating admin admin3.
+
+        Enter password: 
+        Re-enter password: 
+        Admin ID admin3 has been created successfully.
+
+        Enter the deployment ID, e.g., ENTERPRISE017048 
+        Deployment ID: ENTERPRIXXXXXXXX
+
+        Please prepare 5 cards for the first set of recovery cards.
+        Insert a card!
+
+        Setting up recovery card...
+        Key in the PIN and press Enter on the PIN pad to store the secure channel key encryption keys (SCKEKs).
+        Storing secret data in the card...
+        Secret 1 has been written successfully.
+
+        Secure Channel Code (SCC):: 968fd0a461d99eab73404a6d8a473bb3
+        IMPORTANT: Write down the SCC and keep it in a safe place. The SCC is REQUIRED to restore KK-Manager from a backup and to reset the recovery cards.
+
+        Remove the card!
+        Insert a card!
+
+        Setting up recovery card...
+        Key in the PIN and press Enter on the PIN pad to store the secure channel key encryption keys (SCKEKs).
+        Storing secret data in the card...
+        Secret 2 has been written successfully.
+        Remove the card!
+        Insert a card!
+
+        Setting up recovery card...
+        Key in the PIN and press Enter on the PIN pad to store the secure channel key encryption keys (SCKEKs).
+        Storing secret data in the card...
+        Secret 3 has been written successfully.
+        Remove the card!
+        Insert a card!
+
+        Setting up recovery card...
+        Key in the PIN and press Enter on the PIN pad to store the secure channel key encryption keys (SCKEKs).
+        Storing secret data in the card...
+        Secret 4 has been written successfully.
+        Remove the card!
+        Insert a card!
+
+        Setting up recovery card...
+        Key in the PIN and press Enter on the PIN pad to store the secure channel key encryption keys (SCKEKs).
+        Storing secret data in the card...
+        Secret 5 has been written successfully.
+        Remove the card!
+        All secrets have been written successfully to the set of recovery cards.
+
+        Please prepare 5 cards for the second set of recovery cards.
+        Insert a card!
+
+        Setting up recovery card...
+        Key in the PIN and press Enter on the PIN pad to store the secure channel key encryption keys (SCKEKs).
+        Storing secret data in the card...
+        Secret 1 has been written successfully.
+        Remove the card!
+        Insert a card!
+
+        Setting up recovery card...
+        Key in the PIN and press Enter on the PIN pad to store the secure channel key encryption keys (SCKEKs).
+        Storing secret data in the card...
+        Secret 2 has been written successfully.
+        Remove the card!
+        Insert a card!
+
+        Setting up recovery card...
+        Key in the PIN and press Enter on the PIN pad to store the secure channel key encryption keys (SCKEKs).
+        Storing secret data in the card...
+        Secret 3 has been written successfully.
+        Remove the card!
+        Insert a card!
+
+        Setting up recovery card...
+        Key in the PIN and press Enter on the PIN pad to store the secure channel key encryption keys (SCKEKs).
+        Storing secret data in the card...
+        Secret 4 has been written successfully.
+        Remove the card!
+        Insert a card!
+
+        Setting up recovery card...
+        Key in the PIN and press Enter on the PIN pad to store the secure channel key encryption keys (SCKEKs).
+        Storing secret data in the card...
+        Secret 5 has been written successfully.
+        Remove the card!
+        All secrets have been written successfully to the set of recovery cards.
+
+        KK-Manager has been initialized successfully.
+
+    .. important::
+
+        As part of the initialization process, the secure channel code (SCC) will be printed to the console.
+        The secure channel code is used to protect the secure channel key encryption keys (SCKEKs).
+        Ensure that the secure channel code is written down and kept safely and securely, as loss
+        of the secure channel code may lead to irrecoverable data loss.
+
+#.  Once the initialization process has been completed, KK-Auditor will show the following message:
+
+    .. code-block:: console
+
+        [v] KK-Auditor has been registered successfully to KK-Manager.
+
+        Start the KK-Auditor daemon to make it accessible to the KK-Manager instance.
+
+#.  Start the KK-Auditor service, and check that it is running properly.
+
+    .. code-block:: console
+
+        $ sudo systemctl enable kk-ad.service --now
+
+        $ sudo systemctl status kk-ad.service
+
+#.  Start the KK-Manager service, and check that it is running properly.
+
+    .. code-block:: console
+
+        $ sudo systemctl enable kk-md.service --now
+
+        $ sudo systemctl status kk-md.service
+
+#.  Ensure that the KK-Manager instance is connected to the KK-Auditor instance, using ``curl`` with
+    the KK-Auditor host and port.
+
+    .. code-block:: console
+
+        $ curl -k -v 10.30.0.3:8083
+
+#.  Configure CLIKK to connect to the main KK-Manager instance.
+
+    .. code-block:: console
+
+        $ clikk conf server --kk-manager-host=10.30.0.3 --kk-manager-port=8085
+
+        Configuration has been saved successfully.
+        CLIKK will connect to the KK-Manager instance at 10.30.0.3:8085.
+
+#.  Set the password and bind an administrator card for each of the administrators with ``clikk user change-password``.
+
+    .. code-block:: console
+
+        $ clikk admin change-password --user-id=Admin1
+
+        Enter admin ID: Admin1
+        Enter password:
+
+        User Admin1 does not have an associated administrator card.
+        This will initialize an administrator card and bind it to Admin1.
+        Type `e=g` to continue, or press Enter to cancel.
+        > e=g
+
+        Insert a blank card.
+
+        Commencing card initialization process...
+        Resetting the card's secure channel code...
+        Storing the user's public key...
+        Administrator card for Admin1 has been initialized successfully.
+
+        Administrator password MUST follow these requirements:
+        - Password length must be between 8 and 64 characters, inclusive.
+        - Password must contain upper case, lower case, numeric, and special characters.
+        - Password must not have repeated characters (e.g. AA, aa, 11).
+        - Password must not have more than two consecutive characters (e.g. 123, abc).
+        - Password must not contain the admin ID.
+        Enter new password:
+        Re-enter user password:
+        Insert the administrator card of Admin1 for two-factor authentication.
+
+        Password has been changed successfully.

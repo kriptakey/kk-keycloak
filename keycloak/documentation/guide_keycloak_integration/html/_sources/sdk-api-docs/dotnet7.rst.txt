@@ -1,0 +1,6 @@
+.Net SDK Documentation
+======================
+
+.. raw:: html
+
+   <iframe src="../_static/sdk_doc/dotnet7/index.html" height="345px" width="100%"></iframe>

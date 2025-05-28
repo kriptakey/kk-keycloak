@@ -1,0 +1,286 @@
+KK-Cryptoservice setup and configuration
+========================================
+
+KK-Cryptoservice provides cryptographic services to applications. Authorized applications may connect
+to the KK-Cryptoservice instances to perform cryptographic operations using keys that are stored
+in the KK-Manager database or otherwise created by the KK-Manager.
+
+This section describes the steps required to install and configure KK-Cryptoservice.
+
+
+Before installing KK-Cryptoservice
+----------------------------------
+
+#.  Ensure that the server has been prepared as specified in :ref:`installation-guide/before-installing:preparatory steps`.
+
+#.  Download the `Intel SGX Platform Software`__. Run the following commands from the directory
+    where the archive is located:
+
+    __ https://download.01.org/intel-sgx/sgx-linux/2.23/distro/rhel9.2-server/sgx_rpm_local_repo.tgz
+
+    #.  Extract the packages.
+
+        .. code-block:: console
+
+            $ tar -xvf sgx_rpm_local_repo.tgz
+
+    #.  Navigate to the ``sgx_rpm_local_repo`` directory, and enable the repository.
+
+        .. code-block:: console
+
+            $ cd sgx_rpm_local_repo
+            $ sudo dnf config-manager --add-repo $(pwd)
+
+            Updating Subscription Management repositories.
+            Adding repo from: file:///home/user/sgx_rpm_local_repo
+
+.. important::
+
+    Before running the installer, perform :ref:`an integrity check <appendix:performing integrity checks>` first.
+    Also, make sure that the installer is appropriate for the machine's OS.
+
+.. note::
+
+    If errors were encountered during installation, details will be logged to ``/var/log/kriptakey``.
+
+.. note::
+
+    Please contact support@klaviskripta.com if any problems were encountered during installation.
+
+
+Installing KK-Cryptoservice
+---------------------------
+
+#.  Install KK-Cryptoservice from the RPM package. Note that KK-Cryptoservice depends on the packages
+    in ``sgx_rpm_local_repo``. However, these packages are not signed with GPG. Hence, it must be installed
+    without performing the GPG check.
+
+    .. code-block:: console
+
+        $ sudo dnf --nogpgcheck install kk-cs-2.0-0000.el8.x86_64.rpm
+
+    .. note::
+
+        *   The installer automatically creates the user ``kripta``.
+        *   The user ``kripta`` can only read files from the working directory.
+        *   The administrator, using their usual user account, **cannot** write directly to the working directory.
+            Files must be moved as the user ``kripta`` to the working directory.
+        *   During the installation process, the location of the working directory must be specified.
+            It is highly recommended to use the default value.
+
+#.  After successfully installing KK-Cryptoservice, it must be configured by running its configuration script.
+    This will configure settings such as port, log level, SNMP server, and so on. Do note the following
+    when running the configuration script:
+
+    *   The port may be any port from 1024 to 49151, inclusive.
+    *   Using KK-Cryptoservice for functional module testing is optional. Set this to true to activate the APIs 
+        for functional module testing.
+    *   Configuring the SNMP server is optional --- errors are still recorded to the log file. However, it is
+        strongly recommended to configure the SNMP server so that critical alerts from Kripta Key can be
+        noticed promptly. To configure the SNMP server, the administrator must prepare the SNMP host and port,
+        SNMP username, SNMP authentication passphrase, and SNMP privacy passphrase.
+    *   For some configuration fields, the script will set a default value if value is omitted when prompted.
+    *   The working directory must be writable by the ``kripta`` user. For this reason, it is recommended
+        to use the default value, ``/var/local/kriptakey/kk-cryptoservice``.
+
+    .. code-block:: console
+        :caption: Sample output if SNMP server has not been configured.
+
+        $ sudo /opt/kriptakey/kk-cryptoservice/kk-cs.sh
+
+        KK-Manager instance host address []: 10.30.0.116
+        KK-Manager instance port []: 8086
+        KK-Cryptoservice port for REST API endpoint [7003]: 8087
+        KK-Cryptoservice port for SDK API endpoint [7004]: 8088
+        Utilize KK-Cryptoservice as functional module testing endpoint [y/N]: y
+        SNMP server host and port in xxx.xxx.xxx.xxx:xxxx format []:
+        WARNING: SNMP server address is empty. KK-Cryptoservice will not send SNMP alerts.
+        KK-Cryptoservice log level (Option: ERROR/INFO/DEBUG) [ERROR]:
+        KK-Cryptoservice working directory path [/var/local/kriptakey/kk-cryptoservice]:
+
+        Relabeled /var/local/kriptakey/kk-cryptoservice from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_csd_var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/db from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_csd_var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/txncount from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_csd_var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/backup from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_csd_var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/sgxdata from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_csd_var_t:s0
+        Relabeled /etc/kriptakey/kk-csd.conf from unconfined_u:object_r:etc_t:s0 to system_u:object_r:kk_csd_var_t:s0
+
+        WARNING: Configure your firewall to allow the KK-Cryptoservice service.
+
+        Configuration file has been written successfully to /etc/kriptakey/kk-csd.conf.
+
+    .. code-block:: console
+        :caption: Sample output if SNMP has been configured.
+
+        $ sudo /opt/kriptakey/kk-cryptoservice/kk-cs.sh
+
+        KK-Manager instance host address []: 10.30.0.116
+        KK-Manager instance port []: 8086
+        KK-Cryptoservice port for REST API endpoint [7003]: 8087
+        KK-Cryptoservice port for SDK API endpoint [7004]: 8088
+        Utilize KK-Cryptoservice as functional module testing endpoint [y/N]: y
+        NMP server host and port in xxx.xxx.xxx.xxx:xxxx format []: 192.168.0.5:1337
+        SNMP username []: klavis
+        SNMP authentication passphrase []: klavisauth
+        SNMP privacy passphrase []: klavisencrypt
+        KK-Cryptoservice log level (Option: ERROR/INFO/DEBUG) [ERROR]:
+        KK-Cryptoservice working directory path [/var/local/kriptakey/kk-cryptoservice]:
+
+        Relabeled /var/local/kriptakey/kk-cryptoservice from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_csd_var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/db from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_csd_var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/txncount from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_csd_var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/backup from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_csd_var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/sgxdata from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_csd_var_t:s0
+        Relabeled /etc/kriptakey/kk-csd.conf from unconfined_u:object_r:etc_t:s0 to system_u:object_r:kk_csd_var_t:s0
+
+        WARNING: Configure your firewall to allow the KK-Cryptoservice service.
+
+        Configuration file has been written successfully to /etc/kriptakey/kk-csd.conf.
+
+    .. note::
+
+        *   To configure the SNMP server, please refer to :ref:`appendix:snmp configuration`.
+        *   To unset the SNMP configuration, omit the SNMP destination when prompted by the script.
+
+    .. important::
+
+        The configuration file for KK-Manager is stored in ``/etc/kriptakey/kk-csd.conf``. Do not move
+        or remove the file to ensure the smooth operation of the service.
+
+#.  If you choose to enable SNMP, there is an additional step.
+    Kripta Key appliance is accompanied by script that will send crucial system information (CPU, Memory and 
+    Disk utilization) using SNMP if SNMP is configured. The script will automatically send SNMP message every minute. 
+    To enable this script, execute command below:
+
+    .. code-block:: console
+
+        $ /opt/kriptakey/kk-sys_snmp.sh install
+
+#.  Check the version of the daemon to ensure that KK-Manager has been installed properly.
+
+    .. code-block:: console
+
+        $ sudo -u kripta kk-csd --version
+
+        Module: kk-csd
+        Version: <version>
+
+#.  Reload the firewall service and set the zone as shown below. You can set the zone to either public or private.
+
+    .. code-block:: console
+
+        $ sudo firewall-cmd --permanent --zone=public --add-service=kk-csd
+
+        success
+
+        $ sudo firewall-cmd --reload
+
+        success
+
+
+Registering KK-Cryptoservice
+----------------------------
+
+#.  Fetch the machine platform information. Run the following command on each KK-Cryptoservice machine.
+
+    .. code-block:: console
+
+        $ sudo -u kripta kk-csd --get-pck-id
+
+        Platform information successfully written to /var/local/kriptakey/kk-cryptoservice/sgxdata/39288AC7XXXXXXXXXXXXXXXXXXXXXXXX.json
+
+#.  Copy the platform information of the KK-Cryptoservice machines to a device that has CLIKK installed.
+
+#.  :ref:`Obtain an API key from Intel <appendix:obtaining intel api key>` if the administrator lacks one.
+    This API key will be used to retrieve collateral from Intel using CLIKK. The collateral file contains information
+    that attests that the hardware in use truly came from Intel, as opposed to being simulated.
+
+#.  Run ``clikk conf get-collateral``, passing the API key and the path to the platform information to fetch
+    the collateral for the KK-Cryptoservice machines.
+
+    .. important::
+
+        The machine must be connected to the internet.
+
+    .. code-block:: console
+
+        $ clikk conf get-collateral --intel-api-key=39949131XXXXXXXXXXXXXXXXXXXXXXX --platform-info-path=/home/user/documents/39288AC7XXXXXXXXXXXXXXXXXXXXXXXX.json --output-dir-path=/home/user/documents
+
+        This will fetch attestation material from Intel's trusted web service:
+            https://api.trustedservices.intel.com/sgx/certification/v4
+        Type `ew!O3` to continue, or press Enter to cancel.
+        > ew!O3
+
+        PCK certificate has been saved successfully to /home/user/documents/pck_cert_39288AC7XXXXXXXXXXXXXXXXXXXXXXXX.pem.
+        Quote collateral has been saved successfully to /home/user/documents/collateral_0BF32AXXXXXX.json.
+
+#.  Copy the respective PCK certificates and collaterals to the working directories of each KK-Cryptoservice machines.
+
+#.  Run KK-Cryptoservice in registration mode, passing in the path to the KK-Cryptoservice machine's PCK certificate
+    and the latest database backup file.
+
+    .. important::
+
+        Ensure the integrity of the backup file. Perform the following steps:
+
+        *   Compute the hash of the backup file in the KK-Manager machine, preferably as soon as the backup is created.
+        *   Compute the hash of the backup file in the KK-Cryptoservice machine.
+        *   Compare both hashes. Confirm that the hashes are the same before proceeding.
+
+        To compute the hashes, use a tool such as ``sha256sum``.
+
+    .. code-block:: console
+
+        $ sudo -u kripta kk-csd --kk-cryptoservice-pck-cert=/var/local/kriptakey/kk-cryptoservice/sgxdata/pck_cert_39288AC7XXXXXXXXXXXXXXXXXXXXXXXX.pem --database-backup-path=/path-to-database-backup/backup.db
+
+        Commencing the KK-Cryptoservice registration process.
+        This will initialize a KK-Cryptoservice instance on this machine and register it to the KK-Manager instance.
+        Any existing KK-Cryptoservice database file will be OVERWRITTEN.
+        Do not interrupt the process until the message "KK-Cryptoservice has been registered successfully to KK-Manager.".
+        Are you sure you want to continue? Type `'Q\y2` to continue, or press Enter to cancel.
+        > 'Q\y2
+
+        [-] Ready for initialization and registration.
+        [-] Listening on port 8086...
+        [-] Waiting for connection from KK-Manager...
+
+#.  Register the KK-Cryptoservice instance to the main KK-Manager instance using CLIKK, passing in the path
+    to the collateral file obtained above.
+
+    .. code-block:: console
+
+        $ clikk kk-cryptoservice add --kk-manager-collateral-path=/home/user/documents/collateral_00A065XXXXXX.json --kk-cryptoservice-collateral-path=/home/user/documents/collateral_0BF32AXXXXXX.json --kk-cryptoservice-host=10.30.0.2 --kk-cryptoservice-port=8086 --kk-cryptoservice-name=kk-csOne
+
+        Enter admin ID: Admin1
+        Enter password:
+        Insert the administrator card of Admin1 for two-factor authentication.
+
+        Dual control authentication -- credential of second user is required.
+        Admin1 is currently logged in.
+
+        Enter admin ID: Admin2
+        Enter password:
+        Insert the administrator card of Admin2 for two-factor authentication.
+
+        KK-Cryptoservice `KK-CSOne` at 10.30.0.2 has been registered successfully.
+
+#.  Once the registration process has been completed, KK-Cryptoservice will show the following message:
+
+    .. code-block:: console
+
+        [v] KK-Cryptoservice has been registered successfully to KK-Manager.
+
+#.  Start the KK-Auditor service, and check that it is running properly.
+
+    .. code-block:: console
+
+        $ sudo systemctl enable kk-csd.service --now
+
+        $ sudo systemctl status kk-csd.service
+
+#.  Ensure that the KK-Cryptoservice instance is connected to the KK-Manager instance, using ``curl`` with
+    the KK-Manager host and port.
+
+    .. code-block:: console
+
+        $ curl -k -v 10.30.0.116 8086

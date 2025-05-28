@@ -1,0 +1,27 @@
+License Application Guide
+=========================
+
+Preface
+-------
+
+Intended reader
+~~~~~~~~~~~~~~~
+
+This document is intended for administrators and customers as a guide relating to licensing for Kripta Key.
+
+
+Document scope
+~~~~~~~~~~~~~~
+
+This document explains Kripta Key licensing, and contains guides relating to Kripta Key licenses.
+
+For customers, this document elaborates on the different types of licenses for this version of Kripta Key,
+as well as what licensing Kripta Key from Klavis Kripta entails.
+
+For administrators, this document explains how to request and apply for a license.
+
+
+Related documents
+~~~~~~~~~~~~~~~~~
+
+*   :doc:`/sys-admin-guide/index`

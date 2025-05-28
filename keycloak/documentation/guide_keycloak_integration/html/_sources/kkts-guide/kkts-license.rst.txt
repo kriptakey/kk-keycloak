@@ -1,0 +1,50 @@
+KK-TS License
+=============
+
+Kripta Key Tokenization Service (KK-TS) request an additional license. The license is proposed to PT. Reka Sentinel Informasi, henceforth, RSI . 
+Two types of license, customer license and deployment license, must be applied to enable the tokenization service. Please follow the instructions below:
+
+Customer License
+----------------
+
+A customer license permits a customer to have KK-TS. Regardless of how many KK-TS there are, as long as the customer has this license, they can possess KK-TS. 
+One customer can only have one customer license. Just apply your own customer license to the next KK-TS. 
+
+#.  An administrator must generate CSR and private key using command below
+
+    .. code-block:: console
+
+        $ kk-ts license request customer-cert --customer-id=customerID --output-enc-privkey-path=/path/to/private_key.key --output-csr-path=/path/to/csr.csr
+
+#.  The customer then sends the CSR file to the RSI team.
+
+#.  RSI team signs the CSR then send you the certificate. 
+
+#.  Use the certificate signed by RSI, apply the certificate and the private key using command below: 
+
+    .. code-block:: console
+
+        $ kk-ts license apply customer-cert --encrypted-private-key-path=/path/to/private_key.key --certificate-path=/path/to/certificate_signed_by_RSI.cert
+
+
+Deployment License
+------------------
+
+A deployment license permits a customer to execute tokenization service. Each KK-TS requires one deployment license. 
+
+#.  An administrator must generate KK-TS signature using command below
+
+    .. code-block:: console
+
+        $ kk-ts license request deploy-perm 
+
+#.  The customer then sends the KK-TS signature to the RSI team.
+
+#.  RSI team identifies the customer and the signature. If they match, RSI sends the RSI signature.  
+
+#.  Use the signatures to apply deployment license using command below: 
+
+    .. code-block:: console
+
+        $ kk-ts license apply deploy-perm --kkts-signature=MEUCIQDuL7RMP4Vkkz3kr2CqFfXEZZ88aLdUnmeR+ynyaURzsQIgQer0Fm0CWWaqAqHWdjlahdudpjdl --rsi-signature=MIGHAkEgUfO0vnx1Ug77d7EFsTUrx0DQ0pJwsZy1JVLyqR96ia6zePfzAkV6LuCEerwtjZQ6DV1pjBl8A6vMpIp/nzUheQJCAKzUq8Y0ArSPNNcXzlCO6VZOfsgDhOcssHoJYdtVjodifyaloe --kkts-host=<host address> --dns-name=<dns name>
+

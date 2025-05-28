@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E2EE prerequisites &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="E2EE for data protection" href="e2ee-data-protection.html" />
+    <link rel="prev" title="E2EE Developer Guide" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kkts-guide/index.html">KK-TS Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">E2EE Developer Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">E2EE prerequisites</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#before-developing-your-app">Before developing your app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#e2ee-preparation">E2EE preparation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#backend-authentication">Backend authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#e2ee-pre-authentication">E2EE pre-authentication</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="e2ee-data-protection.html">E2EE for data protection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e2ee-password-auth.html">E2EE for password-based authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e2ee-passwordless-auth.html">E2EE for passwordless authentication</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">E2EE Developer Guide</a></li>
+      <li class="breadcrumb-item active">E2EE prerequisites</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/e2ee-dev-guide/e2ee-prerequisites.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="e2ee-prerequisites">
+<h1>E2EE prerequisites<a class="headerlink" href="#e2ee-prerequisites" title="Link to this heading"></a></h1>
+<p>E2EE developers are highly encouraged to read this section first before implementing any E2EE flow,
+as these procedures are required for the E2EE flows to run correctly and securely. Additionally,
+some terminologies used henceforth are defined in <a class="reference internal" href="../dev-guide/kms-e2e-crypto-services.html#end-to-end-cryptographic-services"><span class="std std-ref">End-to-end cryptographic services</span></a>.</p>
+<section id="before-developing-your-app">
+<h2>Before developing your app<a class="headerlink" href="#before-developing-your-app" title="Link to this heading"></a></h2>
+<p>The E2EE mobile SDK, provided by Klavis Kripta, is built on Flutter version 1.17.0. It is highly
+recommended to develop your frontend on a Flutter version 1.17.0 or higher. You can get the E2EE Flutter mobile SDK at
+<a class="reference external" href="https://dev.klaviskripta.com/klavis-kripta-inovasi/kripta-key-documentation/-/merge_requests/19">https://dev.klaviskripta.com/klavis-kripta-inovasi/kripta-key-documentation/-/merge_requests/19</a> .</p>
+<p>While building the frontend, the minimum required Android version must be set to API level 25 (Android 7.1).</p>
+</section>
+<section id="e2ee-preparation">
+<h2>E2EE preparation<a class="headerlink" href="#e2ee-preparation" title="Link to this heading"></a></h2>
+<p>Before performing any E2EE functionality, the backend must generate and store several RSA key pairs, using
+the <code class="docutils literal notranslate"><span class="pre">appstored/keypair/generate</span></code> API endpoint. These are the transport keys, which will be used to secure
+the communication between the frontend, the backend, and Kripta Key — see <a class="reference internal" href="#e2ee-pre-authentication"><span class="std std-ref">E2EE pre-authentication</span></a>
+for details on how these key pairs are used. For increased security, these keys may be regenerated regularly.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We recommend generating 10 to 30 RSA key pairs with 2048-bit key length, regenerating a fresh set of key pairs once
+every few months.</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>In order to prepare the transport keys, the Kripta Key admin must have generated a wrapping key.</p>
+</div>
+</section>
+<section id="backend-authentication">
+<h2>Backend authentication<a class="headerlink" href="#backend-authentication" title="Link to this heading"></a></h2>
+<p>The first flow that must be done by the frontend is authenticating the backend — that is, ensuring that the frontend
+is communicating with the correct backend. This authentication is done cryptographically, utilizing the backend
+certificate generated by Kripta Key. The frontend developer must pin this certificate to the app.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We recommend performing backend authentication each time the frontend initially loads — i.e., as part of frontend
+initialization.</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>To create the backend certificate, the Kripta Key admin must have generated a key pair and a certificate associated
+with the key pair.</p>
+</div>
+<p>The following are the steps to perform backend authentication:</p>
+<ol class="arabic simple">
+<li><p>Frontend calls <code class="docutils literal notranslate"><span class="pre">rnd</span></code> from the SDK, generating a nonce. We recommend 10 random bytes for the nonce.</p></li>
+<li><p>Frontend caches the nonce.</p></li>
+<li><p>Frontend calls <code class="docutils literal notranslate"><span class="pre">encryptRSA</span></code> from the SDK, encrypting the nonce using the <a class="reference internal" href="../appendix.html#term-pinned-certificate"><span class="xref std std-term">pinned certificate</span></a>.</p></li>
+<li><p>Frontend requests backend authentication, sending the encrypted nonce.</p></li>
+<li><p>Backend calls <code class="docutils literal notranslate"><span class="pre">decrypt</span></code> from Kripta Key API, decrypting the encrypted nonce using the certificate’s private key.</p></li>
+<li><p>Backend calls <code class="docutils literal notranslate"><span class="pre">sign</span></code> from Kripta Key API, signing the nonce using the certificate’s private key.</p></li>
+<li><p>Backend sends back the signature to the frontend.</p></li>
+<li><p>Frontend calls <code class="docutils literal notranslate"><span class="pre">verifyRSA</span></code> from the SDK, verifying the signature with the nonce using the pinned certificate.</p></li>
+<li><p>If signature is valid, then the frontend has connected to the correct backend. Otherwise, stop.</p></li>
+</ol>
+<p class="plantuml">
+<img src="../_images/plantuml-4d5cff8a38c8645714f635d1ae33e973281c87cd.png" alt="&#64;startuml
+
+skinparam maxMessageSize 240
+
+box &quot;Frontend&quot; #FFD700
+    participant &quot;User&quot; as user
+    participant &quot;Mobile App&quot; as client
+    participant &quot;E2EE Mobile SDK&quot; as clientlib
+end box
+box &quot;Backend&quot;
+    participant &quot;App Server&quot; as appserver
+    participant &quot;Kripta Key&quot; as kk
+end box
+
+== Backend Server Authentication ==
+
+autonumber
+user -&gt; client : start app
+client -&gt; clientlib : call &quot;&quot;rnd&quot;&quot; to generate 10 bytes nonce
+clientlib -&gt; client : nonce
+client -&gt; client : cache nonce
+client -&gt; clientlib : call &quot;&quot;encryptRSA&quot;&quot;, passing in nonce and pinned certificate
+clientlib -&gt; client : RSA encrypted nonce
+client -&gt; appserver : request for server authentication, send encrypted nonce
+appserver -&gt; kk : decrypt the nonce using private key of server certificate by calling API &quot;&quot;decrypt&quot;&quot;
+kk -&gt; appserver : clear nonce
+appserver -&gt; kk : sign the nonce using private key of server certificate by calling API &quot;&quot;sign&quot;&quot;
+kk -&gt; appserver : signature from nonce
+appserver -&gt; client : signature from nonce
+client -&gt; clientlib : call &quot;&quot;verifyRSA&quot;&quot; passing in nonce, signature and pinned certificate
+clientlib -&gt; client : verification result
+client -&gt; client : if signature is not verified, stop
+
+&#64;enduml"/>
+</p>
+</section>
+<section id="e2ee-pre-authentication">
+<h2>E2EE pre-authentication<a class="headerlink" href="#e2ee-pre-authentication" title="Link to this heading"></a></h2>
+<p>In this step, the frontend and the backend establish a secure channel by using a transport key, previously prepared
+during <a class="reference internal" href="#e2ee-preparation"><span class="std std-ref">E2EE preparation</span></a>. As such, this flow <strong>MUST</strong> run recently
+prior to executing any E2EE flow.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We recommend either running this flow right before executing the intended E2EE flow, or rerunning this flow after
+a certain amount of time has passed since the last time this flow was executed — e.g. 5 minutes.</p>
+</div>
+<p>The following are the steps to perform E2EE pre-authentication:</p>
+<ol class="arabic simple">
+<li><p>Frontend requests for the transport key and other parameters from the backend.</p></li>
+<li><p>Backend chooses a key pair at random from the pool application-stored key pairs (as specified in <a class="reference internal" href="#e2ee-preparation"><span class="std std-ref">E2EE preparation</span></a>).</p></li>
+<li><p>Backend generates an <a class="reference internal" href="../appendix.html#term-OAEP-label"><span class="xref std std-term">OAEP label</span></a> at random. We recommend a length of 64 bytes.</p></li>
+<li><p>Backend generates an E2EE session cache entry with a unique session ID.</p></li>
+<li><p>Backend caches the wrapped transport private key and the OAEP label.</p></li>
+<li><p>Backend sends back the transport public key, OAEP label, and session ID to the frontend.</p></li>
+</ol>
+<p class="plantuml">
+<img src="../_images/plantuml-0ea6b3d04c611016f83010dcf35f9e9e9f1a1897.png" alt="&#64;startuml
+
+skinparam maxMessageSize 240
+
+box &quot;Frontend&quot; #FFD700
+    participant &quot;User&quot; as user
+    participant &quot;Mobile App&quot; as client
+    participant &quot;E2EE Mobile SDK&quot; as clientlib
+end box
+box &quot;Backend&quot;
+    participant &quot;App Server&quot; as appserver
+    participant &quot;Kripta Key&quot; as kk
+end box
+
+== E2EE Pre-Authentication ==
+
+autonumber
+user -&gt; client : start app
+client -&gt; appserver : request for transport key and other params
+appserver -&gt; appserver : generate an E2EE session cache entry with a randomly chosen key pair, randomly generated OAEP label, and a unique session ID
+appserver -&gt; client : return transport public key, OAEP label and session ID
+
+&#64;enduml"/>
+</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For the random selection process, it is highly recommended to either use a secure random number generator, or use
+Kripta Key’s <code class="docutils literal notranslate"><span class="pre">rng</span></code> API endpoint to generate randomness.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is important to note that the backend <strong>MUST</strong> implement its own caching mechanism for the key pair, OAEP label, and
+session ID corresponding to this particular E2EE session. On top of that, it <strong>MUST</strong> implement a timeout for the cache
+entries. We recommend invalidating cache entries 5 minutes after their creation.</p>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="E2EE Developer Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="e2ee-data-protection.html" class="btn btn-neutral float-right" title="E2EE for data protection" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

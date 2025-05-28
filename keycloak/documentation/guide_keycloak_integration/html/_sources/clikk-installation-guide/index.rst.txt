@@ -1,0 +1,25 @@
+CLIKK Installation Guide
+========================
+
+Preface
+-------
+
+Intended reader
+~~~~~~~~~~~~~~~
+
+This document is intended for administrators as a guide to installing Kripta Key Command Line Interface (CLIKK).
+
+
+Document scope
+~~~~~~~~~~~~~~
+
+This document explains the process of installing CLIKK for this version of Kripta Key, as well as
+requirements for installing CLIKK. CLIKK may be installed on Red Hat Enterprise Linux 9.2 and Windows 10/11.
+Other operating systems are not supported.
+
+
+Related documents
+~~~~~~~~~~~~~~~~~
+
+*   :doc:`/installation-guide/index`
+*   :doc:`/sys-admin-guide/index`

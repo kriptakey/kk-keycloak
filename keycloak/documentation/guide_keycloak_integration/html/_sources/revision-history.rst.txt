@@ -1,0 +1,23 @@
+Revision History
+================
+
++---------------------+-------------------+-------------------+-------------------------------------------------+
+|         DATE        | PRODUCT VERSION   | DOCUMENT REVISION |                     CHANGES                     |
++=====================+===================+===================+=================================================+
+| September 28, 2024  | 24.1.0007-GA      | 24.1.0007-GA      | Initial version                                 |
++---------------------+-------------------+-------------------+-------------------------------------------------+
+| November 5, 2024    | 24.1.0010-GA-UP01 | 24.1.0010-GA-UP01 | Introduce KK-TS access control.                 |
++---------------------+-------------------+-------------------+-------------------------------------------------+
+| March 7, 2025       | 24.1.0015-RC-UP02 | 24.1.0015-RC-UP02 | - Introduce application integration.            |
+|                     |                   |                   | - Update payload request of the following APIs: |
+|                     |                   |                   |     - ``/v24.1/encrypt``                        |
+|                     |                   |                   |     - ``/v24.1/decrypt``                        |
+|                     |                   |                   |     - ``/v24.1/appstored/encrypt``              |
+|                     |                   |                   |     - ``/v24.1/appstored/decrypt``              |
+|                     |                   |                   |     - ``/v24.1/reencrypt``                      |
+|                     |                   |                   |     - ``/v24.1/tokenize``                       |
+|                     |                   |                   |     - ``/v24.1/appstored/tokenize``             |
+|                     |                   |                   | - Introduce KK-TS FPE Vaultless Tokenization.   |
+|                     |                   |                   | - Add one line instruction for SNMP installation|
+|                     |                   |                   | - Introduce functional module                   |
++---------------------+-------------------+-------------------+-------------------------------------------------+

@@ -1,0 +1,50 @@
+.. include:: <isonum.txt>
+
+Miscellaneous operations
+========================
+
+Removing KK-Cryptoservice from cloud
+------------------------------------
+
+To uninstall KK-Cryptoservice from the ECS instance, follow these steps:
+
+#.  Uninstall the RPM package.
+
+    .. code-block:: console
+
+        $ sudo dnf remove kk-cs-2.0-0000.el8.x86_64.rpm
+
+#.  Clean the firewall rules.
+
+    .. code-block:: console
+
+        $ sudo firewall-cmd --permanent --zone=public --remove-service=kk-csd.service
+
+#.  It is optional to remove the log files and the working directory, but it is highly recommended.
+
+
+Stopping instance service
+-------------------------
+
+There are `two modes`__ for instances in Alibaba Cloud's virtual private cloud.
+
+*   **Standard Mode**: The resources of the instance are retained and continue to be billed even after
+    the instance is stopped.
+
+*   **Economical Mode**: After the instance is stopped, its computing resources (vCPUs and memory)
+    are released and no longer billed. The cloud disks (including the system disk and data disks),
+    elastic IP addresses (if any), and bandwidth continue to be billed. The public IP address is recycled,
+    and the private IP address is retained. For more details, check `Alibaba Cloud's page`__ on economical mode.
+
+__ https://www.alibabacloud.com/help/en/ecs/user-guide/stop-an-instance#task-1909833
+__ https://www.alibabacloud.com/help/en/ecs/product-overview/economical-mode?spm=a2c63.p38356.0.0.368364261etuFn
+
+Since Kripta Key is bound to the machine, the instance mode must be set to standard mode. Otherwise,
+data loss may occur if the instance is stopped, even if onlyy temporarily.
+
+To stop the instance:
+
+*   To stop a single instance, find the instance, and then select More |rarr| Instance Status |rarr| Stop
+    in the Actions column. 
+*   To stop multiple instances at once, select the instances, and then click Stop in the lower part of the 
+    Instances page.

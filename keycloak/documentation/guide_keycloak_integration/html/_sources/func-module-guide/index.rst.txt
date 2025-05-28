@@ -1,0 +1,25 @@
+Functional Module Guide
+=======================
+
+Preface
+-------
+
+Intended reader
+~~~~~~~~~~~~~~~
+
+This document is intended for administrators as a guide to implement Kripta Key functional module. 
+
+
+Document scope
+~~~~~~~~~~~~~~
+
+This document explains, step by step, how to use the Kripta Key functional module. The functional module 
+is applicable to Kripta Key version 24.1.0016-GA-UP02 or later. The Kripta Key functional module provides 
+a practical implementation for integrating Kripta Key cryptographic services.
+
+
+Related documents
+~~~~~~~~~~~~~~~~~
+
+*   :doc:`/sys-admin-guide/index`
+

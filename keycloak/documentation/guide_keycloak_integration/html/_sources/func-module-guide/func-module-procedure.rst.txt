@@ -1,0 +1,137 @@
+Functional Module Procedure
+===========================
+
+Kripta Key functional module is a self-contained component within its API that performs a specific function or a set of related functions. 
+The Kripta Key functional module is loaded dynamically in a JavaScript environment using Duktape. In Duktape, we fully support ECMAScript 5 
+and provide partial support for ECMAScript 6 and ECMAScript 7. 
+
+List of functions:
+
+*   ``kkAuth``
+*   ``kkRefresh``
+*   ``kkRNG``
+*   ``kkMACGenerate``
+*   ``kkMACVerify``
+*   ``kkSeal``
+*   ``kkUnseal``
+*   ``kkRNG``
+*   ``kkMACGenerate``
+*   ``kkMACVerify``
+*   ``kkSeal``
+*   ``kkUnseal``
+*   ``kkEncrypt``
+*   ``kkDecrypt``
+*   ``kkReencrypt``
+*   ``kkTokenize``
+*   ``kkDetokenize``
+*   ``kkFPETokenize``
+*   ``kkFPEDetokenize``
+*   ``kkSign``
+*   ``kkVerify``
+*   ``kkSign``
+*   ``kkVerify``
+*   ``kkCertSign``
+*   ``kkCertVerify``
+*   ``kkKeyInfo``
+*   ``kkKeyInfo``
+*   ``kkAppstoredKeyGenerate``
+*   ``kkAppstoredKeypairGenerate``
+*   ``kkAppstoredMacGenerate``
+*   ``kkAppstoredMacVerify``
+*   ``kkAppstoredSeal``
+*   ``kkAppstoredUnseal``
+*   ``kkAppstoredEncrypt``
+*   ``kkAppstoredDecrypt``
+*   ``kkAppstoredTokenize``
+*   ``kkAppstoredDetokenize``
+*   ``kkAppstoredSign``
+*   ``kkAppstoredVerify``
+*   ``kkE2EEReencryptFromSessionKeyToPermanentKey``
+*   ``kkE2EECompare``
+*   ``kkE2EEReencryptFromPermanentKeyToClientKey``
+*   ``kkE2EEDecryptFromSessionKey``
+*   ``kkE2EEencryptToClientKey``
+*   ``kkSecretGet``
+
+
+
+For seamless implementation, our procedure mandate test the functional module first before using it.
+
+The following are procedure to implement functional module:
+
+#.  Create script based on your goal. The script must be involve Kripta Key cryptographic APIs listed above and the script 
+    must be in javascript format (.js). Sample script provided below:
+    
+    The script must be maximum 500KB.
+
+    .. code-block:: console
+
+        // Generate random pin
+        function makePIN(length) {
+            var result = "";
+            const characters = '0123456789';
+            var counter = 0;
+            while (counter < length) {
+                result += characters.charAt(Math.floor(Math.random() * length));
+                counter += 1;
+            }
+            return result;
+        }
+
+        function sealedPinGeneration(inputJSON) {
+            var parsedInput = JSON.parse(inputJSON);
+
+            // Random 6 character to be used as PIN
+            var pin = makePIN(6);
+
+            // Generate appstored AES key
+            var generateKeyParam = {
+                "sessionToken": parsedInput.sessionToken,
+                "wrappingMethod": "internalKey",
+                "algo": "AES",
+                "algoLength": 256,
+                "internalWrappingKeyId": parsedInput.wrappingKeyId,
+                "partitionId": parsedInput.partitionId,
+            }
+
+            var generateKeyJSON = JSON.parse(kkAppstoredKeyGenerate(JSON.stringify(generateKeyParam)));
+            if (generateKeyJSON.fault != null) {
+                generateKeyJSON.message = "Appstored AES-256 key generation failed!";
+                return JSON.stringify(generateKeyJSON);
+            }
+
+            // Sealing
+            var sealParam = {
+                "sessionToken": parsedInput.sessionToken,
+                "wrappingKeyId": parsedInput.wrappingKeyId,
+                "wrappedKey": generateKeyJSON.result.wrappedKey,
+                "plaintext": [pin],
+                "partitionId": parsedInput.partitionId,
+            };
+            var sealJSON = JSON.parse(kkAppstoredSeal(JSON.stringify(sealParam)));
+            if (sealJSON.fault != null) {
+                sealJSON.message = "Data sealing failed!";
+                return JSON.stringify(sealJSON);
+            }
+
+            // Output
+            var output = {
+                "wrappedKey": generateKeyJSON.result.wrappedKey,
+                "sealedPIN": sealJSON.result.ciphertext[0],
+            }
+            return JSON.stringify(output);
+        }
+
+#.  Upload the script for testing mode via API ``v24.1/fm/test/add``.
+
+#.  Execute the script in testing mode via the API ``v24.1/fm/test/execute``. If it succeeds, it returns the module hash value, and the script can be used.
+    The return of this API depends on the script. 
+
+#.  Add the functional module script to KK-M using the command ``clikk func-module add``, please refer to  :ref:`func-module-guide/command-line-interface:Functional Module Command line interface`. 
+    Ensure you pass the correct hash value.
+
+#.  Execute the functional module script by calling API ``v24.1/fm/execute``. The return of this API depends on the script. 
+
+#.  To display the list and details of functional module scripts, please refer to :ref:`func-module-guide/command-line-interface:Functional Module Command line interface`
+
+#.  Deleting a functional module is also available, but ensure that no applications are using the functional module before deleting it. 

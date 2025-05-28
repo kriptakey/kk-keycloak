@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installing Kripta Key &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="KK-Cryptoservice setup and configuration" href="cryptographic-service-installation.html" />
+    <link rel="prev" title="Before deploying Kripta Key" href="before-installing.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Installation Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="before-installing.html">Before deploying Kripta Key</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Installing Kripta Key</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#kk-auditor-setup-and-configuration">KK-Auditor setup and configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#before-installing-kk-auditor">Before installing KK-Auditor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#installing-kk-auditor">Installing KK-Auditor</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#kk-manager-setup-and-configuration">KK-Manager setup and configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#before-installing-kk-manager">Before installing KK-Manager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#installing-kk-manager">Installing KK-Manager</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#key-ceremony">Key ceremony</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cryptographic-service-installation.html">KK-Cryptoservice setup and configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="disaster-recovery.html">Disaster recovery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="appliance-deployment.html">Appliance model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="misc-actions.html">Miscellaneous operations</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kkts-guide/index.html">KK-TS Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Installation Guide</a></li>
+      <li class="breadcrumb-item active">Installing Kripta Key</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/installation-guide/kripta-key-installation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installing-kripta-key">
+<h1>Installing Kripta Key<a class="headerlink" href="#installing-kripta-key" title="Link to this heading"></a></h1>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>During installation below, it involves three important security attributes:</p>
+<ol class="arabic simple">
+<li><p>Secure Channel Code (SCC)
+SCC is created during the key ceremony. It is an alphanumeric string that you must store securely. If you
+lose the SCC, there is a high probability that you lose your entire key data with no chance of ever recovering it.</p></li>
+<li><p>PIN of recovery cards
+A recovery card is a higher authentication attribute to perform absolutely critical tasks. Each holder of a recovery
+card has the responsibility to remember or securely store and access his/her own PIN. Any leakage of PIN information
+to an unauthorized person compromises the security of the keys and the entire system.</p></li>
+<li><p>Recovery card
+Two separate sets of recovery smartcards are provided for each deployment. The cards should never be mixed across
+the sets. Users are responsible for securely and separately storing the sets to avoid authentication failure.</p></li>
+</ol>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Before running the installer, perform <a class="reference internal" href="../appendix.html#performing-integrity-checks"><span class="std std-ref">an integrity check</span></a> first.
+Also, make sure that the installer is appropriate for the machine’s OS.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If errors were encountered during installation, details will be logged to <code class="docutils literal notranslate"><span class="pre">/var/log/kriptakey</span></code>.</p>
+</div>
+<section id="kk-auditor-setup-and-configuration">
+<h2>KK-Auditor setup and configuration<a class="headerlink" href="#kk-auditor-setup-and-configuration" title="Link to this heading"></a></h2>
+<p>Before setting up the KK-Manager instance, KK-Auditor must be installed and configured first, so that
+administrator actions on the KK-Manager instance can be recorded.</p>
+<section id="before-installing-kk-auditor">
+<h3>Before installing KK-Auditor<a class="headerlink" href="#before-installing-kk-auditor" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Ensure that the server has been prepared as specified in <a class="reference internal" href="before-installing.html#preparatory-steps"><span class="std std-ref">Preparatory steps</span></a>.</p></li>
+<li><p>Download the <a class="reference external" href="https://download.01.org/intel-sgx/sgx-linux/2.23/distro/rhel9.2-server/sgx_rpm_local_repo.tgz">Intel SGX Platform Software</a>. Run the following commands from the directory
+where the archive is located:</p>
+<ol class="arabic">
+<li><p>Extract the packages.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tar<span class="w"> </span>-xvf<span class="w"> </span>sgx_rpm_local_repo.tgz
+</pre></div>
+</div>
+</li>
+<li><p>Navigate to the <code class="docutils literal notranslate"><span class="pre">sgx_rpm_local_repo</span></code> directory, and enable the repository.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>sgx_rpm_local_repo
+<span class="gp">$ </span>sudo<span class="w"> </span>dnf<span class="w"> </span>config-manager<span class="w"> </span>--add-repo<span class="w"> </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>
+
+<span class="go">Updating Subscription Management repositories.</span>
+<span class="go">Adding repo from: file:///home/user/sgx_rpm_local_repo</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</section>
+<section id="installing-kk-auditor">
+<h3>Installing KK-Auditor<a class="headerlink" href="#installing-kk-auditor" title="Link to this heading"></a></h3>
+<p>Once everything is all set, the administrator may begin installation of KK-Auditor on the server.</p>
+<ol class="arabic">
+<li><p>Install KK-Auditor from the RPM package. Note that KK-Auditor depends on the packages in <code class="docutils literal notranslate"><span class="pre">sgx_rpm_local_repo</span></code>.
+However, these packages are not signed with GPG. Hence, it must be installed without performing the GPG check.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>dnf<span class="w"> </span>--nogpgcheck<span class="w"> </span>install<span class="w"> </span>kk-a-2.0-0000.el8.x86_64.rpm
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The installer automatically creates the user <code class="docutils literal notranslate"><span class="pre">kripta</span></code>.</p></li>
+<li><p>The user <code class="docutils literal notranslate"><span class="pre">kripta</span></code> can only read files from the working directory.</p></li>
+<li><p>The administrator, using their usual user account, <strong>cannot</strong> write directly to the working directory.
+Files must be moved as the user <code class="docutils literal notranslate"><span class="pre">kripta</span></code> to the working directory.</p></li>
+<li><p>During the installation process, the location of the working directory must be specified.
+It is highly recommended to use the default value.</p></li>
+</ul>
+</div>
+</li>
+<li><p>After successfully installing KK-Auditor, it must be configured by running its configuration script.
+This will configure settings such as port, log level, SNMP server, and so on. Do note the following
+when running the configuration script:</p>
+<ul class="simple">
+<li><p>The port may be any port from 1024 to 49151, inclusive.</p></li>
+<li><p>Configuring the SNMP server is optional — errors are still recorded to the log file. However, it is
+strongly recommended to configure the SNMP server so that critical alerts from Kripta Key can be
+noticed promptly. To configure the SNMP server, the administrator must prepare the SNMP host and port,
+SNMP username, SNMP authentication passphrase, and SNMP privacy passphrase.</p></li>
+<li><p>For some configuration fields, the script will set a default value if value is omitted when prompted.</p></li>
+<li><p>The working directory must be writable by the <code class="docutils literal notranslate"><span class="pre">kripta</span></code> user. For this reason, it is recommended
+to use the default value, <code class="docutils literal notranslate"><span class="pre">/var/local/kriptakey/kk-auditor</span></code>.</p></li>
+</ul>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Sample output if SNMP server has not been configured.</span><a class="headerlink" href="#id4" title="Link to this code"></a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>/opt/kriptakey/kk-auditor/kk-a.sh
+
+<span class="go">KK-Auditor port for KK-Manager endpoint [7001]: 8083</span>
+<span class="go">SNMP server host and port in xxx.xxx.xxx.xxx:xxxx format []:</span>
+<span class="go">WARNING: SNMP server address is empty. KK-Auditor will not send SNMP alerts.</span>
+<span class="go">KK-Auditor log level (Option: ERROR/INFO/DEBUG) [ERROR]:</span>
+<span class="go">KK-Auditor working directory path [/var/local/kriptakey/kk-auditor]:</span>
+
+<span class="go">Relabeled /var/local/kriptakey/kk-auditor from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_ad_var_t:s0</span>
+<span class="go">Relabeled /var/local/kriptakey/kk-auditor/db from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_ad_var_t:s0</span>
+<span class="go">Relabeled /var/local/kriptakey/kk-auditor/archive from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_ad_var_t:s0</span>
+<span class="go">Relabeled /var/local/kriptakey/kk-auditor/export from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_ad_var_t:s0</span>
+<span class="go">Relabeled /var/local/kriptakey/kk-auditor/sgxdata from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_ad_var_t:s0</span>
+<span class="go">Relabeled /etc/kriptakey/kk-ad.conf from unconfined_u:object_r:etc_t:s0 to system_u:object_r:kk_ad_var_t:s0</span>
+
+<span class="go">WARNING: Configure your firewall to allow the KK-Auditor service.</span>
+<span class="go">Config file has been written successfully to /etc/kriptakey/kk-ad.conf.</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Sample output if SNMP server has been configured.</span><a class="headerlink" href="#id5" title="Link to this code"></a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>/opt/kriptakey/kk-auditor/kk-a.sh
+
+<span class="go">KK-Auditor port for KK-Manager endpoint [7001]: 8083</span>
+<span class="go">SNMP server host and port in xxx.xxx.xxx.xxx:xxxx format []: 192.168.0.5:1337</span>
+<span class="go">SNMP username []: klavis</span>
+<span class="go">SNMP authentication passphrase []: klavisauth</span>
+<span class="go">SNMP privacy passphrase []: klavisencrypt</span>
+<span class="go">KK-Auditor log level (Option: ERROR/INFO/DEBUG) [ERROR]:</span>
+<span class="go">KK-Auditor working directory path [/var/local/kriptakey/kk-auditor]:</span>
+
+<span class="go">Relabeled /var/local/kriptakey/kk-auditor from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_ad_var_t:s0</span>
+<span class="go">Relabeled /var/local/kriptakey/kk-auditor/db from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_ad_var_t:s0</span>
+<span class="go">Relabeled /var/local/kriptakey/kk-auditor/archive from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_ad_var_t:s0</span>
+<span class="go">Relabeled /var/local/kriptakey/kk-auditor/export from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_ad_var_t:s0</span>
+<span class="go">Relabeled /var/local/kriptakey/kk-auditor/sgxdata from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_ad_var_t:s0</span>
+<span class="go">Relabeled /etc/kriptakey/kk-ad.conf from unconfined_u:object_r:etc_t:s0 to system_u:object_r:kk_ad_var_t:s0</span>
+
+<span class="go">WARNING: Configure your firewall to allow the KK-Auditor service.</span>
+<span class="go">Config file has been written successfully to /etc/kriptakey/kk-ad.conf.</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>To configure the SNMP server, please refer to <a class="reference internal" href="../appendix.html#snmp-configuration"><span class="std std-ref">SNMP configuration</span></a>.</p></li>
+<li><p>To unset the SNMP configuration, omit the SNMP destination when prompted by the script.</p></li>
+</ul>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The configuration file for KK-Auditor is stored in <code class="docutils literal notranslate"><span class="pre">/etc/kriptakey/kk-ad.conf</span></code>. Do not move
+or remove the file to ensure the smooth operation of the service.</p>
+</div>
+</li>
+<li><p>If you choose to enable SNMP, there is additional step.
+Kripta Key appliance is accompanied by script that will send crucial system information (CPU, Memory and
+Disk utilization) using SNMP if SNMP is configured. The script will automatically send SNMP message every minute.
+To enable this script, execute command below:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>/opt/kriptakey/kk-sys_snmp.sh<span class="w"> </span>install
+</pre></div>
+</div>
+</li>
+<li><p>Check the version of the daemon to ensure that KK-Auditor has been installed properly.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>-u<span class="w"> </span>kripta<span class="w"> </span>kk-ad<span class="w"> </span>--version
+
+<span class="go">Module: kk-ad</span>
+<span class="go">Version: &lt;version&gt;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Reload the firewall service and set the zone as shown below. You can set the zone to either public or private.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>firewall-cmd<span class="w"> </span>--permanent<span class="w"> </span>--zone<span class="o">=</span>public<span class="w"> </span>--add-service<span class="o">=</span>kk-ad
+
+<span class="go">success</span>
+
+<span class="gp">$ </span>sudo<span class="w"> </span>firewall-cmd<span class="w"> </span>-–reload
+
+<span class="go">success</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+<section id="kk-manager-setup-and-configuration">
+<h2>KK-Manager setup and configuration<a class="headerlink" href="#kk-manager-setup-and-configuration" title="Link to this heading"></a></h2>
+<section id="before-installing-kk-manager">
+<h3>Before installing KK-Manager<a class="headerlink" href="#before-installing-kk-manager" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Ensure that the server has been prepared as specified in <a class="reference internal" href="before-installing.html#preparatory-steps"><span class="std std-ref">Preparatory steps</span></a>.</p></li>
+<li><p>If the smartcard reader’s driver has not been installed yet, install that before starting KK-Manager’s installer.</p>
+<ol class="arabic">
+<li><p>Download the smartcard reader driver (<code class="docutils literal notranslate"><span class="pre">acsccid-linux-bin-1.1.10-20230804.zip</span></code>) from <a class="reference external" href="https://www.acs.com.hk/download-driver-unified/13546/acsccid-linux-bin-1.1.10-20230804.zip">ACS’s website</a>.</p>
+</li>
+<li><p>Extract the package.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>unzip<span class="w"> </span>acsccid-linux-bin-1.1.10-20230804.zip
+</pre></div>
+</div>
+</li>
+<li><p>Navigate to the <code class="docutils literal notranslate"><span class="pre">acsccid-linux-bin-1.1.10-20230804.zip/epel/9</span></code> directory and install the RPM.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>acsccid-linux-bin-1.1.10-20230804.zip/epel/9
+<span class="gp">$ </span>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>pcsc-lite-acsccid-1.1.10-1.el9.x86_64.rpm
+</pre></div>
+</div>
+</li>
+<li><p>Enable the pcsc-lite service.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>pcscd.service<span class="w"> </span>--now
+</pre></div>
+</div>
+</li>
+<li><p>Make sure that the pcsc-lite service is running by examining the output of the following command.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>pcscd.service
+</pre></div>
+</div>
+</li>
+</ol>
+</li>
+<li><p>Download the <a class="reference external" href="https://download.01.org/intel-sgx/sgx-linux/2.23/distro/rhel9.2-server/sgx_rpm_local_repo.tgz">Intel SGX Platform Software</a>. Run the following commands from the directory
+where the archive is located:</p>
+<ol class="arabic">
+<li><p>Extract the packages.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tar<span class="w"> </span>-xvf<span class="w"> </span>sgx_rpm_local_repo.tgz
+</pre></div>
+</div>
+</li>
+<li><p>Navigate to the <code class="docutils literal notranslate"><span class="pre">sgx_rpm_local_repo</span></code> directory, and enable the repository.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>sgx_rpm_local_repo
+<span class="gp">$ </span>sudo<span class="w"> </span>dnf<span class="w"> </span>config-manager<span class="w"> </span>--add-repo<span class="w"> </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>
+
+<span class="go">Updating Subscription Management repositories.</span>
+<span class="go">Adding repo from: file:///home/user/sgx_rpm_local_repo</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</section>
+<section id="installing-kk-manager">
+<h3>Installing KK-Manager<a class="headerlink" href="#installing-kk-manager" title="Link to this heading"></a></h3>
+<p>Once everything is all set, the administrator may begin installation of KK-Manager on the server.</p>
+<ol class="arabic">
+<li><p>Install KK-Manager from the RPM package. Note that KK-Manager depends on the packages in <code class="docutils literal notranslate"><span class="pre">sgx_rpm_local_repo</span></code>.
+However, these packages are not signed with GPG. Hence, it must be installed without performing the GPG check.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>dnf<span class="w"> </span>--nogpgcheck<span class="w"> </span>install<span class="w"> </span>kk-m-2.0-0000.el8.x86_64.rpm
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The installer automatically creates the user <code class="docutils literal notranslate"><span class="pre">kripta</span></code>.</p></li>
+<li><p>The user <code class="docutils literal notranslate"><span class="pre">kripta</span></code> can only read files from the working directory.</p></li>
+<li><p>The administrator, using their usual user account, <strong>cannot</strong> write directly to the working directory.
+Files must be moved as the user <code class="docutils literal notranslate"><span class="pre">kripta</span></code> to the working directory.</p></li>
+<li><p>During the installation process, the location of the working directory must be specified.
+It is highly recommended to use the default value.</p></li>
+</ul>
+</div>
+</li>
+<li><p>After successfully installing KK-Manager, it must be configured by running its configuration script.
+This will configure settings such as port, log level, SNMP server, and so on. Do note the following
+when running the configuration script:</p>
+<ul class="simple">
+<li><p>The port may be any port from 1024 to 49151, inclusive.</p></li>
+<li><p>Configuring the SNMP server is optional — errors are still recorded to the log file. However, it is
+strongly recommended to configure the SNMP server so that critical alerts from Kripta Key can be
+noticed promptly. To configure the SNMP server, the administrator must prepare the SNMP host and port,
+SNMP username, SNMP authentication passphrase, and SNMP privacy passphrase.</p></li>
+<li><p>For some configuration fields, the script will set a default value if value is omitted when prompted.</p></li>
+<li><p>The working directory must be writable by the <code class="docutils literal notranslate"><span class="pre">kripta</span></code> user. For this reason, it is recommended
+to use the default value, <code class="docutils literal notranslate"><span class="pre">/var/local/kriptakey/kk-manager</span></code>.</p></li>
+</ul>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">Sample output if SNMP server has not been configured.</span><a class="headerlink" href="#id6" title="Link to this code"></a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>/opt/kriptakey/kk-manager/kk-m.sh
+
+<span class="go">KK-Manager mode (Option: main/DR) [main]: main</span>
+<span class="go">KK-Auditor instance host address []: 10.30.0.3</span>
+<span class="go">KK-Auditor instance port []: 8083</span>
+<span class="go">KK-Manager port for CLIKK endpoint [7002]: 8085</span>
+<span class="go">KK-Manager port for KK-Cryptoservice and KK-Manager-DR endpoint [7003]: 8086</span>
+<span class="go">SNMP server host and port in xxx.xxx.xxx.xxx:xxxx format []:</span>
+<span class="go">WARNING: SNMP server address is empty. KK-Manager will not send SNMP alerts.</span>
+<span class="go">KK-Manager log level (Option: ERROR/INFO/DEBUG) [ERROR]:</span>
+<span class="go">KK-Manager working directory path [/var/local/kriptakey/kk-manager]:</span>
+
+<span class="go">Relabeled /var/local/kriptakey/kk-manager from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0</span>
+<span class="go">Relabeled /var/local/kriptakey/kk-manager/db from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0</span>
+<span class="go">Relabeled /var/local/kriptakey/kk-manager/backup from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0</span>
+<span class="go">Relabeled /var/local/kriptakey/kk-manager/sgxdata from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0</span>
+<span class="go">Relabeled /etc/kriptakey/kk-md.conf from unconfined_u:object_r:etc_t:s0 to system_u:object_r:kk_md_var_t:s0</span>
+
+<span class="go">WARNING: Configure your firewall to allow the KK-Manager service.</span>
+
+<span class="go">Configuration file has been written successfully to /etc/kriptakey/kk-md.conf.</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">Sample output if SNMP server has been configured.</span><a class="headerlink" href="#id7" title="Link to this code"></a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>/opt/kriptakey/kk-manager/kk-m.sh
+
+<span class="go">KK-Manager mode (Option: main/DR) [main]: main</span>
+<span class="go">KK-Auditor instance host address []: 10.30.0.3</span>
+<span class="go">KK-Auditor instance port []: 8083</span>
+<span class="go">KK-Manager port for CLIKK endpoint [7002]: 8085</span>
+<span class="go">KK-Manager port for KK-Cryptoservice and KK-Manager-DR endpoint [7003]: 8086</span>
+<span class="go">SNMP server host and port in xxx.xxx.xxx.xxx:xxxx format []: 192.168.0.5:1337</span>
+<span class="go">SNMP username []: klavis</span>
+<span class="go">SNMP authentication passphrase []: klavisauth</span>
+<span class="go">SNMP privacy passphrase []: klavisencrypt</span>
+<span class="go">KK-Manager log level (Option: ERROR/INFO/DEBUG) [ERROR]:</span>
+<span class="go">KK-Manager working directory path [/var/local/kriptakey/kk-manager]:</span>
+
+<span class="go">Relabeled /var/local/kriptakey/kk-manager from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0</span>
+<span class="go">Relabeled /var/local/kriptakey/kk-manager/db from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0</span>
+<span class="go">Relabeled /var/local/kriptakey/kk-manager/backup from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0</span>
+<span class="go">Relabeled /var/local/kriptakey/kk-manager/sgxdata from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0</span>
+<span class="go">Relabeled /etc/kriptakey/kk-md.conf from unconfined_u:object_r:etc_t:s0 to system_u:object_r:kk_md_var_t:s0</span>
+
+<span class="go">WARNING: Configure your firewall to allow the KK-Manager service.</span>
+
+<span class="go">Configuration file has been written successfully to /etc/kriptakey/kk-md.conf.</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>To configure the SNMP server, please refer to <a class="reference internal" href="../appendix.html#snmp-configuration"><span class="std std-ref">SNMP configuration</span></a>.</p></li>
+<li><p>To unset the SNMP configuration, omit the SNMP destination when prompted by the script.</p></li>
+</ul>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The configuration file for KK-Manager is stored in <code class="docutils literal notranslate"><span class="pre">/etc/kriptakey/kk-md.conf</span></code>. Do not move
+or remove the file to ensure the smooth operation of the service.</p>
+</div>
+</li>
+<li><p>If you choose to enable SNMP, there is additional step.
+Kripta Key appliance is accompanied by script that will send crucial system information (CPU, Memory and
+Disk utilization) using SNMP if SNMP is configured. The script will automatically send SNMP message every minute.
+To enable this script, execute command below:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>/opt/kriptakey/kk-sys_snmp.sh<span class="w"> </span>install
+</pre></div>
+</div>
+</li>
+<li><p>Check the version of the daemon to ensure that KK-Manager has been installed properly.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>-u<span class="w"> </span>kripta<span class="w"> </span>kk-md<span class="w"> </span>--version
+
+<span class="go">Module: kk-md</span>
+<span class="go">Version: &lt;version&gt;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Reload the firewall service and set the zone as shown below. You can set the zone to either public or private.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>firewall-cmd<span class="w"> </span>--permanent<span class="w"> </span>--zone<span class="o">=</span>public<span class="w"> </span>--add-service<span class="o">=</span>kk-md
+
+<span class="go">success</span>
+
+<span class="gp">$ </span>sudo<span class="w"> </span>firewall-cmd<span class="w"> </span>--reload
+
+<span class="go">success</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+<section id="key-ceremony">
+<h2>Key ceremony<a class="headerlink" href="#key-ceremony" title="Link to this heading"></a></h2>
+<p>Key ceremony is an important part of a Kripta Key installation. The following events all occur during key ceremony:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Initialization of the main KK-Manager instance.</p></li>
+<li><p>Registration of the KK-Auditor instance to the main KK-Manager instance.</p></li>
+<li><p>Creation of the database scheme.</p></li>
+<li><p>Generation of the KK-Manager certificate, the deployment certificate, the genesis block of
+KK-Auditor’s audit log, and the system keys, such as the metadata encryption key, and the HMAC key.</p></li>
+<li><p>Creation of three default administrators, named Admin1, Admin2, and Admin3.</p></li>
+</ul>
+</div></blockquote>
+<p>The following steps detail how to perform the key ceremony properly:</p>
+<p>The key ceremony starts with obtaining the machine platform information for the KK-Auditor and for the KK-Manager.</p>
+<ol class="arabic">
+<li><p>Fetch the machine platform information. Run the following command on the KK-Auditor machine.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>-u<span class="w"> </span>kripta<span class="w"> </span>kk-ad<span class="w"> </span>--get-pck-id
+
+<span class="go">Platform information has been written successfully to /var/local/kriptakey/kk-auditor/sgxdata/0323BC80XXXXXXXXXXXXXXXXXXXXXXXX.json.</span>
+</pre></div>
+</div>
+<p>Also, run the following command on the KK-Manager machine.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>-u<span class="w"> </span>kripta<span class="w"> </span>kk-md<span class="w"> </span>--get-pck-id
+
+<span class="go">Platform information has been written successfully to /var/local/kriptakey/kk-manager/sgxdata/FBCB327FXXXXXXXXXXXXXXXXXXXXXXXX.json.</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do NOT use PCK Retrieval Tool from Intel to fetch the collateral and PCK ID.</p>
+</div>
+</li>
+<li><p>Copy the platform information of the KK-Manager and KK-Auditor machines to a device that has CLIKK installed.</p></li>
+<li><p><a class="reference internal" href="../appendix.html#obtaining-intel-api-key"><span class="std std-ref">Obtain an API key from Intel</span></a> if the administrator lacks one.
+This API key will be used to retrieve collateral from Intel using CLIKK. The collateral file contains information
+that attests that the hardware in use truly came from Intel, as opposed to being simulated.</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">conf</span> <span class="pre">get-collateral</span></code>, passing the API key and the path to the platform information to fetch
+the collateral for the KK-Auditor and KK-Manager machines.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The machine must be connected to the internet.</p>
+</div>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">Fetching the collateral of the KK-Auditor machine.</span><a class="headerlink" href="#id8" title="Link to this code"></a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>conf<span class="w"> </span>get-collateral<span class="w"> </span>--intel-api-key<span class="o">=</span>39949131XXXXXXXXXXXXXXXXXXXXXXX<span class="w"> </span>--platform-info-path<span class="o">=</span>/home/user/documents/0323BC80XXXXXXXXXXXXXXXXXXXXXXXX.json<span class="w"> </span>--output-dir-path<span class="o">=</span>/home/user/documents
+
+<span class="go">This will fetch attestation material from Intel&#39;s trusted web service:</span>
+<span class="go">    https://api.trustedservices.intel.com/sgx/certification/v4</span>
+<span class="go">Type `:.rzv` to continue, or press Enter to cancel.</span>
+<span class="go">&gt; :.rzv</span>
+
+<span class="go">PCK certificate has been saved successfully to /home/user/documents/pck_cert_0323BC80XXXXXXXXXXXXXXXXXXXXXXXX.pem.</span>
+<span class="go">Quote collateral has been saved successfully to /home/user/documents/collateral_00906EXXXXXX.json.</span>
+</pre></div>
+</div>
+</div>
+</li>
+<li><p>Copy the respective PCK certificates and collaterals to the working directories of KK-Manager and KK-Auditor,
+specifically in the folder “sgxdata” in their machines. Also, copy the KK-Auditor machine’s collateral to KK-Manager’s working directory as well.</p></li>
+<li><p>Run KK-Auditor in registration mode, passing in the path to the KK-Auditor machine’s PCK certificate.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>-u<span class="w"> </span>kripta<span class="w"> </span>kk-ad<span class="w"> </span>--kk-auditor-pck-cert-path<span class="o">=</span>/var/local/kriptakey/kk-auditor/sgxdata/pck_cert_0323BC80XXXXXXXXXXXXXXXXXXXXXXXX.pem
+
+<span class="go">Commencing the KK-Auditor registration process.</span>
+<span class="go">This will initialize a KK-Auditor instance on this machine and register it to the KK-Manager instance.</span>
+<span class="go">Any existing KK-Auditor database file will be OVERWRITTEN.</span>
+<span class="go">Do not interrupt the process until the message &quot;KK-Auditor has been registered successfully to KK-Manager.&quot; appears.</span>
+<span class="go">Are you sure you want to continue? Type `%\Ed_` to continue, or press Enter to cancel.</span>
+<span class="go">&gt; %\Ed_</span>
+
+<span class="go">[-] Ready for initialization and registration.</span>
+<span class="go">[-] Listening on port 8083...</span>
+<span class="go">[-] Waiting for connection from KK-Manager...</span>
+</pre></div>
+</div>
+</li>
+<li><p>Run KK-Manager in initialization mode. This action requires the KK-Manager machine’s PCK certificate,
+collateral, and the KK-Auditor machine’s collateral. Additionally, the deployment ID, assigned to the customer
+by Klavis Kripta, will be prompted for during initialization.</p>
+<p>On top of that, the number of participants to the recovery account must be provided as well. Each participant
+will be entrusted with two recovery cards, and a majority must agree to execute a command with an EMERGENCY
+privilege level.</p>
+<p>Finally, three administrators will be created. These administrators must then change their passwords using
+<code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">admin</span> <span class="pre">change-password</span></code>. This will bind an administrator card to the administrator, which is required
+for certain privileged commands as the second factor of authentication.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A Kripta Key installation may have any number of participants between 5 and 14, inclusive.
+The recovery cards exist as two sets that are NOT interchangeable. Ensure that these recovery cards
+are stored safely and securely, as loss of recovery cards may lead to irrecoverable data loss.</p>
+</div>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text">Example with 5 participants forming the recovery account.</span><a class="headerlink" href="#id9" title="Link to this code"></a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>-u<span class="w"> </span>kripta<span class="w"> </span>kk-md<span class="w"> </span>--initialize<span class="w"> </span>--kk-manager-pck-cert-path<span class="o">=</span>/var/local/kriptakey/kk-manager/sgxdata/pck_cert_FBCB327FXXXXXXXXXXXXXXXXXXXXXXXX.pem<span class="w"> </span>--kk-manager-collateral-path<span class="o">=</span>/var/local/kriptakey/kk-manager/sgxdata/collateral_00A065XXXXXX.json<span class="w"> </span>--kk-auditor-collateral-path<span class="o">=</span>/var/local/kriptakey/kk-manager/sgxdata/collateral_00906EXXXXXX.json<span class="w"> </span>--participant-number<span class="o">=</span><span class="m">5</span>
+
+<span class="go">Commencing the key ceremony process.</span>
+<span class="go">This will initialize a KK-Manager instance on this machine.</span>
+<span class="go">Any existing KK-Manager database file will be OVERWRITTEN.</span>
+<span class="go">Do not interrupt the process until the message &quot;KK-Manager has been initialized successfully!&quot; appears.</span>
+
+<span class="go">Are you sure you want to continue? Type `Ur^%:` to continue, or press Enter to cancel.</span>
+<span class="go">&gt; Ur^%:</span>
+
+<span class="go">Creating admin admin1.</span>
+
+<span class="go">Enter password:</span>
+<span class="go">Re-enter password:</span>
+<span class="go">Admin ID admin1 has been created successfully.</span>
+
+<span class="go">Creating admin admin2.</span>
+
+<span class="go">Enter password:</span>
+<span class="go">Re-enter password:</span>
+<span class="go">Admin ID admin2 has been created successfully.</span>
+
+<span class="go">Creating admin admin3.</span>
+
+<span class="go">Enter password:</span>
+<span class="go">Re-enter password:</span>
+<span class="go">Admin ID admin3 has been created successfully.</span>
+
+<span class="go">Enter the deployment ID, e.g., ENTERPRISE017048</span>
+<span class="go">Deployment ID: ENTERPRIXXXXXXXX</span>
+
+<span class="go">Please prepare 5 cards for the first set of recovery cards.</span>
+<span class="go">Insert a card!</span>
+
+<span class="go">Setting up recovery card...</span>
+<span class="go">Key in the PIN and press Enter on the PIN pad to store the secure channel key encryption keys (SCKEKs).</span>
+<span class="go">Storing secret data in the card...</span>
+<span class="go">Secret 1 has been written successfully.</span>
+
+<span class="go">Secure Channel Code (SCC):: 968fd0a461d99eab73404a6d8a473bb3</span>
+<span class="go">IMPORTANT: Write down the SCC and keep it in a safe place. The SCC is REQUIRED to restore KK-Manager from a backup and to reset the recovery cards.</span>
+
+<span class="go">Remove the card!</span>
+<span class="go">Insert a card!</span>
+
+<span class="go">Setting up recovery card...</span>
+<span class="go">Key in the PIN and press Enter on the PIN pad to store the secure channel key encryption keys (SCKEKs).</span>
+<span class="go">Storing secret data in the card...</span>
+<span class="go">Secret 2 has been written successfully.</span>
+<span class="go">Remove the card!</span>
+<span class="go">Insert a card!</span>
+
+<span class="go">Setting up recovery card...</span>
+<span class="go">Key in the PIN and press Enter on the PIN pad to store the secure channel key encryption keys (SCKEKs).</span>
+<span class="go">Storing secret data in the card...</span>
+<span class="go">Secret 3 has been written successfully.</span>
+<span class="go">Remove the card!</span>
+<span class="go">Insert a card!</span>
+
+<span class="go">Setting up recovery card...</span>
+<span class="go">Key in the PIN and press Enter on the PIN pad to store the secure channel key encryption keys (SCKEKs).</span>
+<span class="go">Storing secret data in the card...</span>
+<span class="go">Secret 4 has been written successfully.</span>
+<span class="go">Remove the card!</span>
+<span class="go">Insert a card!</span>
+
+<span class="go">Setting up recovery card...</span>
+<span class="go">Key in the PIN and press Enter on the PIN pad to store the secure channel key encryption keys (SCKEKs).</span>
+<span class="go">Storing secret data in the card...</span>
+<span class="go">Secret 5 has been written successfully.</span>
+<span class="go">Remove the card!</span>
+<span class="go">All secrets have been written successfully to the set of recovery cards.</span>
+
+<span class="go">Please prepare 5 cards for the second set of recovery cards.</span>
+<span class="go">Insert a card!</span>
+
+<span class="go">Setting up recovery card...</span>
+<span class="go">Key in the PIN and press Enter on the PIN pad to store the secure channel key encryption keys (SCKEKs).</span>
+<span class="go">Storing secret data in the card...</span>
+<span class="go">Secret 1 has been written successfully.</span>
+<span class="go">Remove the card!</span>
+<span class="go">Insert a card!</span>
+
+<span class="go">Setting up recovery card...</span>
+<span class="go">Key in the PIN and press Enter on the PIN pad to store the secure channel key encryption keys (SCKEKs).</span>
+<span class="go">Storing secret data in the card...</span>
+<span class="go">Secret 2 has been written successfully.</span>
+<span class="go">Remove the card!</span>
+<span class="go">Insert a card!</span>
+
+<span class="go">Setting up recovery card...</span>
+<span class="go">Key in the PIN and press Enter on the PIN pad to store the secure channel key encryption keys (SCKEKs).</span>
+<span class="go">Storing secret data in the card...</span>
+<span class="go">Secret 3 has been written successfully.</span>
+<span class="go">Remove the card!</span>
+<span class="go">Insert a card!</span>
+
+<span class="go">Setting up recovery card...</span>
+<span class="go">Key in the PIN and press Enter on the PIN pad to store the secure channel key encryption keys (SCKEKs).</span>
+<span class="go">Storing secret data in the card...</span>
+<span class="go">Secret 4 has been written successfully.</span>
+<span class="go">Remove the card!</span>
+<span class="go">Insert a card!</span>
+
+<span class="go">Setting up recovery card...</span>
+<span class="go">Key in the PIN and press Enter on the PIN pad to store the secure channel key encryption keys (SCKEKs).</span>
+<span class="go">Storing secret data in the card...</span>
+<span class="go">Secret 5 has been written successfully.</span>
+<span class="go">Remove the card!</span>
+<span class="go">All secrets have been written successfully to the set of recovery cards.</span>
+
+<span class="go">KK-Manager has been initialized successfully.</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>As part of the initialization process, the secure channel code (SCC) will be printed to the console.
+The secure channel code is used to protect the secure channel key encryption keys (SCKEKs).
+Ensure that the secure channel code is written down and kept safely and securely, as loss
+of the secure channel code may lead to irrecoverable data loss.</p>
+</div>
+</li>
+<li><p>Once the initialization process has been completed, KK-Auditor will show the following message:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">[v] KK-Auditor has been registered successfully to KK-Manager.</span>
+
+<span class="go">Start the KK-Auditor daemon to make it accessible to the KK-Manager instance.</span>
+</pre></div>
+</div>
+</li>
+<li><p>Start the KK-Auditor service, and check that it is running properly.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>kk-ad.service<span class="w"> </span>--now
+
+<span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>kk-ad.service
+</pre></div>
+</div>
+</li>
+<li><p>Start the KK-Manager service, and check that it is running properly.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>kk-md.service<span class="w"> </span>--now
+
+<span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>kk-md.service
+</pre></div>
+</div>
+</li>
+<li><p>Ensure that the KK-Manager instance is connected to the KK-Auditor instance, using <code class="docutils literal notranslate"><span class="pre">curl</span></code> with
+the KK-Auditor host and port.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>-k<span class="w"> </span>-v<span class="w"> </span><span class="m">10</span>.30.0.3:8083
+</pre></div>
+</div>
+</li>
+<li><p>Configure CLIKK to connect to the main KK-Manager instance.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>conf<span class="w"> </span>server<span class="w"> </span>--kk-manager-host<span class="o">=</span><span class="m">10</span>.30.0.3<span class="w"> </span>--kk-manager-port<span class="o">=</span><span class="m">8085</span>
+
+<span class="go">Configuration has been saved successfully.</span>
+<span class="go">CLIKK will connect to the KK-Manager instance at 10.30.0.3:8085.</span>
+</pre></div>
+</div>
+</li>
+<li><p>Set the password and bind an administrator card for each of the administrators with <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">user</span> <span class="pre">change-password</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>admin<span class="w"> </span>change-password<span class="w"> </span>--user-id<span class="o">=</span>Admin1
+
+<span class="go">Enter admin ID: Admin1</span>
+<span class="go">Enter password:</span>
+
+<span class="go">User Admin1 does not have an associated administrator card.</span>
+<span class="go">This will initialize an administrator card and bind it to Admin1.</span>
+<span class="go">Type `e=g` to continue, or press Enter to cancel.</span>
+<span class="go">&gt; e=g</span>
+
+<span class="go">Insert a blank card.</span>
+
+<span class="go">Commencing card initialization process...</span>
+<span class="go">Resetting the card&#39;s secure channel code...</span>
+<span class="go">Storing the user&#39;s public key...</span>
+<span class="go">Administrator card for Admin1 has been initialized successfully.</span>
+
+<span class="go">Administrator password MUST follow these requirements:</span>
+<span class="go">- Password length must be between 8 and 64 characters, inclusive.</span>
+<span class="go">- Password must contain upper case, lower case, numeric, and special characters.</span>
+<span class="go">- Password must not have repeated characters (e.g. AA, aa, 11).</span>
+<span class="go">- Password must not have more than two consecutive characters (e.g. 123, abc).</span>
+<span class="go">- Password must not contain the admin ID.</span>
+<span class="go">Enter new password:</span>
+<span class="go">Re-enter user password:</span>
+<span class="go">Insert the administrator card of Admin1 for two-factor authentication.</span>
+
+<span class="go">Password has been changed successfully.</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="before-installing.html" class="btn btn-neutral float-left" title="Before deploying Kripta Key" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cryptographic-service-installation.html" class="btn btn-neutral float-right" title="KK-Cryptoservice setup and configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

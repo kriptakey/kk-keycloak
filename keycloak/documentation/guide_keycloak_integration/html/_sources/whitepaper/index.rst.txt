@@ -1,0 +1,17 @@
+Whitepaper
+==========
+
+Preface
+-------
+
+Intended reader
+~~~~~~~~~~~~~~~
+
+This document is intended for all Kripta Key users as an introduction of Kripta Key. 
+
+
+Document scope
+~~~~~~~~~~~~~~
+
+This document explains general information of Kripta Key services. 
+

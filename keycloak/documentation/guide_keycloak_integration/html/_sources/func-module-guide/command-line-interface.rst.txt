@@ -1,0 +1,230 @@
+Functional Module Command line interface
+========================================
+
+This section details all available commands for managing the functional module.
+
+
+``clikk func-module add``
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Add script of functional module.
+
+**Flags**:
+
+--module-name=<module's name>
+    Functional module script name. 
+
+--main-function-name=<main function's name>
+    Name of the main function.
+
+--script-file-path=<path of the script file>
+    Path of functional module script file to be added.
+
+--module-hash=<hash value of the module>
+    Hash value of the module to be added. 
+
+**Privilege level**: **CRITICAL**
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: Failed to open the script file!
+
+    *Likely cause*: Incorrect script file format. 
+
+*   *Message*: According to your license, you're not allowed to add functionality module.
+
+    *Likely cause*: It means your license does not support the use of the functional module. 
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk func-module add --module-name=genSealedPIN --main-function-name=sealedPINGeneration --script-file-path=/home/user/Documents/customSealedGeneration.js --module-hash=hdou6POHFy8G8HKhUjfkjfi8ls=
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Dual control authentication -- credential of second user is required.
+    Admin1 is currently logged in.
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    Functional module has been added successfully!
+
+
+``clikk func-module list``
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List the functional modules that exist on KK-Manager. 
+
+**Flags**: None. 
+
+**Privilege level**: **NORMAL** 
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID or wrong password.
+
+*   *Message*: Functional module list failed to load!
+
+    *Likely cause*: KK-Manager cannot access the database to show the existing functional module.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk func-module list 
+
+    Enter admin ID: Admin1
+    Enter password:
+
+    Functional module list:
+    [-] Script name: genSealedPIN - Main function name: sealedPINGeneration
+
+
+``clikk func-module info``
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Show the information of specific functional module script. 
+
+**Flags**: 
+
+--module-name=<module's name>
+    Name for functional module's script.
+
+**Privilege level**: **HIGH** 
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password or invalid administrator card.
+
+*   *Message*: No function module exists with the specified script name.
+
+    *Likely cause*: The specified script name is incorrect. 
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk func-module info --module-name=genSealedPIN
+
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    [-] Script name: genSealedPIN - Main function name: sealedPINGeneration
+    [-] Main function name: sealedPINGeneration 
+    [-] Script code:
+    // Generate random pin
+    function makePIN(length) {
+        var result = "";
+        const characters = '0123456789';
+        var counter = 0;
+        while (counter < length) {
+            result += characters.charAt(Math.floor(Math.random() * length));
+            counter += 1;
+        }
+        return result;
+    }
+
+    function sealedPinGeneration(inputJSON) {
+        var parsedInput = JSON.parse(inputJSON);
+
+        // Random 6 character to be used as PIN
+        var pin = makePIN(6);
+
+        // Generate appstored AES key
+        var generateKeyParam = {
+            "sessionToken": parsedInput.sessionToken,
+            "wrappingMethod": "internalKey",
+            "algo": "AES",
+            "algoLength": 256,
+            "internalWrappingKeyId": parsedInput.wrappingKeyId,
+            "partitionId": parsedInput.partitionId,
+        }
+
+        var generateKeyJSON = JSON.parse(kkAppstoredKeyGenerate(JSON.stringify(generateKeyParam)));
+        if (generateKeyJSON.fault != null) {
+            generateKeyJSON.message = "Appstored AES-256 key generation failed!";
+            return JSON.stringify(generateKeyJSON);
+        }
+
+        // Sealing
+        var sealParam = {
+            "sessionToken": parsedInput.sessionToken,
+            "wrappingKeyId": parsedInput.wrappingKeyId,
+            "wrappedKey": generateKeyJSON.result.wrappedKey,
+            "plaintext": [pin],
+            "partitionId": parsedInput.partitionId,
+        };
+        var sealJSON = JSON.parse(kkAppstoredSeal(JSON.stringify(sealParam)));
+        if (sealJSON.fault != null) {
+            sealJSON.message = "Data sealing failed!";
+            return JSON.stringify(sealJSON);
+        }
+
+        // Output
+        var output = {
+            "wrappedKey": generateKeyJSON.result.wrappedKey,
+            "sealedPIN": sealJSON.result.ciphertext[0],
+        }
+        return JSON.stringify(output);
+    }
+
+
+
+``clikk func-module delete``
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Delete the existing functional module. Please ensure that no applications are using the functional module before you delete it. 
+
+**Flags**: 
+
+--module-name=<module's name>
+    Name for functional module's script.
+
+**Privilege level**: **CRITICAL** 
+
+**Error messages**:
+
+*   *Message*: Authentication failed!
+
+    *Likely cause*: Wrong admin ID, wrong password, or invalid administrator card.
+
+*   *Message*: No function module exists with the specified script name.
+
+    *Likely cause*: The specified script name is incorrect. 
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ clikk func-module delete --module-name=genSealedPIN
+
+    This will delete the given function module. Ensure that no applications are using this functional module.
+    Are you sure you want to continue? Type `{}` to continue, or press Enter to cancel.
+    > {}
+    
+    Enter admin ID: Admin1
+    Enter password:
+    Insert the administrator card of Admin1 for two-factor authentication.
+
+    Dual control authentication -- credential of second user is required.
+    Admin1 is currently logged in.
+
+    Enter admin ID: Admin2
+    Enter password:
+    Insert the administrator card of Admin2 for two-factor authentication.
+
+    Function module has been successfully deleted!

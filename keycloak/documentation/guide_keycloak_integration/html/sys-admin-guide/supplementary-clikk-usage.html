@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supplementary CLIKK usage &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Manual replication" href="manual-replication.html" />
+    <link rel="prev" title="Kripta Key management with CLIKK" href="kripta-key-management.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kkts-guide/index.html">KK-TS Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">System Administrator Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kripta-key-structure.html">Kripta Key management overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kripta-key-management.html">Kripta Key management with CLIKK</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Supplementary CLIKK usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#exporting-a-key-from-kripta-key">Exporting a key from Kripta Key</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#importing-a-key-to-kripta-key">Importing a key to Kripta Key</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#importing-a-pkcs-12-key-to-kripta-key">Importing a PKCS#12 key to Kripta Key</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-a-csr-for-an-application">Creating a CSR for an application</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="manual-replication.html">Manual replication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transaction-counting.html">Transaction counting</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">System Administrator Guide</a></li>
+      <li class="breadcrumb-item active">Supplementary CLIKK usage</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/sys-admin-guide/supplementary-clikk-usage.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="supplementary-clikk-usage">
+<h1>Supplementary CLIKK usage<a class="headerlink" href="#supplementary-clikk-usage" title="Link to this heading"></a></h1>
+<section id="exporting-a-key-from-kripta-key">
+<h2>Exporting a key from Kripta Key<a class="headerlink" href="#exporting-a-key-from-kripta-key" title="Link to this heading"></a></h2>
+<p>The following steps demonstrate the method of exporting a key from Kripta Key to be used in another system.
+In this example, OpenSSL is used to create the wrapping key.</p>
+<ol class="arabic">
+<li><p>Create a 3072-bit RSA private key.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>genrsa<span class="w"> </span>-out<span class="w"> </span>privateKey.pem<span class="w"> </span><span class="m">3072</span>
+</pre></div>
+</div>
+</li>
+<li><p>Extract the public key from the private key.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>rsa<span class="w"> </span>-in<span class="w"> </span>privateKey.pem<span class="w"> </span>-pubout<span class="w"> </span>-out<span class="w"> </span>publicKey.pem
+</pre></div>
+</div>
+</li>
+<li><p>Export the desired key using CLIKK, passing in the public key file created in the previous step.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>key<span class="w"> </span><span class="nb">export</span><span class="w"> </span>--partition-id<span class="o">=</span><span class="m">1</span><span class="w"> </span>--key-id<span class="o">=</span>AESKey<span class="w"> </span>--key-version<span class="o">=</span><span class="m">1</span><span class="w"> </span>--pubkey-path<span class="o">=</span>/home/user/Documents/publicKey.pem<span class="w"> </span>--output-file-path<span class="o">=</span>/home/user/Documents/AESExport.bin
+</pre></div>
+</div>
+</li>
+<li><p>Extract the wrapped session key and the wrapped exported key from the file created by CLIKK.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>AESExport.bin<span class="w"> </span><span class="nv">of</span><span class="o">=</span>wrappedSessionKey.bin<span class="w"> </span><span class="nv">bs</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="k">$((</span><span class="m">384</span><span class="k">)))</span><span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<span class="gp">$ </span>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>AESExport.bin<span class="w"> </span><span class="nv">of</span><span class="o">=</span>wrappedExportedKey.bin<span class="w"> </span><span class="nv">bs</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">skip</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="k">$((</span><span class="m">384</span><span class="k">)))</span><span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+</pre></div>
+</div>
+</li>
+<li><p>Unwrap the exported key using the RSA private key. The unwrapped key will be saved into <code class="docutils literal notranslate"><span class="pre">clearKey.pem</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>pkeyutl<span class="w"> </span>-decrypt<span class="w"> </span>-inkey<span class="w"> </span>privateKey.pem<span class="w"> </span>-keyform<span class="w"> </span>PEM<span class="w"> </span>-in<span class="w"> </span>wrappedSessionKey.bin<span class="w"> </span>-out<span class="w"> </span>sessionKey.bin<span class="w"> </span>-pkeyopt<span class="w"> </span>rsa_padding_mode:oaep<span class="w"> </span>-pkeyopt<span class="w"> </span>rsa_oaep_md:sha256s
+<span class="gp">$ </span>openssl<span class="w"> </span>enc<span class="w"> </span>-d<span class="w"> </span>-id-aes256-wrap-pad<span class="w"> </span>-iv<span class="w"> </span>A65959A6<span class="w"> </span>-K<span class="w"> </span><span class="k">$(</span><span class="w"> </span>hexdump<span class="w"> </span>-v<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;/1 &quot;%02x&quot;&#39;</span><span class="w"> </span>&lt;<span class="w"> </span>sessionKey.bin<span class="w"> </span><span class="k">)</span><span class="w"> </span>-in<span class="w"> </span>wrappedExportedKey.bin<span class="w"> </span>-out<span class="w"> </span>clearKey.pem
+</pre></div>
+</div>
+<p>When exporting asymmetric keys, the output will be in DER format. It can be converted to PEM format
+with the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>pkcs8<span class="w"> </span>-topk8<span class="w"> </span>-inform<span class="w"> </span>DER<span class="w"> </span>-outform<span class="w"> </span>PEM<span class="w"> </span>-in<span class="w"> </span>clearKey.der<span class="w"> </span>-out<span class="w"> </span>clearKey.pem<span class="w"> </span>-nocrypt
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Performing the final step will result in the exported key material being exposed in the system.
+Never do this with keys protecting sensitive information. Key export can be prohibited by setting
+the key to be not extractable.</p>
+</div>
+</section>
+<section id="importing-a-key-to-kripta-key">
+<h2>Importing a key to Kripta Key<a class="headerlink" href="#importing-a-key-to-kripta-key" title="Link to this heading"></a></h2>
+<p>The following steps demonstrate the method of importing a key from another system to be used in Kripta Key.
+In this example, OpenSSL is used to create the imported key.</p>
+<ol class="arabic">
+<li><p>Create the wrapping key in Kripta Key. This will be used to wrap the target key, which is the key
+that will be imported to Kripta Key.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>key<span class="w"> </span>add<span class="w"> </span>--partition-id<span class="o">=</span><span class="m">1</span><span class="w"> </span>--key-id<span class="o">=</span>rsaWrappingKey<span class="w"> </span>--key-label<span class="o">=</span>KeyImport<span class="w"> </span>--key-algo<span class="o">=</span><span class="m">2</span><span class="w"> </span>--key-length<span class="o">=</span><span class="m">3072</span><span class="w"> </span>--key-purpose<span class="o">=</span><span class="m">2</span><span class="w"> </span>--key-lifetime<span class="o">=</span><span class="m">30</span>
+</pre></div>
+</div>
+</li>
+<li><p>Examine the key info, and then copy the public key and save it to <code class="docutils literal notranslate"><span class="pre">wrappingKey.pem</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>key<span class="w"> </span>info<span class="w"> </span>--partition-id<span class="o">=</span><span class="m">1</span><span class="w"> </span>--key-id<span class="o">=</span>rsaWrappingKey
+</pre></div>
+</div>
+</li>
+<li><p>Generate the target key.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl3<span class="w"> </span>rand<span class="w"> </span>-out<span class="w"> </span>targetKey.bin<span class="w"> </span><span class="m">32</span>
+</pre></div>
+</div>
+<p>Note that this creates an AES key. Importing asymmetric keys requires the keys to be in DER format.</p>
+</li>
+<li><p>Generate the session key, as required by PKCS#11 key wrapping mechanism.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl3<span class="w"> </span>rand<span class="w"> </span>-out<span class="w"> </span>sessionKey.bin<span class="w"> </span><span class="m">32</span>
+</pre></div>
+</div>
+</li>
+<li><p>Wrap the session key using the public key created in step 2.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl3<span class="w"> </span>pkeyutl<span class="w"> </span>-encrypt<span class="w"> </span>-pubin<span class="w"> </span>-inkey<span class="w"> </span>rsaWrappingKey.pem<span class="w"> </span>-keyform<span class="w"> </span>PEM<span class="w"> </span>-in<span class="w"> </span>sessionKey.bin<span class="w"> </span>-out<span class="w"> </span>wrappedSessionKey.bin<span class="w"> </span>-pkeyopt<span class="w"> </span>rsa_padding_mode:oaep<span class="w"> </span>-pkeyopt<span class="w"> </span>rsa_oaep_md:sha256
+</pre></div>
+</div>
+</li>
+<li><p>Wrap the target key using the session key.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl3<span class="w"> </span>enc<span class="w"> </span>-e<span class="w"> </span>-id-aes256-wrap-pad<span class="w"> </span>-iv<span class="w"> </span>A65959A6<span class="w"> </span>-K<span class="w"> </span><span class="k">$(</span><span class="w"> </span>hexdump<span class="w"> </span>-v<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;/1 &quot;%02x&quot;&#39;</span><span class="w"> </span>&lt;<span class="w"> </span>sessionKey.bin<span class="w"> </span><span class="k">)</span><span class="w"> </span>-in<span class="w"> </span>targetKey.bin<span class="w"> </span>-out<span class="w"> </span>wrappedTargetKey.bin
+</pre></div>
+</div>
+</li>
+<li><p>Concatenate the wrapped session key and wrapped target key.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>wrappedTargetKey.bin<span class="w"> </span>&gt;&gt;<span class="w"> </span>wrappedSessionKey.bin
+</pre></div>
+</div>
+</li>
+<li><p>Import the key using <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">key</span> <span class="pre">import-pkcs11</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>key<span class="w"> </span>import-pkcs11<span class="w"> </span>--partition-id<span class="o">=</span><span class="m">1</span><span class="w"> </span>--key-id<span class="o">=</span>importedAesKey<span class="w"> </span>--key-label<span class="o">=</span>ImportedKey<span class="w"> </span>--key-algo<span class="o">=</span><span class="m">1</span><span class="w"> </span>--key-length<span class="o">=</span><span class="m">256</span><span class="w"> </span>--key-lifetime<span class="o">=</span><span class="m">365</span><span class="w"> </span>--key-purpose<span class="o">=</span><span class="m">1</span><span class="w"> </span>--wrapping-key-id<span class="o">=</span>rsaWrappingKey<span class="w"> </span>--wrapping-key-partition-id<span class="o">=</span><span class="m">1</span><span class="w"> </span>--wrapped-key-path<span class="o">=</span>/home/user/wrappedSessionkey.bin
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="importing-a-pkcs-12-key-to-kripta-key">
+<h2>Importing a PKCS#12 key to Kripta Key<a class="headerlink" href="#importing-a-pkcs-12-key-to-kripta-key" title="Link to this heading"></a></h2>
+<p>The following steps demonstrate the method of importing an asymmetric key with its certificate chain
+from another system to be used in Kripta Key. In this example, OpenSSL is used to create the imported key.</p>
+<ol class="arabic">
+<li><p>Generate an asymmetric key. This example generates a 3072-bit RSA key pair.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>genrsa<span class="w"> </span>-out<span class="w"> </span>rsaKey.pem<span class="w"> </span><span class="m">3072</span>
+</pre></div>
+</div>
+</li>
+<li><p>Create the CSR for the key pair.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>req<span class="w"> </span>-new<span class="w"> </span>-sha256<span class="w"> </span>-key<span class="w"> </span>rsaKey.pem<span class="w"> </span>-out<span class="w"> </span>rsaKey.csr
+</pre></div>
+</div>
+</li>
+<li><p>Generate the X509 certificate.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>req<span class="w"> </span>-x509<span class="w"> </span>-sha256<span class="w"> </span>-days<span class="w"> </span><span class="m">365</span><span class="w"> </span>-key<span class="w"> </span>rsaKey.pem<span class="w"> </span>-in<span class="w"> </span>rsaKey.csr<span class="w"> </span>-out<span class="w"> </span>certificate.pem
+</pre></div>
+</div>
+</li>
+<li><p>Export the certificate in P12 format.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>pkcs12<span class="w"> </span>-export<span class="w"> </span>-out<span class="w"> </span>certificate.p12<span class="w"> </span>-inkey<span class="w"> </span>RSAKey.pem<span class="w"> </span>-in<span class="w"> </span>certificate.pem
+</pre></div>
+</div>
+</li>
+<li><p>Import the certificate using <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">key</span> <span class="pre">import-pkcs12</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>key<span class="w"> </span>import-pkcs12<span class="w"> </span>--partition-id<span class="o">=</span><span class="m">2</span><span class="w"> </span>--key-id<span class="o">=</span>Finance02<span class="w"> </span>--key-label<span class="o">=</span>finance02ImportKey<span class="w"> </span>--keystore-path<span class="o">=</span>/home/user/Documents/certificate.p12
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="creating-a-csr-for-an-application">
+<h2>Creating a CSR for an application<a class="headerlink" href="#creating-a-csr-for-an-application" title="Link to this heading"></a></h2>
+<p>The following steps demonstrate the method of creating the CSR for an application that will be used to register
+the application in Kripta Key. In this example, OpenSSL is used to create the application’s CSR.</p>
+<ol class="arabic">
+<li><p>Generate the application’s key pair. This example generates an ECDSA P-256 key pair.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>ecparam<span class="w"> </span>-name<span class="w"> </span>prime256v1<span class="w"> </span>-genkey<span class="w"> </span>-noout<span class="w"> </span>-out<span class="w"> </span>private.key
+</pre></div>
+</div>
+</li>
+<li><p>Create the CSR for the key pair.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>req<span class="w"> </span>-new<span class="w"> </span>-sha256<span class="w"> </span>-key<span class="w"> </span>private.key<span class="w"> </span>-out<span class="w"> </span>appCsr.pem
+</pre></div>
+</div>
+</li>
+<li><p>Register the application using <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">app</span> <span class="pre">add</span></code>, passing in the path to the CSR.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>app<span class="w"> </span>add<span class="w"> </span>--csr-file-path<span class="o">=</span>appCsr.pem<span class="w"> </span>--app-id<span class="o">=</span>Example<span class="w"> </span>--validity-period<span class="o">=</span><span class="m">365</span><span class="w"> </span>--output-cert-path<span class="o">=</span>/home/user/Documents/appCertificate.pem
+</pre></div>
+</div>
+</li>
+<li><p>Add the application to a partition using <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">partition</span> <span class="pre">add-app</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>partition<span class="w"> </span>add-app<span class="w"> </span>--partition-id<span class="o">=</span><span class="m">1</span><span class="w"> </span>--app-id<span class="o">=</span>Example
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Now, the application may use REST API to access cryptographic services with objects in the partition it was added to.
+Provide the certificate and the key pair so that the KK-Cryptoservice instance permits the requests.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="kripta-key-management.html" class="btn btn-neutral float-left" title="Kripta Key management with CLIKK" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="manual-replication.html" class="btn btn-neutral float-right" title="Manual replication" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

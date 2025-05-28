@@ -1,0 +1,26 @@
+E2EE Developer Guide
+====================
+
+Preface
+-------
+
+Intended reader
+~~~~~~~~~~~~~~~
+
+This document is intended for experienced application developers as a guide to using Kripta Key Client SDK :term:`API`
+to implement E2EE functionalities in their applications.
+
+
+Document scope
+~~~~~~~~~~~~~~
+
+This document explains the usage of Kripta Key Client SDK API to form coherent E2EE flows on supported programming
+languages. This document also recommends parameters and best practices, balancing performance and security.
+
+
+Related documents
+~~~~~~~~~~~~~~~~~
+
+*   :doc:`/dev-guide/index`
+*   :doc:`/rest-api-docs/index`
+*   :doc:`/sdk-api-docs/index`

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Domain configuration &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="KK-TS License" href="kkts-license.html" />
+    <link rel="prev" title="Apache Cassandra Setting Recommendation" href="cassandra-setting-recommendation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">KK-TS Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design-motivation.html">Design motivation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kkts-installation.html">KK-Tokenization Service Setup and Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kkts-backuprestore.html">KK-Tokenization Service Backup and Restore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cassandra-setting-consideration.html">Apache Cassandra Setting Consideration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cassandra-setting-recommendation.html">Apache Cassandra Setting Recommendation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Domain configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#application-configuration">Application configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-configuration">Data configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="kkts-license.html">KK-TS License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command-line-interface.html">KK-TS command line interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kms-tokenization-services.html">Tokenization services</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">KK-TS Guide</a></li>
+      <li class="breadcrumb-item active">Domain configuration</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/kkts-guide/domain-configuration.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="domain-configuration">
+<h1>Domain configuration<a class="headerlink" href="#domain-configuration" title="Link to this heading"></a></h1>
+<p>In Kripta Key Tokenization Service, data domains are associated with applications. The tokenization
+of each data domain can be configured separately.</p>
+<section id="application-configuration">
+<h2>Application configuration<a class="headerlink" href="#application-configuration" title="Link to this heading"></a></h2>
+<p>An application has the following configurations:</p>
+<dl class="simple">
+<dt>Application SKI</dt><dd><p>This is subject key identifier of the application, which is derived from the application’s certificate.
+The subject key identifier is calculated by hashing the certificate’s public key, and is used
+to identify the application. One application SKI is associated with only one partition ID and one key ID.</p>
+</dd>
+<dt>Partition ID</dt><dd><p>This is the identifier of the partition associated with the key that is used for tokenization.</p>
+</dd>
+<dt>Key ID</dt><dd><p>This is the identifier of the key that is used for tokenization.</p>
+</dd>
+</dl>
+</section>
+<section id="data-configuration">
+<h2>Data configuration<a class="headerlink" href="#data-configuration" title="Link to this heading"></a></h2>
+<p>A data domain has the following configurations:</p>
+<dl>
+<dt>Application SKI</dt><dd><p>This is the subject key identifier of the application this data domain belongs to.</p>
+</dd>
+<dt>Config ID</dt><dd><p>This is the identifier of this data domain.</p>
+</dd>
+<dt>Tokenization type</dt><dd><p>This is the tokenization type of this data domain. There are four tokenization types available:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">FORMAT_CHAR</span></code> (0)</p>
+<p>This tokenization type uses the format string configuration to determine which part of the sensitive value
+gets tokenized.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FULL</span></code> (1)</p>
+<p>This tokenization type tokenizes the entire sensitive value.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FIRST_HALF</span></code> (2)</p>
+<p>This tokenization type tokenizes the first half of the sensitive value, rounded down.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LAST_HALF</span></code> (3)</p>
+<p>This tokenization type tokenizes the second half of the sensitive value, rounded up.</p>
+</li>
+</ul>
+<p>The values in brackets are the indexes of each tokenization type, for use with the command line interface.</p>
+</dd>
+<dt>Format string</dt><dd><p>This is the format string that specifies how a sensitive value will be tokenized. This field is exclusively used
+with the <code class="docutils literal notranslate"><span class="pre">FORMAT_CHAR</span></code> tokenization type.</p>
+<p>A format string consists of only <code class="docutils literal notranslate"><span class="pre">%</span></code>, <code class="docutils literal notranslate"><span class="pre">$</span></code>, and <code class="docutils literal notranslate"><span class="pre">*</span></code> characters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">%</span></code> indicates characters that will be preserved in the tokenization process.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$</span></code> indicates characters that will be substituted with a benign value in the tokenization process.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> indicates a variable amount of <code class="docutils literal notranslate"><span class="pre">%</span></code> characters. There can only be at most one occurence of <code class="docutils literal notranslate"><span class="pre">*</span></code>
+within the format string, and if a <code class="docutils literal notranslate"><span class="pre">*</span></code> is present, then the format string cannot contain any <code class="docutils literal notranslate"><span class="pre">%</span></code>.
+For example, <code class="docutils literal notranslate"><span class="pre">$$$*$$$</span></code> for 10 characters of USV, it means there are 4 characters in the middle of the word that will be preserved.</p></li>
+</ul>
+</dd>
+<dt>Tokenization charset</dt><dd><p>This is the tokenization character set of this data domain. Each character set has its own minimum length. The system will refuse to tokenize inputs
+that are susceptible to brute-force attacks. There are four tokenization character sets available:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">NUMERIC</span></code> (0)</p>
+<p>This tokenization character set replaces all tokenized characters with numbers. The tokenized minimum length is ten characters.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ALPHABETIC</span></code> (1)</p>
+<p>This tokenization character set replaces all tokenized characters with mixed case letters. The tokenized minimum length is six characters.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ALPHANUMERIC</span></code> (2)</p>
+<p>This tokenization character set replaces all tokenized characters with mixed case letters and numbers. The tokenized minimum length is six characters.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ALPHANUMSPEC</span></code> (3)</p>
+<p>This tokenization character set replaces all tokenized characters with mixed case letters, numbers, and special characters. The tokenized minimum length is six characters.</p>
+</li>
+</ul>
+<p>The values in brackets are the indexes of each tokenization type, for use with the command line interface.</p>
+</dd>
+<dt>Minimum length</dt><dd><p>This is the minimum length of user sensitive value (USV). This minimum length depends on the <span class="xref std std-ref">tokenization type</span>
+and <span class="xref std std-ref">tokenization charset</span>. For example, set data config and assume the tokenized minimum length as N.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">FORMAT_CHAR</span></code></p>
+<ol class="arabic">
+<li><p>Dinamic</p>
+<p>The minimum length should be greater than N.</p>
+<p>For example, if we set the data configuration with tokenization charset <code class="docutils literal notranslate"><span class="pre">NUMERIC</span></code> and format char <code class="docutils literal notranslate"><span class="pre">$$$$$*$$$$$</span></code>, the minimum length must be greater than 10.</p>
+</li>
+<li><p>Static</p>
+<p>The minimum length must be equal to number of <cite>$</cite> set on the format char.</p>
+<p>For example, if we set the data configuration with tokenization charset <code class="docutils literal notranslate"><span class="pre">NUMERIC</span></code> and format char <code class="docutils literal notranslate"><span class="pre">$$$$$$$$$$$%%%</span></code>, the minimum length must be equal to the format char, in this case 14.</p>
+</li>
+</ol>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FULL</span></code></p>
+<p>The minimum length should be equal to or greater than N.</p>
+<p>For example, if we set the data configuration with tokenization charset <code class="docutils literal notranslate"><span class="pre">ALPHABETIC</span></code>, the minimum length must be equal to or greater than 6.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FIRST_HALF</span></code></p>
+<p>The minimum length should be equal to or greater than 2*N.</p>
+<p>For example, if we set the data configuration with tokenization charset <code class="docutils literal notranslate"><span class="pre">ALPHANUMERIC</span></code>, the minimum length must be equal to or greater than 12.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LAST_HALF</span></code></p>
+<p>The minimum length should be equal to or greater than 2*N.</p>
+<p>For example, if we set the data configuration with tokenization charset <code class="docutils literal notranslate"><span class="pre">ALPHANUMSPEC</span></code>, the minimum length must be equal to or greater than 12.</p>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cassandra-setting-recommendation.html" class="btn btn-neutral float-left" title="Apache Cassandra Setting Recommendation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="kkts-license.html" class="btn btn-neutral float-right" title="KK-TS License" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

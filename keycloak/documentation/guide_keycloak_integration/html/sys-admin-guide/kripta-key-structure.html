@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kripta Key management overview &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Kripta Key management with CLIKK" href="kripta-key-management.html" />
+    <link rel="prev" title="System Administrator Guide" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kkts-guide/index.html">KK-TS Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">System Administrator Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Kripta Key management overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#users">Users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#applications">Applications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#command-line-interface">Command line interface</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#authentication-and-privileges">Authentication and privileges</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commands">Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#attributes">Attributes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#user">User</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#partition">Partition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#key">Key</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#certificate">Certificate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#secret">Secret</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#application">Application</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kk-manager-dr">KK-Manager-DR</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kk-cryptoservice">KK-Cryptoservice</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#updatable-key-attributes">Updatable Key Attributes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="kripta-key-management.html">Kripta Key management with CLIKK</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supplementary-clikk-usage.html">Supplementary CLIKK usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual-replication.html">Manual replication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transaction-counting.html">Transaction counting</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">System Administrator Guide</a></li>
+      <li class="breadcrumb-item active">Kripta Key management overview</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/sys-admin-guide/kripta-key-structure.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="kripta-key-management-overview">
+<h1>Kripta Key management overview<a class="headerlink" href="#kripta-key-management-overview" title="Link to this heading"></a></h1>
+<section id="users">
+<h2>Users<a class="headerlink" href="#users" title="Link to this heading"></a></h2>
+<p>Kripta Key recognizes two types of users, namely, administrators and recovery accounts.</p>
+<dl class="simple">
+<dt><strong>Administrators</strong></dt><dd><p>This type of user authenticates using a password and an administrator card. Administrators perform most,
+if not all, of the management operations of Kripta Key via CLIKK. This includes object creation, update,
+and deletion. Administrators can also review the KK-Auditor logs of all administrator actions.</p>
+</dd>
+<dt><strong>Recovery account</strong></dt><dd><p>This type of user authenticates using recovery cards. Note that this does not refer to each participant
+holding a recovery card — the collective, capable of authenticating commands with an EMERGENCY
+privilege level, is considered as the recovery account.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>This document is intended for administrators and recovery card holders.</p></li>
+<li><p>Users do not perform cryptographic operations. KK-Cryptoservice performs cryptographic operations
+for applications.</p></li>
+</ul>
+</div>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
+<p>An application that intends to use cryptographic services must first be registered to Kripta Key. Afterwards,
+it may use objects in the partitions it is authorized to access for cryptographic operations. Here, objects include
+keys, certificats, and secrets.</p>
+<p>The cryptographic services may be accessed via REST API or SDK API, if available for the application’s
+development environment</p>
+</section>
+<section id="command-line-interface">
+<h2>Command line interface<a class="headerlink" href="#command-line-interface" title="Link to this heading"></a></h2>
+<section id="authentication-and-privileges">
+<h3>Authentication and privileges<a class="headerlink" href="#authentication-and-privileges" title="Link to this heading"></a></h3>
+<p>An administrator must use Kripta Key Command Line Interface (CLIKK) to perform management operations
+on a KK-Manager instance. Each command has a privilege level, and the authentication attributes required
+for each privilege level are detailed as follows:</p>
+<ul class="simple">
+<li><p><strong>LOW</strong>: None.</p></li>
+<li><p><strong>NORMAL</strong>: Administrator password.</p></li>
+<li><p><strong>HIGH</strong>: Administrator password and administrator card.</p></li>
+<li><p><strong>CRITICAL</strong>: Dual control — password and administrator card from two administrators.</p></li>
+<li><p><strong>EMERGENCY</strong>: Recovery cards. Requires a majority of the recovery card holders to participate.</p></li>
+</ul>
+<p>The administrator password is initialized during account creation. However, administrators created
+during key ceremony must change their password so that the system can bind an administrator card
+to that administrator. Additional administrators created using <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">admin</span> <span class="pre">add</span></code> will have a card bound
+during the creation process.</p>
+<p>Additionally, each partition also has a password that is set during creation. This password is required
+for applications accessing the partition. Both the administrator and partition passwords are subject
+to these requirements:</p>
+<ul class="simple">
+<li><p>Password length must be between 8 and 64 characters, inclusive.</p></li>
+<li><p>Password must contain upper case, lower case, numeric, and special characters.</p></li>
+<li><p>Password must not have repeated characters (e.g. AA, aa, 11).</p></li>
+<li><p>Password must not have more than two consecutive characters (e.g. 123, abc).</p></li>
+<li><p>Password must not contain the admin ID.</p></li>
+</ul>
+<p>Kripta Key also implements some restrictions on administrator login:</p>
+<ul class="simple">
+<li><p>After three consecutive failed attempts, the account will be locked. Locked accounts cannot log in,
+nor perform any administrative actions.</p></li>
+<li><p>A locked account will be automatically unlocked after 30 minutes have elapsed.</p></li>
+<li><p>A locked account may be manually unlocked by another administrator using the <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">admin</span> <span class="pre">unlock</span></code> command.</p></li>
+</ul>
+<p>The recovery cards are initialized during key ceremony. Two sets of recovery cards are initialized,
+and a total number of cards equal to the number of participants are prepared in each set. These cards must be kept
+safely and securely, as they are necessary for commands with EMERGENCY privilege level. To execute emergency commands,
+a majority of cards from one set must be gathered. To be precise, half of the number of participants
+(as specified during key ceremony) plus one, rounded down.</p>
+</section>
+<section id="commands">
+<h3>Commands<a class="headerlink" href="#commands" title="Link to this heading"></a></h3>
+<p>For explanation on CLIKK commands, see <a class="reference internal" href="kripta-key-management.html"><span class="doc">Kripta Key management with CLIKK</span></a>.</p>
+</section>
+</section>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
+<p>Each object in Kripta Key possesses one or more attributes, detailed in each section.</p>
+<section id="user">
+<h3>User<a class="headerlink" href="#user" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt><strong>Admin ID</strong></dt><dd><p>The identifier of the administrator. Must be alphanumeric and not more than 20 characters in length.</p>
+</dd>
+<dt><strong>Admin name</strong></dt><dd><p>The name of the administrator. It is an additional descriptive label that is shown
+in the output of <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">user</span> <span class="pre">info</span></code>. Must be alphanumeric and not more than 20 characters in length.</p>
+</dd>
+</dl>
+</section>
+<section id="partition">
+<h3>Partition<a class="headerlink" href="#partition" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt><strong>Partition ID</strong></dt><dd><p>The identifier of the partition. Must be a number between 1 and 10000, inclusive.</p>
+</dd>
+<dt><strong>Partition label</strong></dt><dd><p>The descriptive label of the partition. Must be alphanumeric and not more than 20 characters
+in length.</p>
+</dd>
+<dt><strong>Creation date</strong></dt><dd><p>The date and time when the partition was created.</p>
+</dd>
+<dt><strong>Application IDs</strong></dt><dd><p>The list of applications that are registered to this partition.</p>
+</dd>
+<dt><strong>KK-Cryptoservices</strong></dt><dd><p>The list of KK-Cryptoservice instances that this partition is registered to.</p>
+</dd>
+</dl>
+</section>
+<section id="key">
+<h3>Key<a class="headerlink" href="#key" title="Link to this heading"></a></h3>
+<dl>
+<dt><strong>Partition ID</strong></dt><dd><p>The identifier of the partition that is associated with the key.</p>
+</dd>
+<dt><strong>Key ID</strong></dt><dd><p>The identifier of the key. Must be alphanumeric and not more than 20 characters in length.</p>
+</dd>
+<dt><strong>Key ID (percent-encoded)</strong></dt><dd><p>The identifier of the key, percent-encoded. This is intended for interoperability with PKCS#11 URI format.</p>
+</dd>
+<dt><strong>Key label</strong></dt><dd><p>The descriptive label of the key.</p>
+</dd>
+<dt><strong>Algorithm</strong></dt><dd><p>The cryptographic algorithm used with the key.</p>
+</dd>
+<dt><strong>Key length</strong></dt><dd><p>The length of the key, in bits.</p>
+</dd>
+<dt><strong>Creation date</strong></dt><dd><p>The date and time when the key was created.</p>
+</dd>
+<dt><strong>Expiry date</strong></dt><dd><p>The date and time when the key will expire. It is based on the key’s lifetime that you specify when creating the key.</p>
+</dd>
+<dt><strong>Key purpose</strong></dt><dd><p>The purpose of the key. Certain purposes are only compatible with certain key algorithms.
+Kripta Key regulates the availability of keys based on their purpose. A key that the purpose
+is encryption, wrapping, signing, or MAC generation can be used to protect more than one data.
+Meanwhile, certificate signing key is only applicable to signing one piece of data.</p>
+</dd>
+<dt><strong>Extractable</strong></dt><dd><p>The extractable state of the key. Extractable keys may be exported out of the system.
+Defaults to unset. Refer to <a class="reference internal" href="#updatable-key-attributes"><span class="std std-ref">Updatable Key Attributes</span></a>.</p>
+</dd>
+<dt><strong>Revoked</strong></dt><dd><p>The revocation status of the key.</p>
+</dd>
+<dt><strong>Rotatable</strong></dt><dd><p>The rotatable state of the key. Rotatable keys may be rotated, generating a new key material
+under the same key ID with a newer version. The default value is NOT ROTATABLE. Refer to <a class="reference internal" href="#updatable-key-attributes"><span class="std std-ref">Updatable Key Attributes</span></a>.</p>
+</dd>
+<dt><strong>Public key</strong></dt><dd><p>The public key of the key pair, in PEM format. Only applicable to asymmetric keys.</p>
+</dd>
+<dt><strong>Key version</strong></dt><dd><p>The version of the key. New key versions are created when the key is rotated. Only applicable to
+AES keys whose key purpose is encryption.</p>
+</dd>
+<dt><strong>Key check value</strong></dt><dd><p>The checksum of the key, as defined by PKCS#11.</p>
+</dd>
+<dt><strong>Elliptic curve</strong></dt><dd><p>The underlying elliptic curve of the key. Only applicable to ECDSA and EdDSA keys.</p>
+</dd>
+<dt><strong>Key lifetime</strong></dt><dd><p>The duration for which the key is valid for cryptographic operations that generate new data.
+When a key expires, it may only be used for these operations:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Decryption</p></li>
+<li><p>Unsealing</p></li>
+<li><p>Detokenization</p></li>
+<li><p>Signature verification</p></li>
+<li><p>MAC verification</p></li>
+<li><p>Certificate verification</p></li>
+<li><p>Application-stored counterparts of the above</p></li>
+</ul>
+</div></blockquote>
+<p>AES keys whose key purpose are encryption may be rotated, either manually or automatically, to renew the key
+and make it available for all cryptographic operations. Since key rotation is not available for all other keys,
+ensure that if set, the key lifetime is set to the correct value.</p>
+</dd>
+<dt><strong>Extension file</strong></dt><dd><p>A JSON file that serves as an extension of either a CSR or a
+certificate.</p>
+</dd>
+</dl>
+<section id="key-algorithms">
+<h4>Key algorithms<a class="headerlink" href="#key-algorithms" title="Link to this heading"></a></h4>
+<p>The following list shows the available key algorithms, and the valid key lengths and key purposes for each.
+The number in brackets indicates the value that needs to be passed in to CLIKK commands.</p>
+<dl>
+<dt><strong>AES [1]</strong></dt><dd><p>Symmetric key. Uses GCM as mode of operation.</p>
+<p>Key lengths: 256 bits.</p>
+<p>Key purposes: Encryption, wrapping, MAC generation, Format Preserving Encryption (FPE).</p>
+</dd>
+<dt><strong>RSA [2]</strong></dt><dd><p>Asymmetric key.</p>
+<p>Key lengths: 2048, 3072, 4096 bits.</p>
+<p>Key purposes: Encryption, wrapping, signing, certificate signing.</p>
+</dd>
+<dt><strong>ECDSA P-256 [3]</strong></dt><dd><p>Asymmetric key.</p>
+<p>Key lengths: N/A.</p>
+<p>Key purposes: Signing, certificate signing.</p>
+</dd>
+<dt><strong>ECDSA P-384 [4]</strong></dt><dd><p>Asymmetric key.</p>
+<p>Key lengths: N/A.</p>
+<p>Key purposes: Signing, certificate signing.</p>
+</dd>
+<dt><strong>ECDSA P-521 [5]</strong></dt><dd><p>Asymmetric key.</p>
+<p>Key lengths: N/A.</p>
+<p>Key purposes: Signing, certificate signing.</p>
+</dd>
+<dt><strong>EdDSA Ed25519 [6]</strong></dt><dd><p>Asymmetric key.</p>
+<p>Key lengths: N/A.</p>
+<p>Key purposes: Signing, certificate signing.</p>
+</dd>
+<dt><strong>ML-DSA-44 [7]</strong></dt><dd><p>Asymmetric key.</p>
+<p>Key lengths: N/A.</p>
+<p>Key purposes: Signing, certificate signing.</p>
+</dd>
+<dt><strong>ML-DSA-65 [8]</strong></dt><dd><p>Asymmetric key.</p>
+<p>Key lengths: N/A.</p>
+<p>Key purposes: Signing, certificate signing.</p>
+</dd>
+<dt><strong>ML-DSA-87 [9]</strong></dt><dd><p>Asymmetric key.</p>
+<p>Key lengths: N/A.</p>
+<p>Key purposes: Signing, certificate signing.</p>
+</dd>
+</dl>
+</section>
+<section id="key-purposes">
+<h4>Key purposes<a class="headerlink" href="#key-purposes" title="Link to this heading"></a></h4>
+<p>The following list details and describes the available key purposes. The number in brackets indicates the value
+that needs to be passed in to CLIKK commands.</p>
+<dl class="simple">
+<dt><strong>Encryption [1]</strong></dt><dd><p>Used to encrypt and decrypt data. Encryption, decryption, sealing, unsealing, tokenization and detokenization
+require this key purpose.</p>
+</dd>
+<dt><strong>Wrapping [2]</strong></dt><dd><p>Used to wrap and unwrap keys. Key import, application-stored services, and E2EE services require this key purpose.
+That key also can be used to sign a certificate.</p>
+</dd>
+<dt><strong>Signing [3]</strong></dt><dd><p>Used to sign and verify data. Signature generation and verification require this key purpose.</p>
+</dd>
+<dt><strong>Certificate signing [4]</strong></dt><dd><p>Used to sign and verify certificates. Certificate signing and verification require this key purpose.</p>
+</dd>
+<dt><strong>MAC generation [5]</strong></dt><dd><p>Used to generate and verify MACs. MAC generation and verification require this key purpose.</p>
+</dd>
+<dt><strong>Format Preserving Encryption (FPE) [6]</strong></dt><dd><p>Used to tokenize and detokenize input that with format preserving encryption (FPE). FPE tokenization and detokenization require this key purpose.</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="certificate">
+<h3>Certificate<a class="headerlink" href="#certificate" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt><strong>Partition ID</strong></dt><dd><p>The identifier of the partition that is associated with the certificate.</p>
+</dd>
+<dt><strong>Key ID</strong></dt><dd><p>The identifier of the key that is associated with the certificate.</p>
+</dd>
+<dt><strong>Key version</strong></dt><dd><p>The version of the key that is associated with the certificate.</p>
+</dd>
+<dt><strong>Issue date</strong></dt><dd><p>The date and time when the certificate was issued.</p>
+</dd>
+<dt><strong>Expiry date</strong></dt><dd><p>The date and time when the certificate will expire.</p>
+</dd>
+<dt><strong>Subject</strong></dt><dd><p>The Distinguished Name (DN) associated with the certificate.</p>
+</dd>
+<dt><strong>Extension file</strong></dt><dd><p>A JSON file that serves as an extension of either a CSR or a
+certificate.</p>
+</dd>
+</dl>
+</section>
+<section id="secret">
+<h3>Secret<a class="headerlink" href="#secret" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt><strong>Secret ID</strong></dt><dd><p>The identifier of the secret. Must be alphanumeric and not more than 20 characters in length.</p>
+</dd>
+<dt><strong>Secret label</strong></dt><dd><p>The descriptive label of the secret. Must be alphanumeric and not more than 20 characters in length.</p>
+</dd>
+</dl>
+</section>
+<section id="application">
+<h3>Application<a class="headerlink" href="#application" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt><strong>Application ID</strong></dt><dd><p>The identifier of the application.  Must be alphanumeric and not more than 20 characters in length.</p>
+</dd>
+<dt><strong>Subject</strong></dt><dd><p>The Distinguished Name (DN) associated with the application’s certificate.</p>
+</dd>
+<dt><strong>Encoded public key hash</strong></dt><dd><p>The hash of the application’s certificate’s public key encoded in Base64.</p>
+</dd>
+<dt><strong>Registration date</strong></dt><dd><p>The date and time when the application was registered. It is based on the specified validity period during registration.</p>
+</dd>
+<dt><strong>Expiry date</strong></dt><dd><p>The date and time of the application’s certificate expiration.</p>
+</dd>
+<dt><strong>Partition IDs</strong></dt><dd><p>The list of partitions that this application is registered to.</p>
+</dd>
+</dl>
+</section>
+<section id="kk-manager-dr">
+<h3>KK-Manager-DR<a class="headerlink" href="#kk-manager-dr" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt><strong>KK-Manager-DR ID</strong></dt><dd><p>The QE ID of the machine that is running the KK-Manager-DR instance.</p>
+</dd>
+<dt><strong>KK-Manager-DR name</strong></dt><dd><p>The friendly name of the KK-Manager-DR instance. This is used to refer
+to the KK-Manager-DR instance.</p>
+</dd>
+<dt><strong>Registration date</strong></dt><dd><p>The date and time when the instance was registered.</p>
+</dd>
+</dl>
+</section>
+<section id="kk-cryptoservice">
+<h3>KK-Cryptoservice<a class="headerlink" href="#kk-cryptoservice" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt><strong>KK-Cryptoservice ID</strong></dt><dd><p>The QE ID of the machine that is running the KK-Cryptoservice instance.</p>
+</dd>
+<dt><strong>KK-Cryptoservice name</strong></dt><dd><p>The friendly name of the KK-Cryptoservice instance. This is used to refer
+to the KK-Cryptoservice instance.</p>
+</dd>
+<dt><strong>Registration date</strong></dt><dd><p>The date and time when the instance was registered.</p>
+</dd>
+<dt><strong>Partition IDs</strong></dt><dd><p>The list of partitions that is registered to the KK-Cryptoservice instance.</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="updatable-key-attributes">
+<h2>Updatable Key Attributes<a class="headerlink" href="#updatable-key-attributes" title="Link to this heading"></a></h2>
+<dl>
+<dt><strong>Extractable</strong></dt><dd><p>Using command <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">key</span> <span class="pre">update</span></code>, you can change the extractable state
+based on the extractable_code below:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Extractable State</p></th>
+<th class="head"><p>extractable code</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>NO (disable to be exported)</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>YES (enable to be exported)</p></td>
+<td><p>1</p></td>
+</tr>
+</tbody>
+</table>
+<p>Once this attribute is set to NO, it can’t be set to YES</p>
+</dd>
+<dt><strong>Rotatable</strong></dt><dd><p>The rotatable
+flag is optional in command <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">key</span> <span class="pre">update</span></code> and applicable only for AES key with purpose encryption.
+Using command <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">key</span> <span class="pre">update</span></code>, you can set the rotatable state based on the rotatable_code below:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Rotatable State</p></th>
+<th class="head"><p>rotatable code</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Manually Rotatable</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>Automatically Rotatable</p></td>
+<td><p>1</p></td>
+</tr>
+</tbody>
+</table>
+<p>Manually rotatable means the key will be rotated manually using command <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">key</span> <span class="pre">rotate</span></code>. While automatically
+otatable means the key will be rotated automatically by the system based on the key’s lifetime. The version of
+AES encryption key that is rotated manually or automatically will increase 1 version in every rotation. The first
+version before rotation is 0 (zero).</p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="System Administrator Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="kripta-key-management.html" class="btn btn-neutral float-right" title="Kripta Key management with CLIKK" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Functional Module Command line interface &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="App Integration Guide" href="../app-integration-guide/index.html" />
+    <link rel="prev" title="Functional Module Procedure" href="func-module-procedure.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kkts-guide/index.html">KK-TS Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Functional Module Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="func-module-procedure.html">Functional Module Procedure</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Functional Module Command line interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#clikk-func-module-add"><code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">func-module</span> <span class="pre">add</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#clikk-func-module-list"><code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">func-module</span> <span class="pre">list</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#clikk-func-module-info"><code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">func-module</span> <span class="pre">info</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#clikk-func-module-delete"><code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">func-module</span> <span class="pre">delete</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Functional Module Guide</a></li>
+      <li class="breadcrumb-item active">Functional Module Command line interface</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/func-module-guide/command-line-interface.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="functional-module-command-line-interface">
+<h1>Functional Module Command line interface<a class="headerlink" href="#functional-module-command-line-interface" title="Link to this heading"></a></h1>
+<p>This section details all available commands for managing the functional module.</p>
+<section id="clikk-func-module-add">
+<h2><code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">func-module</span> <span class="pre">add</span></code><a class="headerlink" href="#clikk-func-module-add" title="Link to this heading"></a></h2>
+<p>Add script of functional module.</p>
+<p><strong>Flags</strong>:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">--module-name=<var>&lt;module’s name&gt;</var></span></kbd></dt>
+<dd><p>Functional module script name.</p>
+</dd>
+<dt><kbd><span class="option">--main-function-name=<var>&lt;main function’s name&gt;</var></span></kbd></dt>
+<dd><p>Name of the main function.</p>
+</dd>
+<dt><kbd><span class="option">--script-file-path=<var>&lt;path of the script file&gt;</var></span></kbd></dt>
+<dd><p>Path of functional module script file to be added.</p>
+</dd>
+<dt><kbd><span class="option">--module-hash=<var>&lt;hash value of the module&gt;</var></span></kbd></dt>
+<dd><p>Hash value of the module to be added.</p>
+</dd>
+</dl>
+<p><strong>Privilege level</strong>: <strong>CRITICAL</strong></p>
+<p><strong>Error messages</strong>:</p>
+<ul>
+<li><p><em>Message</em>: Authentication failed!</p>
+<p><em>Likely cause</em>: Wrong admin ID, wrong password, or invalid administrator card.</p>
+</li>
+<li><p><em>Message</em>: Failed to open the script file!</p>
+<p><em>Likely cause</em>: Incorrect script file format.</p>
+</li>
+<li><p><em>Message</em>: According to your license, you’re not allowed to add functionality module.</p>
+<p><em>Likely cause</em>: It means your license does not support the use of the functional module.</p>
+</li>
+</ul>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>func-module<span class="w"> </span>add<span class="w"> </span>--module-name<span class="o">=</span>genSealedPIN<span class="w"> </span>--main-function-name<span class="o">=</span>sealedPINGeneration<span class="w"> </span>--script-file-path<span class="o">=</span>/home/user/Documents/customSealedGeneration.js<span class="w"> </span>--module-hash<span class="o">=</span><span class="nv">hdou6POHFy8G8HKhUjfkjfi8ls</span><span class="o">=</span>
+
+<span class="go">Enter admin ID: Admin1</span>
+<span class="go">Enter password:</span>
+<span class="go">Insert the administrator card of Admin1 for two-factor authentication.</span>
+
+<span class="go">Dual control authentication -- credential of second user is required.</span>
+<span class="go">Admin1 is currently logged in.</span>
+
+<span class="go">Enter admin ID: Admin2</span>
+<span class="go">Enter password:</span>
+<span class="go">Insert the administrator card of Admin2 for two-factor authentication.</span>
+
+<span class="go">Functional module has been added successfully!</span>
+</pre></div>
+</div>
+</section>
+<section id="clikk-func-module-list">
+<h2><code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">func-module</span> <span class="pre">list</span></code><a class="headerlink" href="#clikk-func-module-list" title="Link to this heading"></a></h2>
+<p>List the functional modules that exist on KK-Manager.</p>
+<p><strong>Flags</strong>: None.</p>
+<p><strong>Privilege level</strong>: <strong>NORMAL</strong></p>
+<p><strong>Error messages</strong>:</p>
+<ul>
+<li><p><em>Message</em>: Authentication failed!</p>
+<p><em>Likely cause</em>: Wrong admin ID or wrong password.</p>
+</li>
+<li><p><em>Message</em>: Functional module list failed to load!</p>
+<p><em>Likely cause</em>: KK-Manager cannot access the database to show the existing functional module.</p>
+</li>
+</ul>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>func-module<span class="w"> </span>list
+
+<span class="go">Enter admin ID: Admin1</span>
+<span class="go">Enter password:</span>
+
+<span class="go">Functional module list:</span>
+<span class="go">[-] Script name: genSealedPIN - Main function name: sealedPINGeneration</span>
+</pre></div>
+</div>
+</section>
+<section id="clikk-func-module-info">
+<h2><code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">func-module</span> <span class="pre">info</span></code><a class="headerlink" href="#clikk-func-module-info" title="Link to this heading"></a></h2>
+<p>Show the information of specific functional module script.</p>
+<p><strong>Flags</strong>:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">--module-name=<var>&lt;module’s name&gt;</var></span></kbd></dt>
+<dd><p>Name for functional module’s script.</p>
+</dd>
+</dl>
+<p><strong>Privilege level</strong>: <strong>HIGH</strong></p>
+<p><strong>Error messages</strong>:</p>
+<ul>
+<li><p><em>Message</em>: Authentication failed!</p>
+<p><em>Likely cause</em>: Wrong admin ID, wrong password or invalid administrator card.</p>
+</li>
+<li><p><em>Message</em>: No function module exists with the specified script name.</p>
+<p><em>Likely cause</em>: The specified script name is incorrect.</p>
+</li>
+</ul>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>func-module<span class="w"> </span>info<span class="w"> </span>--module-name<span class="o">=</span>genSealedPIN
+
+<span class="go">Enter admin ID: Admin1</span>
+<span class="go">Enter password:</span>
+<span class="go">Insert the administrator card of Admin1 for two-factor authentication.</span>
+
+<span class="go">[-] Script name: genSealedPIN - Main function name: sealedPINGeneration</span>
+<span class="go">[-] Main function name: sealedPINGeneration</span>
+<span class="go">[-] Script code:</span>
+<span class="go">// Generate random pin</span>
+<span class="go">function makePIN(length) {</span>
+<span class="go">    var result = &quot;&quot;;</span>
+<span class="go">    const characters = &#39;0123456789&#39;;</span>
+<span class="go">    var counter = 0;</span>
+<span class="go">    while (counter &lt; length) {</span>
+<span class="go">        result += characters.charAt(Math.floor(Math.random() * length));</span>
+<span class="go">        counter += 1;</span>
+<span class="go">    }</span>
+<span class="go">    return result;</span>
+<span class="go">}</span>
+
+<span class="go">function sealedPinGeneration(inputJSON) {</span>
+<span class="go">    var parsedInput = JSON.parse(inputJSON);</span>
+
+<span class="go">    // Random 6 character to be used as PIN</span>
+<span class="go">    var pin = makePIN(6);</span>
+
+<span class="go">    // Generate appstored AES key</span>
+<span class="go">    var generateKeyParam = {</span>
+<span class="go">        &quot;sessionToken&quot;: parsedInput.sessionToken,</span>
+<span class="go">        &quot;wrappingMethod&quot;: &quot;internalKey&quot;,</span>
+<span class="go">        &quot;algo&quot;: &quot;AES&quot;,</span>
+<span class="go">        &quot;algoLength&quot;: 256,</span>
+<span class="go">        &quot;internalWrappingKeyId&quot;: parsedInput.wrappingKeyId,</span>
+<span class="go">        &quot;partitionId&quot;: parsedInput.partitionId,</span>
+<span class="go">    }</span>
+
+<span class="go">    var generateKeyJSON = JSON.parse(kkAppstoredKeyGenerate(JSON.stringify(generateKeyParam)));</span>
+<span class="go">    if (generateKeyJSON.fault != null) {</span>
+<span class="go">        generateKeyJSON.message = &quot;Appstored AES-256 key generation failed!&quot;;</span>
+<span class="go">        return JSON.stringify(generateKeyJSON);</span>
+<span class="go">    }</span>
+
+<span class="go">    // Sealing</span>
+<span class="go">    var sealParam = {</span>
+<span class="go">        &quot;sessionToken&quot;: parsedInput.sessionToken,</span>
+<span class="go">        &quot;wrappingKeyId&quot;: parsedInput.wrappingKeyId,</span>
+<span class="go">        &quot;wrappedKey&quot;: generateKeyJSON.result.wrappedKey,</span>
+<span class="go">        &quot;plaintext&quot;: [pin],</span>
+<span class="go">        &quot;partitionId&quot;: parsedInput.partitionId,</span>
+<span class="go">    };</span>
+<span class="go">    var sealJSON = JSON.parse(kkAppstoredSeal(JSON.stringify(sealParam)));</span>
+<span class="go">    if (sealJSON.fault != null) {</span>
+<span class="go">        sealJSON.message = &quot;Data sealing failed!&quot;;</span>
+<span class="go">        return JSON.stringify(sealJSON);</span>
+<span class="go">    }</span>
+
+<span class="go">    // Output</span>
+<span class="go">    var output = {</span>
+<span class="go">        &quot;wrappedKey&quot;: generateKeyJSON.result.wrappedKey,</span>
+<span class="go">        &quot;sealedPIN&quot;: sealJSON.result.ciphertext[0],</span>
+<span class="go">    }</span>
+<span class="go">    return JSON.stringify(output);</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</section>
+<section id="clikk-func-module-delete">
+<h2><code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">func-module</span> <span class="pre">delete</span></code><a class="headerlink" href="#clikk-func-module-delete" title="Link to this heading"></a></h2>
+<p>Delete the existing functional module. Please ensure that no applications are using the functional module before you delete it.</p>
+<p><strong>Flags</strong>:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">--module-name=<var>&lt;module’s name&gt;</var></span></kbd></dt>
+<dd><p>Name for functional module’s script.</p>
+</dd>
+</dl>
+<p><strong>Privilege level</strong>: <strong>CRITICAL</strong></p>
+<p><strong>Error messages</strong>:</p>
+<ul>
+<li><p><em>Message</em>: Authentication failed!</p>
+<p><em>Likely cause</em>: Wrong admin ID, wrong password, or invalid administrator card.</p>
+</li>
+<li><p><em>Message</em>: No function module exists with the specified script name.</p>
+<p><em>Likely cause</em>: The specified script name is incorrect.</p>
+</li>
+</ul>
+<p><strong>Usage example</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>func-module<span class="w"> </span>delete<span class="w"> </span>--module-name<span class="o">=</span>genSealedPIN
+
+<span class="go">This will delete the given function module. Ensure that no applications are using this functional module.</span>
+<span class="go">Are you sure you want to continue? Type `{}` to continue, or press Enter to cancel.</span>
+<span class="go">&gt; {}</span>
+
+<span class="go">Enter admin ID: Admin1</span>
+<span class="go">Enter password:</span>
+<span class="go">Insert the administrator card of Admin1 for two-factor authentication.</span>
+
+<span class="go">Dual control authentication -- credential of second user is required.</span>
+<span class="go">Admin1 is currently logged in.</span>
+
+<span class="go">Enter admin ID: Admin2</span>
+<span class="go">Enter password:</span>
+<span class="go">Insert the administrator card of Admin2 for two-factor authentication.</span>
+
+<span class="go">Function module has been successfully deleted!</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="func-module-procedure.html" class="btn btn-neutral float-left" title="Functional Module Procedure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../app-integration-guide/index.html" class="btn btn-neutral float-right" title="App Integration Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

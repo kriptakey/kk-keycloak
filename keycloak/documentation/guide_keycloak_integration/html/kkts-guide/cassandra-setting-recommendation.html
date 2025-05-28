@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apache Cassandra Setting Recommendation &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Domain configuration" href="domain-configuration.html" />
+    <link rel="prev" title="Apache Cassandra Setting Consideration" href="cassandra-setting-consideration.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">KK-TS Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design-motivation.html">Design motivation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kkts-installation.html">KK-Tokenization Service Setup and Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kkts-backuprestore.html">KK-Tokenization Service Backup and Restore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cassandra-setting-consideration.html">Apache Cassandra Setting Consideration</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Apache Cassandra Setting Recommendation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#keyspace-configuration">Keyspace configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#table-configuration">Table Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#disk-configuration">Disk configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kernel-configuration">Kernel Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#audit-log">Audit Log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tuning-guide">Tuning Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="domain-configuration.html">Domain configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kkts-license.html">KK-TS License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command-line-interface.html">KK-TS command line interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kms-tokenization-services.html">Tokenization services</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">KK-TS Guide</a></li>
+      <li class="breadcrumb-item active">Apache Cassandra Setting Recommendation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/kkts-guide/cassandra-setting-recommendation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="apache-cassandra-setting-recommendation">
+<h1>Apache Cassandra Setting Recommendation<a class="headerlink" href="#apache-cassandra-setting-recommendation" title="Link to this heading"></a></h1>
+<p>This section provides the recommendation settings to optimize the Apache Cassandra performance.</p>
+<section id="keyspace-configuration">
+<h2>Keyspace configuration<a class="headerlink" href="#keyspace-configuration" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">class</span></code> on replication: <code class="docutils literal notranslate"><span class="pre">SimpleStrategy</span></code>, used for single datacenter.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">datacenter1</span></code>: 2, full replication (means all data replicated to all 2 nodes by setting up the RF=2)</p></li>
+</ul>
+</section>
+<section id="table-configuration">
+<h2>Table Configuration<a class="headerlink" href="#table-configuration" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">chunk_length_in_kb</span></code> on compression: set to 4kb for SSD and 64kb for HDD (sync with disk read_ahead).</p></li>
+</ul>
+</section>
+<section id="disk-configuration">
+<h2>Disk configuration<a class="headerlink" href="#disk-configuration" title="Link to this heading"></a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">read_ahead</span></code>: set to 4kb for SSD and 64kb for HDD. Below is an example of changing the read ahead value for <code class="docutils literal notranslate"><span class="pre">/dev/vdb</span></code> to 4kb SSD.
+Note that this change not permanent, admin need to re-set after a restart.
+Block calculation:
+setra in 512-byte sectors</p>
+<p>4kb = 4 * 1024 = 4096 byte.</p>
+<p>setra block = 4096/512 = 8 blocks.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>blockdev<span class="w"> </span>--setra<span class="w"> </span><span class="m">8</span><span class="w"> </span>/dev/vdb
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="kernel-configuration">
+<h2>Kernel Configuration<a class="headerlink" href="#kernel-configuration" title="Link to this heading"></a></h2>
+<ul>
+<li><p>Adjust sysctl.conf</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/sysctl.conf
+</pre></div>
+</div>
+</li>
+<li><p>Insert following script</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">net.core.rmem_max = 16777216</span>
+<span class="go">net.core.wmem_max = 16777216</span>
+<span class="go">net.core.rmem_default = 16777216</span>
+<span class="go">net.core.wmem_default = 16777216</span>
+<span class="go">net.core.optmem_max = 40960</span>
+<span class="go">net.ipv4.tcp_rmem = 4096 87380 16777216</span>
+<span class="go">net.ipv4.tcp_wmem = 4096 65536 16777216</span>
+
+<span class="go">vm.max_map_count = 1048575</span>
+</pre></div>
+</div>
+</li>
+<li><p>Save the adjustment</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo sysctl -p</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="audit-log">
+<h2>Audit Log<a class="headerlink" href="#audit-log" title="Link to this heading"></a></h2>
+<p>To activate the audit log, please follow procedure below:</p>
+<ul>
+<li><p>Modify cassandra.yaml. Ensure that <code class="docutils literal notranslate"><span class="pre">/path/to/logdir/</span></code> is created and owned by <code class="docutils literal notranslate"><span class="pre">cassandra</span></code> user.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">audit_logging_options:</span>
+<span class="go">enabled: true</span>
+<span class="go">logger:</span>
+<span class="go">    - class_name: BinAuditLogger</span>
+<span class="go">audit_logs_dir: /path/to/logdir/</span>
+<span class="gp"># </span>included_keyspaces:
+<span class="gp"># </span>excluded_keyspaces:<span class="w"> </span>system,<span class="w"> </span>system_schema,<span class="w"> </span>system_virtual_schema
+<span class="gp"># </span>included_categories:
+<span class="go">excluded_categories: QUERY, DML</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Restart the cassandra service.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo systemctl restart cassandra</span>
+</pre></div>
+</div>
+</li>
+<li><p>Login to <code class="docutils literal notranslate"><span class="pre">cqlsh</span></code> and check the log.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">auditlogviewer /path/to/logdir/</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="tuning-guide">
+<h2>Tuning Guide<a class="headerlink" href="#tuning-guide" title="Link to this heading"></a></h2>
+<ul>
+<li><p>System Resource</p>
+<ol class="arabic">
+<li><p>Install demonstrate</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>dstat
+</pre></div>
+</div>
+</li>
+<li><p>Monitoring system resource</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>dstat<span class="w"> </span>-lrvn<span class="w"> </span><span class="m">10</span>
+</pre></div>
+</div>
+<figure class="align-default">
+<img alt="../_images/cassandra_system_monitoring.png" src="../_images/cassandra_system_monitoring.png" />
+</figure>
+</li>
+<li><p>Check io read/write if there is high read/write operation then observe with command below.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>sysstat
+<span class="gp">$ </span>sudo<span class="w"> </span>iostat<span class="w"> </span>-xdm<span class="w"> </span><span class="m">2</span>
+</pre></div>
+</div>
+</li>
+<li><p>See if there is high <code class="docutils literal notranslate"><span class="pre">r_await</span></code> or <code class="docutils literal notranslate"><span class="pre">w_await</span></code> to check disk read/write latency and benchmark
+your disk using <code class="docutils literal notranslate"><span class="pre">fio</span></code></p></li>
+<li><p>Check the memory. Cassandra uses cached memory (page cache), so high cached memory and low free memory is good.</p></li>
+<li><p>Check network recv/send, also benchmark connection over node using <code class="docutils literal notranslate"><span class="pre">iperf3</span></code></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>iperf3
+</pre></div>
+</div>
+</li>
+<li><p>Execute command below on server, e.g., node 1.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>iperf<span class="w"> </span>-s
+</pre></div>
+</div>
+</li>
+<li><p>Execute command below on client, e.g., node 2.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>iperf<span class="w"> </span>-c<span class="w"> </span><span class="m">10</span>.21.0.2
+</pre></div>
+</div>
+</li>
+<li><p>Check total-usage if there is a lot of <code class="docutils literal notranslate"><span class="pre">wait</span></code>, there might be IO bottleneck.</p></li>
+</ol>
+</li>
+<li><p>JVM profiling</p>
+<ol class="arabic">
+<li><p>get asprof (<a class="reference external" href="https://github.com/async-profiler/async-profiler">https://github.com/async-profiler/async-profiler</a>) and copy to directory which cassandra can access.</p></li>
+<li><p>Generate flame graph for the cassandra JVM.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>/cassandra/async-profiler-3.0-linux-x64/bin/asprof<span class="w"> </span>-f<span class="w"> </span>/tmp/cass.html<span class="w"> </span><span class="k">$(</span>cat<span class="w"> </span>/var/run/cassandra/cassandra.pid<span class="k">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>Check the flamegraph to see the method calls and the percentage of time they are taking, and to check if there is a long GC pause.</p>
+<figure class="align-default">
+<img alt="../_images/cassandra_flamegraph.png" src="../_images/cassandra_flamegraph.png" />
+</figure>
+</li>
+</ol>
+</li>
+<li><p>Nodetool command</p>
+<p>Important command to check nodes condition.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">status</span></code>: show cluster information</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">info</span></code>: show node information</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">compationstatus</span></code>: check compaction</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">tpstats</span></code>: check thread pools</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">tablehistograms</span></code>: check histograms</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nodetool</span> <span class="pre">tablestats</span></code>: check table</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cassandra-setting-consideration.html" class="btn btn-neutral float-left" title="Apache Cassandra Setting Consideration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="domain-configuration.html" class="btn btn-neutral float-right" title="Domain configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

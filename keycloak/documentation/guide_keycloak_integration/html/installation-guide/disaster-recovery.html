@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Disaster recovery &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Appliance model" href="appliance-deployment.html" />
+    <link rel="prev" title="KK-Cryptoservice setup and configuration" href="cryptographic-service-installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Installation Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="before-installing.html">Before deploying Kripta Key</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kripta-key-installation.html">Installing Kripta Key</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cryptographic-service-installation.html">KK-Cryptoservice setup and configuration</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Disaster recovery</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#kk-manager-setup-and-configuration-in-disaster-recovery-dr-mode">KK-Manager setup and configuration in Disaster Recovery (DR) mode</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#before-installing-kk-manager-dr">Before installing KK-Manager-DR</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#installing-kk-manager-dr">Installing KK-Manager-DR</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#registering-kk-manager-dr">Registering KK-Manager-DR</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#kk-manager-dr-promotion">KK-Manager-DR promotion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#restoring-kk-manager-from-backup">Restoring KK-Manager from backup</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#restoring-to-the-same-machine">Restoring to the same machine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#restoring-to-a-different-machine">Restoring to a different machine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#re-registering-kk-cryptoservice-and-kk-manager-dr-instances-after-restoration">Re-registering KK-Cryptoservice and KK-Manager-DR instances after restoration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="appliance-deployment.html">Appliance model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="misc-actions.html">Miscellaneous operations</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kkts-guide/index.html">KK-TS Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Installation Guide</a></li>
+      <li class="breadcrumb-item active">Disaster recovery</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/installation-guide/disaster-recovery.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="disaster-recovery">
+<h1>Disaster recovery<a class="headerlink" href="#disaster-recovery" title="Link to this heading"></a></h1>
+<p>On extraordinary situations such as database corruption or server failure, Kripta Key provides a way to recover
+from such failure and to mitigate downtime. Administrators may set up and later promote a Disaster Recovery mode
+KK-Manager instance to mitigate downtime. Administrators can also restore a KK-Manager backup to recover from
+a server failure.</p>
+<section id="kk-manager-setup-and-configuration-in-disaster-recovery-dr-mode">
+<h2>KK-Manager setup and configuration in Disaster Recovery (DR) mode<a class="headerlink" href="#kk-manager-setup-and-configuration-in-disaster-recovery-dr-mode" title="Link to this heading"></a></h2>
+<p>During setup of KK-Manager, it can be set to run in Disaster Recovery (DR) mode. However, it is important to note
+that registration of the KK-Manager-DR instances depends on the license applied to the deployment, as the license
+limits the number of the KK-Manager-DR instances that can be registered.</p>
+<p>KK-Manager-DR instances replicate all objects from the main KK-Manager instance. CLIKK can also be connected
+to the KK-Manager-DR instances by using the <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">conf</span> <span class="pre">server</span></code> command. When connected to a KK-Manager-DR instance,
+CLIKK may only run list and info commands.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Before running the installer, perform <a class="reference internal" href="../appendix.html#performing-integrity-checks"><span class="std std-ref">an integrity check</span></a> first.
+Also, make sure that the installer is appropriate for the machine’s OS.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If errors were encountered during installation, details will be logged to <code class="docutils literal notranslate"><span class="pre">/var/log/kriptakey</span></code>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please contact <a class="reference external" href="mailto:support&#37;&#52;&#48;klaviskripta&#46;com">support<span>&#64;</span>klaviskripta<span>&#46;</span>com</a> if any problems were encountered during installation.</p>
+</div>
+<section id="before-installing-kk-manager-dr">
+<h3>Before installing KK-Manager-DR<a class="headerlink" href="#before-installing-kk-manager-dr" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Ensure that the server has been prepared as specified in <a class="reference internal" href="before-installing.html#preparatory-steps"><span class="std std-ref">Preparatory steps</span></a>.</p></li>
+<li><p>If the smartcard reader’s driver has not been installed yet, install that before starting KK-Manager’s installer.</p>
+<ol class="arabic">
+<li><p>Download the smartcard reader driver (<code class="docutils literal notranslate"><span class="pre">acsccid-linux-bin-1.1.10-20230804.zip</span></code>) from <a class="reference external" href="https://www.acs.com.hk/download-driver-unified/13546/acsccid-linux-bin-1.1.10-20230804.zip">ACS’s website</a>.</p>
+</li>
+<li><p>Extract the package.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>unzip<span class="w"> </span>acsccid-linux-bin-1.1.10-20230804.zip
+</pre></div>
+</div>
+</li>
+<li><p>Navigate to the <code class="docutils literal notranslate"><span class="pre">acsccid-linux-bin-1.1.10-20230804.zip/epel/9</span></code> directory and install the RPM.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>ACS-Unified-PKG-Lnx-118-P/epel/9
+<span class="gp">$ </span>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>pcsc-lite-acsccid-1.1.10-1.el9.x86_64.rpm
+</pre></div>
+</div>
+</li>
+<li><p>Enable the pcsc-lite service.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>pcscd.service<span class="w"> </span>--now
+</pre></div>
+</div>
+</li>
+<li><p>Make sure that the pcsc-lite service is running by examining the output of the following command.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>pcscd.service
+</pre></div>
+</div>
+</li>
+</ol>
+</li>
+<li><p>Download the <a class="reference external" href="https://download.01.org/intel-sgx/sgx-linux/2.23/distro/rhel9.2-server/sgx_rpm_local_repo.tgz">Intel SGX Platform Software</a>. Run the following commands from the directory
+where the archive is located:</p>
+<ol class="arabic">
+<li><p>Extract the packages.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tar<span class="w"> </span>-xvf<span class="w"> </span>sgx_rpm_local_repo.tgz
+</pre></div>
+</div>
+</li>
+<li><p>Navigate to the <code class="docutils literal notranslate"><span class="pre">sgx_rpm_local_repo</span></code> directory, and enable the repository.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>sgx_rpm_local_repo
+<span class="gp">$ </span>sudo<span class="w"> </span>dnf<span class="w"> </span>config-manager<span class="w"> </span>--add-repo<span class="w"> </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>
+
+<span class="go">Updating Subscription Management repositories.</span>
+<span class="go">Adding repo from: file:///home/user/sgx_rpm_local_repo</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</section>
+<section id="installing-kk-manager-dr">
+<h3>Installing KK-Manager-DR<a class="headerlink" href="#installing-kk-manager-dr" title="Link to this heading"></a></h3>
+<p>Once everything is all set, the administrator may begin installation of KK-Manager-DR on the server.</p>
+<ol class="arabic">
+<li><p>Install KK-Manager from the RPM package. Note that KK-Manager depends on the packages in <code class="docutils literal notranslate"><span class="pre">sgx_rpm_local_repo</span></code>.
+However, these packages are not signed with GPG. Hence, it must be installed without performing the GPG check.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>dnf<span class="w"> </span>--nogpgcheck<span class="w"> </span>install<span class="w"> </span>kk-m-2.0-0000.el8.x86_64.rpm
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The installer automatically creates the user <code class="docutils literal notranslate"><span class="pre">kripta</span></code>.</p></li>
+<li><p>The user <code class="docutils literal notranslate"><span class="pre">kripta</span></code> can only read files from the working directory.</p></li>
+<li><p>The administrator, using their usual user account, <strong>cannot</strong> write directly to the working directory.
+Files must be moved as the user <code class="docutils literal notranslate"><span class="pre">kripta</span></code> to the working directory.</p></li>
+<li><p>During the installation process, the location of the working directory must be specified.
+It is highly recommended to use the default value.</p></li>
+</ul>
+</div>
+</li>
+<li><p>After successfully installing KK-Manager, it must be configured by running its configuration script.
+This will configure settings such as port, log level, SNMP server, and so on. Do note the following
+when running the configuration script:</p>
+<ul class="simple">
+<li><p>The port may be any port from 1024 to 49151, inclusive.</p></li>
+<li><p>Configuring the SNMP server is optional — errors are still recorded to the log file. However, it is
+strongly recommended to configure the SNMP server so that critical alerts from Kripta Key can be
+noticed promptly. To configure the SNMP server, the administrator must prepare the SNMP host and port,
+SNMP username, SNMP authentication passphrase, and SNMP privacy passphrase.</p></li>
+<li><p>For some configuration fields, the script will set a default value if value is omitted when prompted.</p></li>
+<li><p>The working directory must be writable by the <code class="docutils literal notranslate"><span class="pre">kripta</span></code> user. For this reason, it is recommended
+to use the default value, <code class="docutils literal notranslate"><span class="pre">/var/local/kriptakey/kk-manager</span></code>.</p></li>
+</ul>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Sample output if SNMP server has not been configured.</span><a class="headerlink" href="#id3" title="Link to this code"></a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>/opt/kriptakey/kk-manager/kk-m.sh
+
+<span class="go">KK-Manager mode (Option: main/DR) [main]: DR</span>
+<span class="go">Main KK-Manager host []: 10.30.0.116</span>
+<span class="go">Main KK-Manager port []: 8086</span>
+<span class="go">KK-Manager port for CLIKK endpoint [7002]: 8090</span>
+<span class="go">KK-Manager port for KK-Cryptoservice and KK-Manager-DR endpoint [7003]: 8091</span>
+<span class="go">SNMP server host and port in xxx.xxx.xxx.xxx:xxxx format []:</span>
+<span class="go">WARNING: SNMP server address is empty. KK-Manager will not send SNMP alerts.</span>
+<span class="go">KK-Manager log level (Option: ERROR/INFO/DEBUG) [ERROR]:</span>
+<span class="go">KK-Manager working directory path [/var/local/kriptakey/kk-manager]:</span>
+
+<span class="go">Relabeled /var/local/kriptakey/kk-manager from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0</span>
+<span class="go">Relabeled /var/local/kriptakey/kk-manager/db from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0</span>
+<span class="go">Relabeled /var/local/kriptakey/kk-manager/backup from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0</span>
+<span class="go">Relabeled /var/local/kriptakey/kk-manager/sgxdata from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0</span>
+<span class="go">Relabeled /etc/kriptakey/kk-md.conf from unconfined_u:object_r:etc_t:s0 to system_u:object_r:kk_md_var_t:s0</span>
+
+<span class="go">WARNING: Configure your firewall to allow the KK-Manager service.</span>
+
+<span class="go">Configuration file has been written successfully to /etc/kriptakey/kk-md.conf.</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Sample output if SNMP server has been configured.</span><a class="headerlink" href="#id4" title="Link to this code"></a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>/opt/kriptakey/kk-manager/kk-m.sh
+
+<span class="go">KK-Manager mode (Option: main/DR) [main]: main</span>
+<span class="go">Main KK-Manager host []: 10.30.0.116</span>
+<span class="go">Main KK-Manager port []: 8086</span>
+<span class="go">KK-Manager port for CLIKK endpoint [7002]: 8090</span>
+<span class="go">KK-Manager port for KK-Cryptoservice and KK-Manager-DR endpoint [7003]: 8091</span>
+<span class="go">SNMP server host and port in xxx.xxx.xxx.xxx:xxxx format []: 192.168.0.5:1337</span>
+<span class="go">SNMP username []: klavis</span>
+<span class="go">SNMP authentication passphrase []: klavisauth</span>
+<span class="go">SNMP privacy passphrase []: klavisencrypt</span>
+<span class="go">KK-Manager log level (Option: ERROR/INFO/DEBUG) [ERROR]:</span>
+<span class="go">KK-Manager working directory path [/var/local/kriptakey/kk-manager]:</span>
+
+<span class="go">Relabeled /var/local/kriptakey/kk-manager from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0</span>
+<span class="go">Relabeled /var/local/kriptakey/kk-manager/db from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0</span>
+<span class="go">Relabeled /var/local/kriptakey/kk-manager/backup from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0</span>
+<span class="go">Relabeled /var/local/kriptakey/kk-manager/sgxdata from unconfined_u:object_r:var_t:s0 to system_u:object_r:kk_md_var_t:s0</span>
+<span class="go">Relabeled /etc/kriptakey/kk-md.conf from unconfined_u:object_r:etc_t:s0 to system_u:object_r:kk_md_var_t:s0</span>
+
+<span class="go">WARNING: Configure your firewall to allow the KK-Manager service.</span>
+
+<span class="go">Configuration file has been written successfully to /etc/kriptakey/kk-md.conf.</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>To configure the SNMP server, please refer to <a class="reference internal" href="../appendix.html#snmp-configuration"><span class="std std-ref">SNMP configuration</span></a>.</p></li>
+<li><p>To unset the SNMP configuration, omit the SNMP destination when prompted by the script.</p></li>
+</ul>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The configuration file for KK-Manager is stored in <code class="docutils literal notranslate"><span class="pre">/etc/kriptakey/kk-md.conf</span></code>. Do not move
+or remove the file to ensure the smooth operation of the service.</p>
+</div>
+</li>
+<li><p>If you choose to enable SNMP, there is additional step.
+Kripta Key appliance is accompanied by script that will send crucial system information (CPU, Memory and
+Disk utilization) using SNMP if SNMP is configured. The script will automatically send SNMP message every minute.
+To enable this script, execute command below:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>/opt/kriptakey/kk-sys_snmp.sh<span class="w"> </span>install
+</pre></div>
+</div>
+</li>
+<li><p>Check the version of the daemon to ensure that KK-Manager has been installed properly.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>-u<span class="w"> </span>kripta<span class="w"> </span>kk-md<span class="w"> </span>--version
+
+<span class="go">Module: kk-md</span>
+<span class="go">Version: &lt;version&gt;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Reload the firewall service and set the zone as shown below. You can set the zone to either public or private.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>firewall-cmd<span class="w"> </span>--permanent<span class="w"> </span>--zone<span class="o">=</span>public<span class="w"> </span>--add-service<span class="o">=</span>kk-md
+
+<span class="go">success</span>
+
+<span class="gp">$ </span>sudo<span class="w"> </span>firewall-cmd<span class="w"> </span>--reload
+
+<span class="go">success</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="registering-kk-manager-dr">
+<h3>Registering KK-Manager-DR<a class="headerlink" href="#registering-kk-manager-dr" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Double check the license status to ensure that there’s available quota for a KK-Manager-DR registration.</p></li>
+<li><p>Fetch the machine platform information. Run the following command on the KK-Manager-DR machine.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>-u<span class="w"> </span>kripta<span class="w"> </span>kk-md<span class="w"> </span>--get-pck-id
+
+<span class="go">Platform information has been written successfully to /var/local/kriptakey/kk-manager/sgxdata/4DB1DC9FXXXXXXXXXXXXXXXXXXXXXXXX.json.</span>
+</pre></div>
+</div>
+</li>
+<li><p>Copy the platform information of the KK-Manager-DR machines to a device that has CLIKK installed.</p></li>
+<li><p><a class="reference internal" href="../appendix.html#obtaining-intel-api-key"><span class="std std-ref">Obtain an API key from Intel</span></a> if the administrator lacks one.
+This API key will be used to retrieve collateral from Intel using CLIKK. The collateral file contains information
+that attests that the hardware in use truly came from Intel, as opposed to being simulated.</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">conf</span> <span class="pre">get-collateral</span></code>, passing the API key and the path to the platform information to fetch
+the collateral for the KK-Manager-DR machine.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The machine must be connected to the internet.</p>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>conf<span class="w"> </span>get-collateral<span class="w"> </span>--intel-api-key<span class="o">=</span>39949131XXXXXXXXXXXXXXXXXXXXXXX<span class="w"> </span>--platform-info-path<span class="o">=</span>/home/user/documents/4DB1DC9FXXXXXXXXXXXXXXXXXXXXXXXX.json<span class="w"> </span>--output-dir-path<span class="o">=</span>/home/user/documents
+
+<span class="go">This will fetch attestation material from Intel&#39;s trusted web service:</span>
+<span class="go">    https://api.trustedservices.intel.com/sgx/certification/v4</span>
+<span class="go">Type `9Kl/&#39;` to continue, or press Enter to cancel.</span>
+<span class="go">&gt; 9Kl/&#39;</span>
+
+<span class="go">PCK certificate has been saved successfully to /home/user/documents/pck_cert_4DB1DC9FXXXXXXXXXXXXXXXXXXXXXXXX.pem.</span>
+<span class="go">Quote collateral has been saved successfully to /home/user/documents/collateral_13E3CDXXXXXX.json.</span>
+</pre></div>
+</div>
+</li>
+<li><p>Copy the PCK certificate and collateral to the working directory of the KK-Manager-DR machine.</p></li>
+<li><p>Run KK-Manager in DR registration mode, passing in the path to the KK-Manager-DR machine’s PCK certificate
+and the latest database backup file.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Ensure the integrity of the backup file. Perform the following steps:</p>
+<ul class="simple">
+<li><p>Compute the hash of the backup file in the KK-Manager machine, preferably as soon as the backup is created.</p></li>
+<li><p>Compute the hash of the backup file in the KK-Manager-DR machine.</p></li>
+<li><p>Compare both hashes. Confirm that the hashes are the same before proceeding.</p></li>
+</ul>
+<p>To compute the hashes, use a tool such as <code class="docutils literal notranslate"><span class="pre">sha256sum</span></code>.</p>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>-u<span class="w"> </span>kripta<span class="w"> </span>kk-md<span class="w"> </span>--add-dr<span class="w"> </span>--kk-manager-dr-pck-cert-path<span class="o">=</span>/var/local/kriptakey/kk-manager/sgxdata/pck_cert_4DB1DC9FXXXXXXXXXXXXXXXXXXXXXXXXXXX.pem<span class="w"> </span>--kk-manager-dr-collateral-path<span class="o">=</span>/var/local/kriptakey/kk-manager/sgxdata/collateral_13E3CDXXXXXX.json<span class="w"> </span>--database-backup-path<span class="o">=</span>/path-to-backup-file/backup.db
+
+<span class="go">Commencing the KK-Manager-DR registration process.</span>
+<span class="go">This will initialize a KK-Manager-DR instance on this machine and register it to the main KK-Manager instance.</span>
+<span class="go">Do not interrupt the process until the message &quot;KK-Manager-DR has been registered successfully to KK-Manager.&quot; appears.</span>
+<span class="go">Are you sure you want to continue? Type `s@Hfr` to continue, or press Enter to cancel.</span>
+<span class="go">&gt; s@Hfr</span>
+
+<span class="go">[-] Ready for initialization and registration.</span>
+<span class="go">[-] Listening on port 8086...</span>
+<span class="go">[-] Waiting for connection from KK-Manager...</span>
+</pre></div>
+</div>
+</li>
+<li><p>Register the KK-Manager-DR instance to the main KK-Manager instance using CLIKK, passing in the path
+to the collateral file obtained above.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>kk-manager<span class="w"> </span>add-dr<span class="w"> </span>--kk-manager-collateral-path<span class="o">=</span>home/user/documents/collateral_00A065XXXXXXX.json<span class="w"> </span>--kk-manager-dr-collateral-path<span class="o">=</span>/home/user/documents/collateral_13E3CDXXXXXX.json<span class="w"> </span>--kk-manager-dr-host<span class="o">=</span><span class="m">10</span>.30.0.2<span class="w"> </span>--kk-manager-dr-port<span class="o">=</span><span class="m">8086</span><span class="w"> </span>--kk-manager-dr-name<span class="o">=</span>kk-m-drOne
+
+<span class="go">Enter admin ID: Admin1</span>
+<span class="go">Enter password:</span>
+<span class="go">Insert the administrator card of Admin1 for two-factor authentication.</span>
+
+<span class="go">Dual control authentication -- credential of second user is required.</span>
+<span class="go">Admin1 is currently logged in.</span>
+
+<span class="go">Enter admin ID: Admin2</span>
+<span class="go">Enter password:</span>
+<span class="go">Insert the administrator card of Admin2 for two-factor authentication.</span>
+
+<span class="go">KK-Manager-DR `kk-m-drOne` at 10.30.0.2 has been registered successfully.</span>
+</pre></div>
+</div>
+</li>
+<li><p>Once the registration process has been completed, KK-Manager-DR will show the following message:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">[v] KK-Manager-DR has been registered successfully to KK-Manager.</span>
+</pre></div>
+</div>
+</li>
+<li><p>Start the KK-Manager service, and check that it is running properly.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>kk-md-dr.service<span class="w"> </span>--now
+
+<span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>kk-md-dr.service
+</pre></div>
+</div>
+</li>
+<li><p>Ensure that the KK-Manager-DR instance is connected to the KK-Manager instance, using <code class="docutils literal notranslate"><span class="pre">curl</span></code>
+with the KK-Manager host and port.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>-k<span class="w"> </span>-v<span class="w"> </span><span class="m">10</span>.30.0.116<span class="w"> </span><span class="m">8086</span>
+</pre></div>
+</div>
+</li>
+<li><p>Whenever necessary, administrators may connect CLIKK to the KK-Manager-DR instance by running
+the configuration command.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">clikk conf server --kk-manager-host=10.30.0.18 --kk-manager port=1234</span>
+</pre></div>
+</div>
+<p>While connected to a KK-Manager-DR instance, CLIKK can only execute list and info commands —
+no <a class="reference internal" href="../appendix.html#term-CUD"><span class="xref std std-term">CUD</span></a> commands may be executed.</p>
+</li>
+</ol>
+</section>
+</section>
+<section id="kk-manager-dr-promotion">
+<h2>KK-Manager-DR promotion<a class="headerlink" href="#kk-manager-dr-promotion" title="Link to this heading"></a></h2>
+<p>In the case where the main KK-Manager server goes down and is rendered inoperable, administrators may promote
+a KK-Manager-DR instance to be the main KK-Manager instance. Follow these steps to promote a KK-Manager-DR instance:</p>
+<ol class="arabic">
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">clikk</span> <span class="pre">kk-manager</span> <span class="pre">promote-dr</span></code> to promote a KK-Manager-DR instance. CLIKK must be connected
+to the KK-Manager-DR instance that will be promoted. There are two variants of the command:</p>
+<ul>
+<li><p>To use the same KK-Auditor instance, use the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>kk-manager<span class="w"> </span>promote-dr<span class="w"> </span>--kk-auditor-host<span class="o">=</span><span class="m">127</span>.0.0.1<span class="w"> </span>--kk-auditor-port<span class="o">=</span><span class="m">8082</span>
+
+<span class="go">Enter admin ID: Admin1</span>
+<span class="go">Enter password:</span>
+<span class="go">Insert the administrator card of Admin1 for two-factor authentication.</span>
+
+<span class="go">Dual control authentication -- credential of second user is required.</span>
+<span class="go">Admin1 is currently logged in.</span>
+
+<span class="go">Enter admin ID: Admin2</span>
+<span class="go">Enter password:</span>
+<span class="go">Insert the administrator card of Admin2 for two-factor authentication.</span>
+
+<span class="go">KK-Manager-DR has been promoted successfully to main KK-Manager.</span>
+<span class="go">Please update the relevant configurations and restart the KK-Manager service.</span>
+</pre></div>
+</div>
+</li>
+<li><p>To use a new KK-Auditor instance, run the new KK-Auditor in registration mode.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>-u<span class="w"> </span>kripta<span class="w"> </span>kk-ad<span class="w"> </span>--kk-auditor-pck-cert-path<span class="o">=</span>/var/local/kriptakey/kk-auditor/sgxdata/pck_cert_0323BC80XXXXXXXXXXXXXXXXXXXXXXXX.pem
+</pre></div>
+</div>
+<p>Then, run the following command with CLIKK:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>kk-manager<span class="w"> </span>promote-dr<span class="w"> </span>--kk-manager-collateral-path<span class="o">=</span>/home/user/Documents/collateral_00A034XXXXXXXX.json<span class="w"> </span>--kk-auditor-collateral-pat<span class="o">=</span>/home/user/Documents/collateral_00A034XXXXXXXX.json<span class="w"> </span>--kk-auditor-host<span class="o">=</span><span class="m">127</span>.0.0.1<span class="w"> </span>--kk-auditor-port<span class="o">=</span><span class="m">8082</span>
+
+<span class="go">Enter admin ID: Admin1</span>
+<span class="go">Enter password:</span>
+<span class="go">Insert the administrator card of Admin1 for two-factor authentication.</span>
+
+<span class="go">Dual control authentication -- credential of second user is required.</span>
+<span class="go">Admin1 is currently logged in.</span>
+
+<span class="go">Enter admin ID: Admin2</span>
+<span class="go">Enter password:</span>
+<span class="go">Insert the administrator card of Admin2 for two-factor authentication.</span>
+
+<span class="go">KK-Manager-DR has been promoted successfully to main KK-Manager.</span>
+<span class="go">Please update the relevant configurations and restart the KK-Manager service.</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p>Stop the KK-Manager-DR service.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>stop<span class="w"> </span>kk-md-dr.service
+</pre></div>
+</div>
+</li>
+<li><p>Run the KK-Manager configuration script to update the KK-Manager configuration file. Change the KK-Manager mode
+to main KK-Manager.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>/opt/kriptakey/kk-manager/kk-m.sh
+</pre></div>
+</div>
+</li>
+<li><p>Restart the KK-Manager service, and check that it is running properly.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>kk-md.service<span class="w"> </span>--now
+
+<span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>kk-md.service
+</pre></div>
+</div>
+</li>
+<li><p>For each KK-Cryptoservice instance, run the KK-Cryptoservice configuration script to update the KK-Manager
+host and port.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>/opt/kriptakey/kk-cryptoservice/kk-cs.sh
+</pre></div>
+</div>
+</li>
+<li><p>The promotion procedure is complete. As a KK-Manager-DR instance has been promoted to the main KK-Manager instance,
+it is highly recommended to set up a new KK-Manager-DR instance and register it to the main KK-Manager instance —
+refer to <a class="reference internal" href="#registering-kk-manager-dr"><span class="std std-ref">Registering KK-Manager-DR</span></a>.</p></li>
+</ol>
+</section>
+<section id="restoring-kk-manager-from-backup">
+<h2>Restoring KK-Manager from backup<a class="headerlink" href="#restoring-kk-manager-from-backup" title="Link to this heading"></a></h2>
+<p>If KK-Manager-DR promotion is not an available option, administrators must restore the KK-Manager’s database
+from a backup. Backups may be created manually via CLIKK, or automatically by the main KK-Manager instance.
+It is the administrator’s responsibility to keep the backups off the KK-Manager machine to aovid unavailability
+issues when the KK-Manager machine is inoperable and data is inaccessible.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Before restoring the backup file, ensure that the KK-Auditor and the KK-Manager service has been stopped.
+Run the command <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">systemctl</span> <span class="pre">stop</span> <span class="pre">kk-ad.service</span></code> and <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">systemctl</span> <span class="pre">stop</span> <span class="pre">kk-md.service</span></code> to stop
+the KK-Auditor service and the KK-Manager service, respectively.</p>
+</div>
+<p>To begin the restoration process, a backup file must be available on hand. Backups may be retrieved from the <code class="docutils literal notranslate"><span class="pre">backup</span></code>
+directory in the main KK-Manager’s working directory. The restored KK-Manager instance can be configured to connect
+to the existing KK-Auditor instance, or to a new KK-Auditor instance.</p>
+<p>On top of the database backup file, restoration from backup also requires the following:</p>
+<ul class="simple">
+<li><p>KK-Auditor machine’s PCK certificate and collateral files</p></li>
+<li><p>KK-Manager machine’s PCK certificate and collateral files</p></li>
+<li><p>A sufficient amount of recovery cards</p></li>
+<li><p>If restoring to a different machine, a signed permission file from Klavis Kripta</p></li>
+</ul>
+<section id="restoring-to-the-same-machine">
+<h3>Restoring to the same machine<a class="headerlink" href="#restoring-to-the-same-machine" title="Link to this heading"></a></h3>
+<ul>
+<li><p>If the administrator would like to connect the restored KK-Manager instance to a new KK-Auditor instance,
+the KK-Auditor machine must first be set up following the steps in <a class="reference internal" href="kripta-key-installation.html#kk-auditor-setup-and-configuration"><span class="std std-ref">KK-Auditor setup and configuration</span></a>.</p></li>
+<li><p>Run KK-Auditor in registration mode on the desired machine.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>-u<span class="w"> </span>kripta<span class="w"> </span>kk-ad<span class="w"> </span>--kk-auditor-pck-cert-path<span class="o">=</span>/var/local/kriptakey/kk-auditor/sgxdata/pck_cert_0323BC80XXXXXXXXXXXXXXXXXXXXXXXX.pem
+
+<span class="go">Commencing the KK-Auditor registration process.</span>
+<span class="go">This will initialize a KK-Auditor instance on this machine and register it to the KK-Manager instance.</span>
+<span class="go">Any existing KK-Auditor database file will be OVERWRITTEN.</span>
+<span class="go">Do not interrupt the process until the message &quot;KK-Auditor has been registered successfully to KK-Manager.&quot; appears.</span>
+<span class="go">Are you sure you want to continue? Type `%\Ed_` to continue, or press Enter to cancel.</span>
+<span class="go">&gt; %\Ed_</span>
+
+<span class="go">[-] Ready for initialization and registration.</span>
+<span class="go">[-] Listening on port 8083...</span>
+<span class="go">[-] Waiting for connection from KK-Manager...</span>
+</pre></div>
+</div>
+</li>
+<li><p>Run KK-Manager in restoration mode. Note that this action requires a number of recovery cards,
+which will be specified by KK-Manager.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Commencing the database restoration process.</span>
+<span class="go">This will restore the KK-Manager database from a backup.</span>
+<span class="go">Any existing KK-Manager database will be OVERWRITTEN.</span>
+<span class="go">Do not interrupt the process until the message &quot;KK-Manager backup has been restored successfully.&quot; appears.</span>
+<span class="go">Re-run the restoration process if the message fails to appear.</span>
+
+<span class="go">Are you sure you want to continue? Type `U|4+&gt;` to continue, or press Enter to cancel.</span>
+<span class="go">&gt; U|4+&gt;</span>
+
+<span class="go">Enter the deployment ID, e.g., ENTERPRISE017048</span>
+<span class="go">Deployment ID: ENTERPRIXXXXXXXX</span>
+<span class="go">Enter the secure channel code (SCC), e.g., 418XX...XX</span>
+<span class="go">Secure channel code: 92c78aa0XXXXXXXXXXXXXXXXXXXXXXXX</span>
+
+<span class="go">Please prepare a sufficient number of healthy recovery cards.</span>
+
+<span class="go">Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).</span>
+<span class="go">Total of 1 secret(s) recovered.</span>
+<span class="go">Please insert the next recovery card</span>
+
+<span class="go">Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).</span>
+<span class="go">Total of 2 secret(s) recovered.</span>
+<span class="go">Please insert the next recovery card</span>
+
+<span class="go">Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).</span>
+<span class="go">Total of 3 secret(s) recovered.</span>
+
+<span class="go">A sufficient number of secrets have been recovered.</span>
+<span class="go">Remove the card!</span>
+<span class="go">KK-Manager backup has been restored successfully.</span>
+<span class="go">Please restart the KK-Manager service and re-register all KK-Cryptoservice and KK-Manager-DR instances.</span>
+</pre></div>
+</div>
+<p>Please refer to <a class="reference internal" href="#re-registering-kk-cryptoservice-and-kk-manager-dr-instances-after-restoration"><span class="std std-ref">Re-registering KK-Cryptoservice and KK-Manager-DR instances after restoration</span></a>
+for steps on re-registration.</p>
+</li>
+</ul>
+</section>
+<section id="restoring-to-a-different-machine">
+<h3>Restoring to a different machine<a class="headerlink" href="#restoring-to-a-different-machine" title="Link to this heading"></a></h3>
+<p>Unlike restoration to the same machine, restoring KK-Manager to a different machine requires a permission file
+that is signed by Klavis Kripta. Follow these steps to obtain a restoration request file:</p>
+<ul>
+<li><p>To restore it in a new machine, prepare a KK-Manager service in that new machine by referring to <a class="reference internal" href="kripta-key-installation.html#kk-manager-setup-and-configuration"><span class="std std-ref">KK-Manager setup and configuration</span></a>.</p></li>
+<li><p>Ensure the target machine has the PCK certificate and collateral. Generate a restoration request file by running the command below, passing in the path to the KK-Manager machine’s
+PCK certificate and collateral files:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>-u<span class="w"> </span>kripta<span class="w"> </span>kk-md<span class="w"> </span>--request-restore<span class="w"> </span>--kk-manager-pck-cert-path<span class="o">=</span>/var/local/kriptakey/kk-manager/sgxdata/pck_cert_7AF8435A5CA5E004C802042EXXXXXXXX.pem<span class="w"> </span>--kk-manager-collateral-path<span class="o">=</span>/var/local/kriptakey/kk-manager/sgxdata/collateral_00A0XXXXXXXX.json
+
+<span class="go">Commencing the restoration request generation process.</span>
+<span class="go">This will generate a request file to restore a KK-Manager backup to a different machine.</span>
+<span class="go">Do not interrupt the process until the message &quot;KK-Manager restoration request has been generated successfully.&quot; appears.</span>
+<span class="go">Re-run the process if you do not see the message.</span>
+<span class="go">Are you sure you want to continue? Type `6?QHt` to continue, or press Enter to cancel.</span>
+<span class="go">&gt; 6?QHt</span>
+
+<span class="go">[-] Generating KK-Manager restoration request...</span>
+
+<span class="go">KK-Manager restoration request has been generated successfully.</span>
+<span class="go">Restoration request has been written to /var/local/kriptakey/kk-manager/sgxdata/request.restore.</span>
+</pre></div>
+</div>
+</li>
+<li><p>Send the restoration request file alone with the deployment ID via email to <a class="reference external" href="mailto:sales&#37;&#52;&#48;klaviskripta&#46;com">sales<span>&#64;</span>klaviskripta<span>&#46;</span>com</a>.</p></li>
+<li><p>Once the permission file has been received from Klavis Kripta, proceed with restoration as detailed in
+<a class="reference internal" href="#restoring-to-the-same-machine"><span class="std std-ref">Restoring to the same machine</span></a>. On the restoration step
+where KK-Manager is ran with the <code class="docutils literal notranslate"><span class="pre">--restore</span></code> flag, add in the flag <code class="docutils literal notranslate"><span class="pre">--permission-file-path</span></code>,
+passing in the path to the received permission file.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>-u<span class="w"> </span>kripta<span class="w"> </span>kk-md<span class="w"> </span>--restore<span class="w"> </span>–-kk-manager-pck-cert-path<span class="o">=</span>/var/local/kriptakey/kk-manager/sgxdata/pck_cert_7AF8435A5CA5E004C802042EXXXXXXXX.pem<span class="w"> </span>--kk-manager-collateral-path<span class="o">=</span>/var/local/kriptakey/kk-manager/sgxdata/collateral_00A0XXXXXXXX.json<span class="w"> </span>--recovery-card-threshold<span class="o">=</span><span class="m">3</span><span class="w"> </span>--backup-file-path<span class="o">=</span>/var/local/kriptakey/kk-manager/backup/KK-M-mar15-15:03.backup<span class="w"> </span>--kk-auditor-collateral-path<span class="o">=</span>collateral_00A0XXXXXXXX.json<span class="w"> </span>--permission-file-path<span class="o">=</span>/var/local/kriptakey/kk-manager/sgxdata/permission.file
+
+<span class="go">Commencing the database restoration process.</span>
+<span class="go">This will restore the KK-Manager database from a backup.</span>
+<span class="go">Any existing KK-Manager database will be OVERWRITTEN.</span>
+<span class="go">Do not interrupt the process until the message &quot;KK-Manager backup has been restored successfully.&quot; appears.</span>
+<span class="go">Re-run the restoration process if the message fails to appear.</span>
+
+<span class="go">Are you sure you want to continue? Type `U|4+&gt;` to continue, or press Enter to cancel.</span>
+<span class="go">&gt; U|4+&gt;</span>
+
+<span class="go">Enter the deployment ID, e.g., ENTERPRISE017048</span>
+<span class="go">Deployment ID: ENTERPRIXXXXXXXX</span>
+<span class="go">Enter the secure channel code (SCC), e.g., 418XX...XX</span>
+<span class="go">Secure channel code: 92c78aa0XXXXXXXXXXXXXXXXXXXXXXXX</span>
+
+<span class="go">Please prepare a sufficient number of healthy recovery cards.</span>
+
+<span class="go">Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).</span>
+<span class="go">Total of 1 secret(s) recovered.</span>
+<span class="go">Please insert the next recovery card</span>
+
+<span class="go">Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).</span>
+<span class="go">Total of 2 secret(s) recovered.</span>
+<span class="go">Please insert the next recovery card</span>
+
+<span class="go">Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).</span>
+<span class="go">Total of 3 secret(s) recovered.</span>
+
+<span class="go">A sufficient number of secrets have been recovered.</span>
+<span class="go">Remove the card!</span>
+<span class="go">KK-Manager backup has been restored successfully.</span>
+<span class="go">Please restart the KK-Manager service and re-register all KK-Cryptoservice and KK-Manager-DR instances.</span>
+</pre></div>
+</div>
+<p>Please refer to <a class="reference internal" href="#re-registering-kk-cryptoservice-and-kk-manager-dr-instances-after-restoration"><span class="std std-ref">Re-registering KK-Cryptoservice and KK-Manager-DR instances after restoration</span></a>
+for steps on re-registration.</p>
+</li>
+</ul>
+</section>
+<section id="re-registering-kk-cryptoservice-and-kk-manager-dr-instances-after-restoration">
+<h3>Re-registering KK-Cryptoservice and KK-Manager-DR instances after restoration<a class="headerlink" href="#re-registering-kk-cryptoservice-and-kk-manager-dr-instances-after-restoration" title="Link to this heading"></a></h3>
+<p>After restoration, it is necessary to re-register all Kripta Key modules to propagate the new information.
+Follow these steps to perform re-registration correctly:</p>
+<ol class="arabic">
+<li><p>Stop the KK-Cryptoservice and KK-Manager-DR services on the relevant machines.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>stop<span class="w"> </span>kk-csd.service
+
+<span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>stop<span class="w"> </span>kk-md-dr.service
+</pre></div>
+</div>
+</li>
+<li><p>For each KK-Cryptoservice instance in operation:</p>
+<ol class="arabic">
+<li><p>Run the configuration script so that it connects to the restored KK-Manager instance.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>/opt/kriptakey/kk-cryptoservice/kk-cs.sh
+</pre></div>
+</div>
+</li>
+<li><p>Run KK-Cryptoservice in registration mode.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>-u<span class="w"> </span>kripta<span class="w"> </span>kk-csd<span class="w"> </span>--kk-cryptoservice-pck-cert<span class="o">=</span>/var/local/kriptakey/kk-cryptoservice/sgxdata/pck_cert_39288AC7XXXXXXXXXXXXXXXXXXXXXXXX.pem<span class="w"> </span>--database-backup-path<span class="o">=</span>/path-to-database-backup/backup.db
+</pre></div>
+</div>
+</li>
+<li><p>Register the KK-Cryptoservice instance using CLIKK.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>kk-cryptoservice<span class="w"> </span>add<span class="w"> </span>--kk-manager-collateral-path<span class="o">=</span>/home/user/documents/collateral_00A065XXXXXX.json<span class="w"> </span>--kk-cryptoservice-collateral-path<span class="o">=</span>/home/user/documents/collateral_0BF32AXXXXXX.json<span class="w"> </span>--kk-cryptoservice-host<span class="o">=</span><span class="m">10</span>.30.0.2<span class="w"> </span>--kk-cryptoservice-port<span class="o">=</span><span class="m">8086</span><span class="w"> </span>--kk-cryptoservice-name<span class="o">=</span>kk-csOne
+</pre></div>
+</div>
+</li>
+<li><p>Start the KK-Cryptoservice service.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>kk-csd.service<span class="w"> </span>--now
+</pre></div>
+</div>
+</li>
+</ol>
+</li>
+<li><p>For each KK-Manager-DR instance in operation:</p>
+<ol class="arabic">
+<li><p>Run the configuration script so that it connects to the restored KK-Manager instance.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>/opt/kriptakey/kk-manager/kk-m.sh
+</pre></div>
+</div>
+</li>
+<li><p>Run KK-Manager in DR registration mode.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>-u<span class="w"> </span>kripta<span class="w"> </span>kk-md<span class="w"> </span>--register-dr<span class="w"> </span>--kk-manager-dr-pck-cert-path<span class="o">=</span>/var/local/kriptakey/kk-manager/sgxdata/pck_cert_4DB1DC9FXXXXXXXXXXXXXXXXXXXXXXXXXXX.pem<span class="w"> </span>--kk-manager-dr-collateral-path<span class="o">=</span>/var/local/kriptakey/kk-manager/sgxdata/collateral_13E3CDXXXXXX.json<span class="w"> </span>--database-backup-path<span class="o">=</span>/path-to-backup-file/backup.db
+</pre></div>
+</div>
+</li>
+<li><p>Register the KK-Manager-DR instance using CLIKK.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>kk-manager<span class="w"> </span>add-dr<span class="w"> </span>--kk-manager-collateral-path<span class="o">=</span>home/user/documents/collateral_00A065XXXXXXX.json<span class="w"> </span>--kk-manager-dr-collateral-path<span class="o">=</span>/home/user/documents/collateral_13E3CDXXXXXX.json<span class="w"> </span>--kk-manager-dr-host<span class="o">=</span><span class="m">10</span>.30.0.2<span class="w"> </span>--kk-manager-dr-port<span class="o">=</span><span class="m">8086</span><span class="w"> </span>--kk-manager-dr-name<span class="o">=</span>kk-m-drOne
+</pre></div>
+</div>
+</li>
+<li><p>Start the KK-Manager-DR service.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>kk-md-dr.service<span class="w"> </span>--now
+</pre></div>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+<p>For more details, refer to <a class="reference internal" href="cryptographic-service-installation.html#registering-kk-cryptoservice"><span class="std std-ref">Registering KK-Cryptoservice</span></a>
+and <a class="reference internal" href="#registering-kk-manager-dr"><span class="std std-ref">Registering KK-Manager-DR</span></a>.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cryptographic-service-installation.html" class="btn btn-neutral float-left" title="KK-Cryptoservice setup and configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="appliance-deployment.html" class="btn btn-neutral float-right" title="Appliance model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

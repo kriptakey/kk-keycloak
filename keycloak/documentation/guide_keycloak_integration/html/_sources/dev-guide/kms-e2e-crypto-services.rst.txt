@@ -1,0 +1,61 @@
+End-to-end cryptographic services
+=================================
+
+Nowadays, various institutions provide services to end users via web and mobile applications. Often,
+users of these applications must authenticate themselves by providing their credentials. As such,
+these applications must handle sensitive information, which isn't limited to the end users' credentials.
+
+System administrators may set up a secure channel such as SSL/TLS to protect sensitive data in transit.
+However, once the data leaves the channel, nothing protects it as it flows to other endpoints, such as
+database servers, application servers, and so on. All these endpoints present a possible weak point
+where sensitive information may leak or be tampered.
+
+Kripta Key's **end-to-end cryptographic services** solves this issue by encrypting data on the user's end,
+and providing a service for applications to verify or reencrypt the data, without the application ever
+seeing the sensitive data in the clear.
+
+If the preexisting system involves some legacy system that has its own encryption method and format to secure
+the credentials, Kripta Key also provides a service to reencrypt and repack the credentials to the appropriate
+format, performed securely inside its secure memory. Hence, no application will receive the credentials in the clear.
+
+The end-to-end encryption process involves several keys:
+
+#.  **Wrapping key** --- the transport keys are wrapped with this Kripta Key-stored key.
+#.  **Transport key** --- the session key and the client key is wrapped with this application-stored key.
+#.  **Session key** --- data sent from the client (in transit) is encrypted with this ephemeral key.
+#.  **Client key** --- data sent to the client (in transit) is encrypted with this ephemeral key.
+#.  **Permanent key** --- data is stored in the server encrypted with this Kripta Key-stored key.
+
+Most of these keys are symmetric (hence, AES) keys, with the exception of the transport key --- the transport key
+is an RSA key pair. It is recommended to use different permanent keys to store different types of data.
+Additionally, in here, "client" refers to the end user-facing side of the web or mobile application.
+
+.. glossary::
+
+    E2EE reencryption from session key to permanent key
+        Reencrypts data received from the client for storage in the application's server. The data is encrypted
+        on the client-side with the session key, and reencrypted in Kripta Key with the permanent key.
+        Storage of the reencrypted data is handled by the application.
+
+    E2EE reencryption from permanent key to client key
+        Reencrypts data from the application to be sent to the client. The data is encrypted with the
+        permanent key at rest, and reencrypted in Kripta Key with the client key, which is then sent
+        to the client for decryption.
+
+    E2EE decryption from session key
+        Decrypts data received from the client. This returns the data in the clear. Unless this is necessary,
+        it is recommended to use the reencrypt service instead.
+
+    E2EE encryption to client key
+        Encrypts data to be sent to the client.
+
+    E2EE comparison
+        Compares two encrypted messages securely in secure memory, where the messages are encrypted with different keys.
+        This service allows application to avoid requesting decryption twice and receiving the possibly sensitive
+        message in the clear. Kripta Key returns ``true`` if the messages compare equal, and ``false`` otherwise.
+        In the context of Kripta Key E2EE, one of the messages is encrypted with the session key from the client,
+        while the other message is encrypted with the permanent key from the application's server.
+
+    Secret fetching
+        Retrieve the information and data of a secret that is stored in Kripta Key. The secret may be added or
+        generated via CLIKK. The information returned includes the secret ID, label, and data.

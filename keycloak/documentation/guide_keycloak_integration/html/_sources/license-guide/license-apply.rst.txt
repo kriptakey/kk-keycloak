@@ -1,0 +1,82 @@
+Applying your license
+=====================
+
+After receiving the license file from the sales team, an administrator may apply the license
+by running the following command:
+
+.. code-block:: console
+
+    $ clikk kk-manager apply-license --license-file="license.file"
+
+This command is **critical** privilege level, which requires two administrators to authenticate
+with their passwords and smartcards.
+
+
+Applying a license from evaluation license
+------------------------------------------
+
+When a license is applied to a deployment on an evaluation license, several system changes occur. Thus,
+it is important that the administrators follow the steps below to propagate the changes to all instances
+involved in the deployment.
+
+#.  Restart the KK-Auditor service on the KK-Auditor instance, so that the applied license takes effect.
+
+    .. code-block:: console
+
+        $ sudo systemctl restart kk-ad.service
+
+#.  Restart the KK-Manager service on the KK-Manager instance, so that the applied license takes effect.
+
+    .. code-block:: console
+
+        $ sudo systemctl restart kk-md.service
+
+#.  For each KK-Cryptoservice instance, do the following:
+
+    #.  Stop the KK-Cryptoservice service.
+
+        .. code-block:: console
+
+            $ sudo systemctl stop kk-csd.service
+
+    #.  Re-register the KK-Cryptoservice instance. Refer to :doc:`/sys-admin-guide/index` for details
+        on the ``clikk kk-cryptoservice add`` command.
+
+        .. todo::
+
+            TODO: Link this reference once Sysadmin Guide is rewritten.
+
+    #.  Restart the KK-Cryptoservice service.
+
+        .. code-block:: console
+
+            $ sudo systemctl start kk-csd.service
+
+#.  For each registered application, re-register the application. Refer to :doc:`/sys-admin-guide/index`
+    for details on the ``clikk app add`` command.
+
+
+
+Renewing existing license
+-------------------------
+
+Before renewing the license on a deployment, to ensure that the new license information properly propagates
+to all instances, perform the following steps:
+
+#.  Ensure all KK-Cryptoservice instances and KK-Manager-DR instances are connected to the KK-Manager instance.
+
+#.  Apply the new license.
+
+#.  Double-check that the replication to all KK-Cryptoservice and KK-Manager-DR instances was successful.
+
+#.  Restart the KK-Cryptoservice service on each KK-Cryptoservice instance.
+
+    .. code-block:: console
+
+        $ sudo systemctl restart kk-csd.service
+
+#.  Restart the KK-Manager service on each KK-Manager-DR instance.
+
+    .. code-block:: console
+
+        $ sudo systemctl restart kk-md.service

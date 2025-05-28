@@ -1,0 +1,250 @@
+General cryptographic services
+==============================
+
+.. To access cryptographic services, you can use REST API or SDK API as an interface. This guide will help you
+.. understand how to call the REST API or SDK API with code examples on supported programming languages. We assume
+.. that you know, in a general sense, how REST API and SDK API work.
+
+The following actions are necessary before an application may access the cryptographic services.
+
+#.  Register the application with ``clikk app add``.
+#.  Assign the application to a specific partition with ``clikk partition add-app``.
+#.  Add the partition to a specific KK-Cryptoservice instance with ``clikk kk-cryptoservice add-partition``.
+
+After a successful :term:`login`, the application must present its session token to any of the following
+cryptographic service endpoints.
+
+.. glossary::
+
+    Random number generation
+        Generates a random number of a given length.
+
+    MAC generation
+        Messages that are sent over an insecure channel must be authenticated to prevent message forgery
+        by an intruder who can tamper with the channel. A message authentication code (MAC), also known as a tag,
+        protects both a message's integrity and authenticity.
+
+        There are several types of MAC available: CMAC-AES-256, GMAC-256, and HMAC-SHA-256. Only AES keys whose
+        key purpose is MAC generation may be used to generate MACs. For GMAC-256, the output will also include
+        the initialization vector (IV).
+
+        *   Generating MAC for data
+
+            Data for this type of MAC generation may not exceed 700 KB in size. Given the same key and MAC type,
+            a batch of data may have their respective MACs generated in a single request.
+
+        *   Generating MAC for a file (**SDK API only**)
+
+            Only HMAC-SHA-256 may be used to generate MAC for files.
+
+    MAC verification
+        MAC verification is subject to similar restrictions as MAC generation.
+
+        *   For verifying the MAC of a data, the size of the data must not exceed 700 KB. Additionally,
+            if the MAC is a GMAC-256, the initialization vector (IV) must be provided as well. It is also possible
+            to verify several MACs in one request, given that all of them are of the same type and were generated
+            using the same key.
+
+        *   For verifying the MAC of a file, only HMAC-SHA-256 is accepted. This verification is only available
+            via the SDK API.
+
+    Data sealing
+        Applications may request data :term:`sealing` using this service. A batch of data, to be sealed with
+        the same parameters, may be sealed in a single request, returning multiple results as well.
+        Unlike regular encryption, the metadata is stored as part of the ciphertext --- the application does not
+        need to handle the metadata.
+
+        Sealing requires a key whose key purpose is encryption.
+
+    Data unsealing
+        This service reverses data sealing. Note that a sealed data can be unsealed only by the same deployment
+        of Kripta Key that sealed it. Applications may unseal a batch of data in one request by providing multiple
+        input values.
+
+    Encryption
+        Applications that handle sensitive or confidential data may use this service to ensure the confidentiality
+        and integrity of the data. Encryption may be done using an AES key or an RSA key.
+
+        *   Encrypting data
+
+            AES or RSA keys may be used for encrypting data. Multiple inputs, to be encrypted using the same key,
+            may be provided. The total size of the input may not exceed 700 KB in size.
+
+            *   Encrypting using AES key
+
+                On this mode, data will be encrypted with AES-256-GCM. AES-256-GCM is an authenticated encryption
+                scheme, which always produces a tag. Applications may provide additional authenticated data (AAD)
+                in its request. The AAD will not be encrypted, but it will be combined with the ciphertext
+                to generate the tag. The latest version of the key is always used.
+
+            *   Encrypting using RSA key (without session key)
+
+                On this mode, the maximum input size depends on the size of the key.
+
+                *   With 2048 bit keys, the maximum size is 126 bytes.
+                *   With 3072 bit keys, the maximum size is 254 bytes.
+                *   With 4096 bit keys, the maximum size is 382 bytes.
+
+            *   Encrypting using RSA key (with session key)
+
+                On this mode, a temporary AES key, called the session key is generated for each encryption.
+                The data is encrypted using the session key with AES-256-GCM, and then the session key
+                is wrapped using the RSA key. Hence, this mode has the same capabilities and limitations
+                as direct encryption using an AES key.
+
+        *   Encrypting files (**SDK API only**)
+
+            Only AES key may be used to encrypt files. Files are encrypted using AES-256-CBC. Additionally,
+            a tag is calculated as well, using HMAC-SHA-256.
+
+    Decryption
+        This service decrypts encrypted data. Applications must provide the parameters used to encrypt the data.
+
+        *   Decrypting data
+
+            A batch of data may be decrypted in a single request, if they were encrypted using the same key and mode.
+            If the data was encrypted using an AES key, the key version must be supplied as well. Additionally,
+            if the data was encrypted with an AAD, the same AAD must be provided in order to decrypt
+            the data successfully.
+
+        *   Decrypting files (**SDK API only**)
+
+            Providing the file's MAC is optional. If omitted, integrity check will not be performed.
+
+    Tokenization
+        Tokenization is the process of substituting parts of a sensitive data with benign data. This is done
+        when there is a need to recognize and verify the data without having to decrypt all of it.
+
+        The encryption is done using an AES key whose purpose is encryption. The latest version is always used
+        when tokenizing an input. Given the same parameters, it is possible to tokenize multiple inputs
+        with a single request.
+
+        A format string specify which part of the data is tokenized and which part is kept in the clear.
+        This format string consists of only ``$`` and ``%`` characters, and must be the same length as
+        the input string. ``$`` indicates characters that are preserved, while ``%`` indicates characters
+        that will be substituted with a benign value.
+
+        Since tokenization is done using encryption, the length of the data will not be preserved,
+        and the resulting token will always be longer than the input.
+
+    Detokenization
+        This service reverses tokenization, retrieving the original data from the tokenized data.
+        Multiple tokens may be detokenized in a single request.
+
+    Format Preserving Encryption (FPE) Tokenization
+        Format-Preserving Encryption (FPE) tokenization is a method of replacing sensitive data with 
+        tokens while preserving the original format. Unlike traditional tokenization, which may generate 
+        tokens of varying lengths or formats, FPE ensures that the token retains the same structure as 
+        the input data.
+
+        FPE tokenization is performed using an AES key with the FFx algorithm. This service allows tokenizing 
+        multiple inputs in a single request. Here, FPE tokenization only supports full tokenization.
+
+    Format Preserving Encryption (FPE) Detokenization
+        FPE detokenization is the process of reversing FPE tokenization, converting the tokenized data back into 
+        its original form. Since FPE tokenization preserves the format and structure of the original data, 
+        detokenization ensures seamless data retrieval while maintaining security.
+
+    Signature generation
+        Data signing requires a key pair whose purpose is signing. Generating a signature guarantees
+        data integrity and authenticity, allowing users to detect if the data has been altered after the generation
+        of the signature, and assuring users that the data was signed by the entity possessing the private key.
+
+    Signature verification
+        To verify a signature, an application must present the data, the key, and the signature.
+
+    Certificate signing
+        This service allows an application to sign a :term:`CSR` using another certificate present in the system.
+        The key attached to the signing certificate must have a certificate signing purpose. The signed certificate
+        will be returned in PEM format.
+
+    Certificate verification
+        To verify a certificate, the application must present the key ID associated with the signing certificate.
+
+    Key information fetching
+        An application may provide partition ID, key ID, and key version --- if the key is an AES key ---
+        to fetch information about the key from the system. The information includes the key label, algorithm,
+        length, purpose, extractable state, rotatable state, whether the key is public (if applicable),
+        the related certificate (if any), creation date, and expiry date.
+
+These services are performed using keys stored in the Kripta Key system. However, Kripta Key also provides
+services where the key used is supplied by the application. Such services are called **application-stored services**.
+In order to safeguard the key material and prevent unauthorized disclosures, application-stored keys are generated and
+wrapped by Kripta Key. The application stores the wrapped key outside of Kripta Key.
+
+.. glossary::
+
+    Application-stored key generation
+        This service generates an AES key and outputs it in a protected form, which is detailed as follows:
+
+        *   Wrapped by a Kripta Key-stored key.
+
+            The wrapping key must be an AES key whose purpose is key wrapping.
+
+        *   Wrapped by an application-stored key.
+
+            The wrapping key must be an asymmetric key.
+
+        *   Stored in a passworded ZIP archive.
+
+            This requires the :ref:`license-guide/kripta-key-licensing:snap bi` add-on feature on your license.
+
+    Application-stored key pair generation
+        This service generates a key pair and outputs it in a protected form, which is detailed as follows:
+
+        *   Wrapped by a Kripta Key-stored key.
+
+            The wrapping key must be an AES or RSA key whose purpose is key wrapping. Additionally,
+            if the wrapping key is an RSA key, the application may also opt to generate the certificate
+            corresponding to the generated public key.
+
+        *   Wrapped by an application-stored key.
+
+            The wrapping key must be an asymmetric key.
+
+        *   Stored in a passworded ZIP archive.
+
+            This requires the :ref:`license-guide/kripta-key-licensing:snap bi` add-on feature on your license.
+
+        The key pair can be any of the following type:
+
+        *   RSA-2048
+        *   RSA-3072
+        *   RSA-4096
+        *   ECDSA P-256
+
+    Application-stored MAC generation
+        Generates MAC using an application-stored AES key. Similar to :term:`MAC generation`
+        using Kripta Key-stored keys, applications may generate these types of MACs: CMAC-AES-256, GMAC-256,
+        and HMAC-SHA-256.
+
+    Application-stored MAC verification
+        Verifies MAC using an application-stored AES key.
+
+    Application-stored data sealing
+        This service encrypts a single or multiple plaintexts and the metadata using an application-stored AES
+        or RSA public key. The plaintext must not exceed 700 KB in size.
+
+    Application-stored data unsealing
+        This service decrypts sealed data using an application-stored AES or an RSA private key.
+
+    Application-stored encryption
+        Encrypts a single or multiple plaintexts using an application-stored key, either an AES or an RSA key.
+        See :term:`encryption` for details and restrictions.
+
+    Application-stored decryption
+        Decrypts a single or multiple ciphertexts using an application-stored AES or RSA key.
+
+    Application-stored tokenization
+        Tokenizes a single or multiple input strings using an application-stored AES key. See :term:`tokenization`
+        for more details.
+
+    Application-stored detokenization
+        Detokenizes a single or multiple tokens using an application-stored AES key.
+
+    Application-stored signature generation
+        Applications may use this service to generate a signature corresponding to a particular piece of data
+        with an application-stored asymmetric key.
+
+    Application-stored signature verification
+        Applications may use this service to verify a data's signature with an application-stored asymmetric key.

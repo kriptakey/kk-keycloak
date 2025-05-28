@@ -1,0 +1,327 @@
+.. include:: <isonum.txt>
+
+Before installing on cloud
+==========================
+
+This guide assumes Alibaba Cloud as the platform of installation. It may be possible to install
+a KK-Cryptoservice instance on a different cloud platform. However, Klavis Kripta will not provide
+official support for installing and/or troubleshoot issues that may occur.
+
+Before configuring the cloud platform, it is highly recommended to set the region to one
+that is geographically closest, and to comply with the region's regulations. This region should be
+used in the configuration settings provided below wherever applicable. This guide will be using
+**Indonesia (Jakarta)** as its preferred region.
+
+
+Cloud platform configuration
+----------------------------
+
+Perform the following steps to prepare Alibaba Cloud for KK-Cryptoservice installation.
+
+*   Create a resource group.
+
+    Resource groups are used to group resources based on usage, permissions, and regions. This allows
+    the resources to be managed in a hierarchical manner based on users and projects.
+
+    #.  Navigate to the Resource Management Console.
+    #.  Click **Resource Group** on the left panel.
+    #.  Click the **Create Resource Group** button.
+    #.  Configure the following settings on the right panel, and then click the **OK** button.
+
+        +---------------------------+-------------------+
+        |        Config Name        |   Config Value    |
+        +===========================+===================+
+        | Resource Group Identifier | kk-resource-group |
+        +---------------------------+-------------------+
+        | Display Name              | KK Resource Group |
+        +---------------------------+-------------------+
+
+*   Create an SSH key pair.
+
+    Alibaba Cloud allows users to access their instances via SSH. For a more detailed explanation,
+    please refer to the `SSH key pair article`__ at Alibaba Cloud's website.
+
+    __ https://www.alibabacloud.com/help/en/ecs/user-guide/overview-ssh
+
+    The SSH key pair will be used to set up connection between the KK-Cryptoservice instance on cloud
+    and the KK-Manager instance on premise.
+
+    #.  Navigate to the Elastic Compute Service page, and then choose Network & Security.
+    #.  Click **SSH Key Pairs** on the left panel.
+    #.  In the top navigation bar, select an appropriate region.
+    #.  Click the **Create SSH Key Pair** button.
+    #.  Configure the following settings, and then click the **OK** button.
+
+        +-------------------+-------------------------------+
+        | Config Name       | Config Value                  |
+        +===================+===============================+
+        | SSH Key Pair Name | kk-keypair                    |
+        +-------------------+-------------------------------+
+        | Creation Type     | Auto-create                   |
+        +-------------------+-------------------------------+
+        | Resource Group    | KK Resource Group             |
+        +-------------------+-------------------------------+
+        | Tag               | Add/select deployment: kk tag |
+        +-------------------+-------------------------------+
+
+    This downloads the file ``kk-keypair.pem``. Make sure to keep this file safe and secure, as anyone
+    with access to this file will be able to access the server that runs the KK-Cryptoservice instance.
+
+*   Create a security group.
+
+    A `security group`__ acts as a virtual firewall that can control inbound and outbound traffic for ECS instances.
+    By configuring inbound and outbound rules, traffic into and out of the ECS instance can be controlled.
+    An ECS instance may have multiple security groups assigned to it.
+
+    __ https://www.alibabacloud.com/help/en/ecs/user-guide/security-groups-1/
+
+    Here, the ECS instance is configured to accept incoming REST API and SDK API traffic for the KK-Cryptoservice
+    instance.
+
+    #.  Navigate to the Elastic Compute Service page, and then choose Network & Security.
+    #.  Click **Security Group** on the left panel.
+    #.  Click the **Create Security Group** button.
+    #.  Configure the following settings.
+
+        +---------------------+-------------------------------+
+        | Config Name         | Config Value                  |
+        +=====================+===============================+
+        | Security group Name | kk-security-group             |
+        +---------------------+-------------------------------+
+        | Network             | Select default VPC            |
+        +---------------------+-------------------------------+
+        | Security group Name | Basic Security Group          |
+        +---------------------+-------------------------------+
+        | Description         | KK Security Group             |
+        +---------------------+-------------------------------+
+        | Resource Group      | KK Resource Group             |
+        +---------------------+-------------------------------+
+        | Tag                 | Add/select deployment: kk tag |
+        +---------------------+-------------------------------+
+
+    #.  Add the following Inbound Rule.
+
+        +--------+----------+---------------+------------+----------------------+------------------------+
+        | Action | Priority | Protocol Type | Port Range | Authorization Object | Description            |
+        +========+==========+===============+============+======================+========================+
+        | Allow  | 1        | Custom TCP    | 8083       | 0.0.0.0/0            | REST API Endpoint Port |
+        +--------+----------+---------------+------------+----------------------+------------------------+
+        | Allow  | 1        | Custom TCP    | 8084       | 0.0.0.0/0            | SDK Endpoint Port      |
+        +--------+----------+---------------+------------+----------------------+------------------------+
+
+    #.  Click the Create Security Group button.
+
+*   Create a deployment set.
+
+    A `deployment set`__ is a policy that controls the distribution of the ECS instances.
+
+    __ https://www.alibabacloud.com/help/en/ecs/user-guide/overview-43?spm=a2c63.p38356.0.0.77e12eb1V5BvIF
+
+    KK-Cryptoservice instances must be deployed in different machines to ensure unique hardware-based root of trust
+    and service availability when the ECS instances are created. Therefore, the deployment set's strategy
+    must be set to High Availability.
+
+    #.  Navigate to the Elastic Compute Service page, and then choose **Deployment & Elasticity**.
+    #.  Click **Deployment Sets** on the left panel.
+    #.  In the top navigation bar, select a region to Indonesia(Jakarta).
+    #.  Configure the following settings, and then click the **OK** button.
+
+        +-------------+-------------------+
+        | Config Name | Config Value      |
+        +=============+===================+
+        | Name        | kk-deployment-set |
+        +-------------+-------------------+
+        | Description | KK Deployment Set |
+        +-------------+-------------------+
+        | Strategy    | High Availability |
+        +-------------+-------------------+
+
+*   Configure the VPN gateway.
+
+    The VPN Gateway is used to transmit encrypted traffic between Alibaba Cloud's virtual private cloud
+    and the KK-Manager instance or the KK-Manager-DR instances on premise.
+
+    #.  Navigate to the Elastic Compute Service page, and then choose **Network & Security**.
+    #.  Click **Virtual Private Cloud** on the left-side navigation pane.
+    #.  Navigate to **Interconnections** |rarr| **VPN** |rarr| **VPN Gateways**.
+    #.  Click **Create VPN Gateway** on the right panel.
+    #.  Configure the following settings, and then click the **Buy Now** button.
+
+        +---------------------+----------------------------+
+        | Config Name         | Config Value               |
+        +=====================+============================+
+        | Name                | kk-vpn-gateway             |
+        +---------------------+----------------------------+
+        | Resource Group      | KK Resource Group          |
+        +---------------------+----------------------------+
+        | Region              | Indonesia (Jakarta)        |
+        +---------------------+----------------------------+
+        | Gateway Type        | Standard                   |
+        +---------------------+----------------------------+
+        | Network Type        | Public                     |
+        +---------------------+----------------------------+
+        | VPC                 | Select default VPC         |
+        +---------------------+----------------------------+
+        | Specify VSwitch     | No                         |
+        +---------------------+----------------------------+
+        | Maximum Bandwidth   | 100 Mbit/s                 |
+        +---------------------+----------------------------+
+        | Traffic             | Pay-by-data-transfer       |
+        +---------------------+----------------------------+
+        | IPsec-VPN           | Disable                    |
+        +---------------------+----------------------------+
+        | SSL-VPN             | Enable                     |
+        +---------------------+----------------------------+
+        | SSL-Connections     | 5                          |
+        +---------------------+----------------------------+
+        | Duration            | By Hour                    |
+        +---------------------+----------------------------+
+        | Service-linked Role | Create a service link role |
+        +---------------------+----------------------------+
+
+    #.  Review your order on the Confirm Order page, and then tick the VPN Gateway Agreement of Service box.
+    #.  Click the **Activate Now** button.
+
+*   Configure the SSL server.
+
+    SSL-VPN allows remote clients to connect to a VPC and access the applications or services that are deployed
+    in the VPC in a secure manner.
+
+    #.  Navigate to the VPN Gateway page, and then click **SSL Servers** on the left panel.
+    #.  Click the **Create SSL Server** button.
+    #.  Configure the following settings, and then click the **OK** button.
+
+        +------------------------+--------------------------------------------------------------------+-------------------------+
+        | Config Name            | Config Value                                                       |                         |
+        +========================+====================================================================+=========================+
+        | Name                   | kk-ssl-server                                                      |                         |
+        +------------------------+--------------------------------------------------------------------+-------------------------+
+        | VPN Gateway            | Select the previously created VPN gateway                          |                         |
+        +------------------------+--------------------------------------------------------------------+-------------------------+
+        | Local Network          | Specify the default VPC CIDR (Check on VPC page)                   | example: 172.16.0.0/12  |
+        +------------------------+--------------------------------------------------------------------+-------------------------+
+        | Client Subnet          | Specify client CIDR for KK-Manager and KK-Cryptoservice connection | example: 192.168.0.0/16 |
+        +------------------------+--------------------------------------------------------------------+-------------------------+
+        | Advanced Configuration | Leave the default configuration as is                              |                         |
+        +------------------------+--------------------------------------------------------------------+-------------------------+
+
+*   Create the SSL client certificate.
+
+    An SSL client certificate is required for the Kripta Key instances to join the VPN through the OpenVPN protocol.
+
+    #.  Navigate to SSL Client page, and then click **SSL Clients** on the left panel.
+    #.  Click the **Create Client Certificate** button.
+    #.  Configure the following settings, and then click the **OK** button.
+
+        +-------------+------------------------------------------+
+        | Config Name | Config Value                             |
+        +=============+==========================================+
+        | Name        | kk-ssl-client                            |
+        +-------------+------------------------------------------+
+        | SSL Server  | Select the previously created SSL server |
+        +-------------+------------------------------------------+
+
+    #.  Under the Actions tab on the right pane, click **Download Certificate link** to download
+        the client certificate file.
+
+    This downloads the file ``certs.zip``. Make sure to keep this file safe and secure.
+
+*   Create a g7t vSGX instance.
+
+    To run KK-Cryptoservice, the ECS instance must support SGX or Virtual SGX (vSGX). Alibaba Cloud provides
+    various ECS instance families, each tailored to a specific use scenario or workload. Among the instance families
+    offered by Alibaba Cloud, instance families such as g7t, c7t, and r7t support `vSGX`__. Hence, it is possible
+    to install KK-Cryptoservice on such instances.
+
+    __ https://www.alibabacloud.com/help/en/ecs/user-guide/build-an-sgx-encrypted-computing-environment
+
+    This guide elects to use an instance from the g7t family, designed for general-purpose computing.
+
+    #.  Navigate to the Elastic Compute Service page, and then choose Instances & Images.
+    #.  Click **Create Instances** on the left panel.
+    #.  Configure the following settings on the Basic Configuration page.
+
+        +----------------+-------------------------------------------+-----------------------------------------------------+
+        | Config Name    | Config Value                              | Remark                                              |
+        +================+===========================================+=====================================================+
+        | Billing Method | Pay-as-you-go                             |                                                     |
+        +----------------+-------------------------------------------+-----------------------------------------------------+
+        | Region         | Indonesia (Jakarta) / Zone A              |                                                     |
+        +----------------+-------------------------------------------+-----------------------------------------------------+
+        | Instance Type  | ecs.g7t.large                             |                                                     |
+        +----------------+-------------------------------------------+-----------------------------------------------------+
+        | Quantity       | 1                                         |                                                     |
+        +----------------+-------------------------------------------+-----------------------------------------------------+
+        | Image          | Alibaba Cloud Linux 3 (UEFI)              | Tick the Security Hardening and Trusted System box. |
+        +----------------+-------------------------------------------+-----------------------------------------------------+
+        | Storage        | Default                                   |                                                     |
+        +----------------+-------------------------------------------+-----------------------------------------------------+
+        | Snapshot       | Create snapshot policy for backup purpose |                                                     |
+        +----------------+-------------------------------------------+-----------------------------------------------------+
+
+    #.  Configure the following settings on the Networking page.
+
+        +-------------------+------------------------------------------+
+        | Config Name       | Config Value                             |
+        +===================+==========================================+
+        | Network Type      | VPC (select the default VPC)             |
+        +-------------------+------------------------------------------+
+        | Public IP Address | Tick Assign Public IPv4 Address          |
+        +-------------------+------------------------------------------+
+        | Bandwidth Billing | Pay-By-Traffic                           |
+        +-------------------+------------------------------------------+
+        | Peak Bandwidth    | 25 Mbps                                  |
+        +-------------------+------------------------------------------+
+        | Security Group    | Select previously created security group |
+        +-------------------+------------------------------------------+
+        | Elastic Network   | Default                                  |
+        +-------------------+------------------------------------------+
+        | IPv6              | Default                                  |
+        +-------------------+------------------------------------------+
+
+    #.  Configure the following settings on the System Configuration page.
+
+        +---------------------------+---------------------------------------------------------------+
+        | Config Name               | Config Value                                                  |
+        +===========================+===============================================================+
+        | Logon Credentials         | Key Pair                                                      |
+        +---------------------------+---------------------------------------------------------------+
+        | Logon Username            | root                                                          |
+        +---------------------------+---------------------------------------------------------------+
+        | Key Pair                  | Select previously created keypair                             |
+        +---------------------------+---------------------------------------------------------------+
+        | Instance Name             | KK-Cryptoservice-ali-image                                    |
+        +---------------------------+---------------------------------------------------------------+
+        | Descryption               | KK-Cryptoservice instance with Alibaba Image                  |
+        +---------------------------+---------------------------------------------------------------+
+        | Host                      | KK-Cryptoservice-ali                                          |
+        +---------------------------+---------------------------------------------------------------+
+        | Sequential Suffix         | Default                                                       |
+        +---------------------------+---------------------------------------------------------------+
+        | Release Protection        | Default                                                       |
+        +---------------------------+---------------------------------------------------------------+
+        | RAM Role                  | Select/create AliyunECSInstanceForYundunSysTrustRole RAM role |
+        +---------------------------+---------------------------------------------------------------+
+        | Instance metadata account | Default                                                       |
+        +---------------------------+---------------------------------------------------------------+
+        | User data                 | Default                                                       |
+        +---------------------------+---------------------------------------------------------------+
+
+    #.  Configure the following settings on the Grouping page.
+
+        +-------------------+------------------------------------------+----------------------------------------------------------------------------------------+
+        | Config Name       | Config Value                             | Remark                                                                                 |
+        +===================+==========================================+========================================================================================+
+        | Tags              | Add/select deployment: Kripta Key tag    |                                                                                        |
+        +-------------------+------------------------------------------+----------------------------------------------------------------------------------------+
+        | Resource Group    | Select previously created resource group |                                                                                        |
+        +-------------------+------------------------------------------+----------------------------------------------------------------------------------------+
+        | Deployment set    | Select previously created deployment set | Important to ensure the KK-Cryptoservice instances are deployed in different machines. |
+        +-------------------+------------------------------------------+----------------------------------------------------------------------------------------+
+        | Dedicated host    | Default                                  |                                                                                        |
+        +-------------------+------------------------------------------+----------------------------------------------------------------------------------------+
+        | Private Pool Type | Default                                  |                                                                                        |
+        +-------------------+------------------------------------------+----------------------------------------------------------------------------------------+
+
+    #.  Tick the ECS Terms of Service and Product Terms of Service box in the Grouping page.
+    #.  Double check all settings. If everything is correct, click the **Create Instance** button.

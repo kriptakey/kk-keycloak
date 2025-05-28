@@ -1,0 +1,26 @@
+System Administrator Guide
+==========================
+
+Preface
+-------
+
+Intended readers
+~~~~~~~~~~~~~~~~
+
+This document is intended for administrators as a guide to operating this version of Kripta Key.
+
+
+Document scope
+~~~~~~~~~~~~~~
+
+This document explains the administrative operations supported by Kripta Key Command Line Interface (CLIKK),
+including, but not limited to, managing the Kripta Key instances, as well as various cryptographic objects.
+
+
+Related documents
+~~~~~~~~~~~~~~~~~
+
+*   :doc:`/installation-guide/index`
+*   :doc:`/dev-guide/index`
+*   :doc:`/clikk-installation-guide/index`
+*   :doc:`/license-guide/index`

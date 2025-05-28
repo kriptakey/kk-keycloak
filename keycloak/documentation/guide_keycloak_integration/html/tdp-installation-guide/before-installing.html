@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Before deploying Kripta Key TDP &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Feature configuration" href="feature-configuration.html" />
+    <link rel="prev" title="TDP Installation Guide" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kkts-guide/index.html">KK-TS Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">TDP Installation Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Before deploying Kripta Key TDP</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-the-tdp-deployment">Configuring the TDP deployment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-the-tdp-certificates">Creating the TDP certificates</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#root-certificate">Root certificate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#database-certificate">Database certificate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tdp-server-certificate">TDP server certificate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tdp-client-certificate">TDP client certificate</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="feature-configuration.html">Feature configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tdp-installation.html">Deploying Kripta Key TDP</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">TDP Installation Guide</a></li>
+      <li class="breadcrumb-item active">Before deploying Kripta Key TDP</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tdp-installation-guide/before-installing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="before-deploying-kripta-key-tdp">
+<h1>Before deploying Kripta Key TDP<a class="headerlink" href="#before-deploying-kripta-key-tdp" title="Link to this heading"></a></h1>
+<p>Kripta Key <a class="reference internal" href="../appendix.html#term-TDP"><span class="xref std std-term">TDP</span></a> serves as a proxy between applications, database servers, and the KK-Tokenization Service instances.
+Kripta Key performs encryption and decryption with Format Preserving Encryption (FPE) transparently, while applications can simply access data
+just as before, without the need to change their source code to integrate Kripta Key.</p>
+<dl>
+<dt><a class="reference internal" href="../appendix.html#term-TDP"><span class="xref std std-term">TDP</span></a> must be deployed in a Virtual Machine (VM) with the following specifications:</dt><dd><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Specification</p></th>
+<th class="head"><p>TDP Virtual Machine</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CPU</p></td>
+<td><p>4 core</p></td>
+</tr>
+<tr class="row-odd"><td><p>RAM</p></td>
+<td><p>minimum 16GB</p></td>
+</tr>
+<tr class="row-even"><td><p>NIC</p></td>
+<td><p>10GB ethernet</p></td>
+</tr>
+<tr class="row-odd"><td><p>Operating System (OS)</p></td>
+<td><p>RHEL 9.2</p></td>
+</tr>
+<tr class="row-even"><td><p>Requirements</p></td>
+<td><p>None</p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<p>The following preparatory steps are required to deploy Kripta Key TDP:</p>
+<ul class="simple">
+<li><p>Deploy a KK-Cryptoservice instance.</p></li>
+<li><p>Deploy a KK-Tokenization Service instance.</p></li>
+<li><p>Create the application’s certificate.</p></li>
+<li><p>Register the application to the KK-TS.</p></li>
+<li><p>Use MySQL with minimum version 5.7.31 or PostgreSQL with minimum version 9.23 databases.</p></li>
+<li><p>Use TLS 1.3.</p></li>
+</ul>
+<p>Refer to the <a class="reference internal" href="../installation-guide/index.html"><span class="doc">Installation Guide</span></a>, <a class="reference internal" href="../kkts-guide/index.html"><span class="doc">KK-TS Guide</span></a> and the <a class="reference internal" href="../sys-admin-guide/index.html"><span class="doc">System Administrator Guide</span></a> for details on these steps.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Before running the installer, perform <a class="reference internal" href="../appendix.html#performing-integrity-checks"><span class="std std-ref">an integrity check</span></a> first.
+Also, make sure that the installer is appropriate for the machine’s OS.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please contact <a class="reference external" href="mailto:support&#37;&#52;&#48;klaviskripta&#46;com">support<span>&#64;</span>klaviskripta<span>&#46;</span>com</a> if any problems were encountered during installation.</p>
+</div>
+<section id="configuring-the-tdp-deployment">
+<h2>Configuring the TDP deployment<a class="headerlink" href="#configuring-the-tdp-deployment" title="Link to this heading"></a></h2>
+<p>After the preparatory steps are done, the TDP deployment may be configured.</p>
+<ul class="simple">
+<li><p>Extract the TDP ZIP archive.</p></li>
+<li><p>Edit <code class="docutils literal notranslate"><span class="pre">encryption-config.yml</span></code>. Add table schema, define all columns in encryption config then define the specific columns that need
+to be encrypted. Refer to <a class="reference internal" href="feature-configuration.html"><span class="doc">Feature configuration</span></a> for more details.</p></li>
+</ul>
+</section>
+<section id="creating-the-tdp-certificates">
+<h2>Creating the TDP certificates<a class="headerlink" href="#creating-the-tdp-certificates" title="Link to this heading"></a></h2>
+<p>Kripta Key TDP communicates with Kripta Key database to fetch objects, such as encryption keys. In order to
+guarantee secure communication between the database and the TDP deployment, certificates will be needed for both.
+There are 4 certificates for TDP server:</p>
+<ul class="simple">
+<li><p>Root certificate</p></li>
+<li><p>Database certificate</p></li>
+<li><p>TDP server certificate</p></li>
+<li><p>TDP client certificate</p></li>
+</ul>
+<p>This guide covers <strong>MySQL and PostgreSQL databases</strong>. Other database servers are currently not supported.</p>
+<p>The following are the steps to create the certificates:</p>
+<section id="root-certificate">
+<h3>Root certificate<a class="headerlink" href="#root-certificate" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Create the root key pair for the certificate. Here, the root key pair is a 4096-bit RSA key. The key material
+will be outputted to the <code class="docutils literal notranslate"><span class="pre">root.key</span></code> file.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>genrsa<span class="w"> </span>-out<span class="w"> </span>root.key<span class="w"> </span><span class="m">4096</span>
+</pre></div>
+</div>
+</li>
+<li><p>Create the root certificate from the root key pair. The <code class="docutils literal notranslate"><span class="pre">root.cnf</span></code> file is obtained from the ZIP archive.
+The root certificate will be outputted to the <code class="docutils literal notranslate"><span class="pre">root.crt</span></code> file.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>req<span class="w"> </span>-new<span class="w"> </span>-x509<span class="w"> </span>-days<span class="w"> </span><span class="m">3650</span><span class="w"> </span>-config<span class="w"> </span>root.cnf<span class="w"> </span>-key<span class="w"> </span>root.key<span class="w"> </span>-out<span class="w"> </span>root.crt
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="database-certificate">
+<h3>Database certificate<a class="headerlink" href="#database-certificate" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Create another key pair for the database certificate. This key pair is a 3072-bit RSA key. The key material
+will be outputted to the <code class="docutils literal notranslate"><span class="pre">database.key</span></code> file.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>genrsa<span class="w"> </span>-out<span class="w"> </span>database.key<span class="w"> </span><span class="m">3072</span>
+</pre></div>
+</div>
+</li>
+<li><p>Generate a certificate signing request (CSR) from the database key pair. The <code class="docutils literal notranslate"><span class="pre">openssl.cnf</span></code> file is
+obtained from the ZIP archive. The CSR will be outputted to the <code class="docutils literal notranslate"><span class="pre">database.csr</span></code> file.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>req<span class="w"> </span>-config<span class="w"> </span>openssl.cnf<span class="w"> </span>-new<span class="w"> </span>-key<span class="w"> </span>database.key<span class="w"> </span>-out<span class="w"> </span>database.csr
+</pre></div>
+</div>
+</li>
+<li><p>Create the database certificate by signing the CSR with the root certificate. The <code class="docutils literal notranslate"><span class="pre">database.cnf</span></code> file is
+obtained from the ZIP archive. The database certificate will be outputted to the <code class="docutils literal notranslate"><span class="pre">database.crt</span></code> file.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>x509<span class="w"> </span>-req<span class="w"> </span>-days<span class="w"> </span><span class="m">365</span><span class="w"> </span>-in<span class="w"> </span>database.csr<span class="w"> </span>-CA<span class="w"> </span>root.crt<span class="w"> </span>-CAkey<span class="w"> </span>root.key<span class="w"> </span>-out<span class="w"> </span>database.crt<span class="w"> </span>-extfile<span class="w"> </span>database.cnf
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="tdp-server-certificate">
+<h3>TDP server certificate<a class="headerlink" href="#tdp-server-certificate" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Create RSA keypair 3072 for TDP server certificates. The <code class="docutils literal notranslate"><span class="pre">tdp-server.cnf</span></code>
+is obtained from the ZIP archive. The certificates will be outputted to
+<code class="docutils literal notranslate"><span class="pre">tdp-server.crt</span></code> for the TDP server, respectively.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>genrsa<span class="w"> </span>-out<span class="w"> </span>tdp-server.key<span class="w"> </span><span class="m">3072</span>
+<span class="gp">$ </span>openssl<span class="w"> </span>req<span class="w"> </span>-config<span class="w"> </span>openssl.cnf<span class="w"> </span>-new<span class="w"> </span>-key<span class="w"> </span>tdp-server.key<span class="w"> </span>-out<span class="w"> </span>tdp-server.csr
+<span class="gp">$ </span>openssl<span class="w"> </span>x509<span class="w"> </span>-req<span class="w"> </span>-days<span class="w"> </span><span class="m">365</span><span class="w"> </span>-in<span class="w"> </span>tdp-server.csr<span class="w"> </span>-CA<span class="w"> </span>root.crt<span class="w"> </span>-CAkey<span class="w"> </span>root.key<span class="w"> </span>-out<span class="w"> </span>tdp-server.crt<span class="w"> </span>-exfile<span class="w"> </span>tdp-server.cnf
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="tdp-client-certificate">
+<h3>TDP client certificate<a class="headerlink" href="#tdp-client-certificate" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Create RSA keypair 3072 for TDP client certificates. The <code class="docutils literal notranslate"><span class="pre">tdp-client.cnf</span></code>
+is obtained from the ZIP archive. The certificates will be outputted to
+<code class="docutils literal notranslate"><span class="pre">tdp-client.crt</span></code> for the TDP client, respectively.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>genrsa<span class="w"> </span>-out<span class="w"> </span>tdp-client.key<span class="w"> </span><span class="m">3072</span>
+<span class="gp">$ </span>openssl<span class="w"> </span>req<span class="w"> </span>-config<span class="w"> </span>openssl.cnf<span class="w"> </span>-new<span class="w"> </span>-key<span class="w"> </span>tdp-client.key<span class="w"> </span>-out<span class="w"> </span>tdp-client.csr
+<span class="gp">$ </span>openssl<span class="w"> </span>x509<span class="w"> </span>-req<span class="w"> </span>-days<span class="w"> </span><span class="m">365</span><span class="w"> </span>-in<span class="w"> </span>tdp-client.csr<span class="w"> </span>-CA<span class="w"> </span>root.crt<span class="w"> </span>-CAkey<span class="w"> </span>root.key<span class="w"> </span>-out<span class="w"> </span>tdp-client.crt<span class="w"> </span>-exfile<span class="w"> </span>tdp-client.cnf
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="TDP Installation Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="feature-configuration.html" class="btn btn-neutral float-right" title="Feature configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

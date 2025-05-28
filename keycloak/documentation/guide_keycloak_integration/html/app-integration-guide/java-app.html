@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Integrate Java Applications to Kripta Key using PKCS#11 Connector &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Integrate Apache Tomcat Web Server Applications to Kripta Key using PKCS#11 Connector" href="apache-tomcat.html" />
+    <link rel="prev" title="App Integration Guide" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kkts-guide/index.html">KK-TS Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">App Integration Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Integrate Java Applications to Kripta Key using PKCS#11 Connector</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sign-and-verify-using-jarsigner">Sign and Verify using Jarsigner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sign-and-verify-using-apksigner">Sign and Verify using Apksigner</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="apache-tomcat.html">Integrate Apache Tomcat Web Server Applications to Kripta Key using PKCS#11 Connector</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">App Integration Guide</a></li>
+      <li class="breadcrumb-item active">Integrate Java Applications to Kripta Key using PKCS#11 Connector</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/app-integration-guide/java-app.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="integrate-java-applications-to-kripta-key-using-pkcs-11-connector">
+<h1>Integrate Java Applications to Kripta Key using PKCS#11 Connector<a class="headerlink" href="#integrate-java-applications-to-kripta-key-using-pkcs-11-connector" title="Link to this heading"></a></h1>
+<p>Java applications such as Jarsigner and Apksigner can be integrated with Kripta Key using PKCS#11 connector.</p>
+<p>Java tools can be used for two purposes:</p>
+<ul class="simple">
+<li><p>Signing files – Ensures the authenticity and integrity of the JAR by applying a digital signature.</p></li>
+<li><p>Verifying files – Confirms the validity of signatures and checks the integrity of the JAR contents.</p></li>
+</ul>
+<p>To generate digital signatures for files, the jarsigner command retrieves key and certificate information from a
+keystore. In this case, when using Kripta Key (KK), the key pair and certificates are accessed directly from the Kripta Key.
+The java tools can be integrated with Kripta Key using the PKCS#11 interface, enabling secure access to the key pair and certificates.</p>
+<p>The following are procedure to intgrate Java tools specifically Jarsigner and Apksigner with Kripta Key using PKCS#11 connector:</p>
+<ol class="arabic">
+<li><p>Generate a signing key pair in Kripta Key to sign the file. Currently, only RSA signing key pairs are supported to integrated
+with jarsigner tool, with key lengths of 2048, 3072, or 4096 bits.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>key<span class="w"> </span>add<span class="w"> </span>--partition-id<span class="o">=</span><span class="m">1</span><span class="w"> </span>--key-id<span class="o">=</span>rsaSigning2048<span class="w"> </span>--key-label<span class="o">=</span>signingKey<span class="w"> </span>--key-algo<span class="o">=</span><span class="m">2</span><span class="w"> </span>--key-length<span class="o">=</span><span class="m">2048</span><span class="w"> </span>--key-purpose<span class="o">=</span><span class="m">3</span><span class="w"> </span>--key-lifetime<span class="o">=</span><span class="m">365</span>
+</pre></div>
+</div>
+</li>
+<li><p>After successfully generating the key, configure it and other required objects in kk-cryptoki.conf.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span><span class="o">[</span>Partition<span class="w"> </span>Configuration<span class="o">]</span>
+<span class="gp"># </span>Specify<span class="w"> </span>the<span class="w"> </span>partition<span class="w"> </span>ID<span class="w"> </span>and<span class="w"> </span>password<span class="w"> </span>to<span class="w"> </span>be<span class="w"> </span>used
+<span class="gp"># </span>kk-cryptoki<span class="w"> </span><span class="o">(</span>Application<span class="o">)</span><span class="w"> </span>must<span class="w"> </span>have<span class="w"> </span>access<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>partition
+<span class="go">PartitionID=1</span>
+<span class="go">PartitionPassword=Klavis1!</span>
+
+<span class="gp"># </span><span class="o">[</span>KK-CS<span class="w"> </span>Configuration<span class="o">]</span>
+<span class="gp"># </span>Specify<span class="w"> </span>KKCS<span class="w"> </span>target<span class="w"> </span>host<span class="w"> </span>to<span class="w"> </span>connect<span class="w"> </span>to
+<span class="gp"># </span>Connection<span class="w"> </span>established<span class="w"> </span>through<span class="w"> </span>kk-cryptoki<span class="w"> </span>as<span class="w"> </span>the<span class="w"> </span>Application<span class="w"> </span>using<span class="w"> </span>KKCS<span class="w"> </span>SDK<span class="w"> </span>Service
+<span class="go">KKCSTargetHost=192.168.100.25</span>
+<span class="go">KKCSTargetPort=7004</span>
+
+<span class="gp"># </span><span class="o">[</span>SDK<span class="w"> </span>Configuration<span class="o">]</span>
+<span class="gp"># </span>Specify<span class="w"> </span>kk-cryptoki<span class="w"> </span><span class="o">(</span>Application<span class="o">)</span><span class="w"> </span>Certificate<span class="w"> </span>and<span class="w"> </span>private<span class="w"> </span>key<span class="w"> </span>registered<span class="w"> </span>to<span class="w"> </span>KK-Manager
+<span class="go">ClientCertificateFile=/etc/cryptoserver/test.pem</span>
+<span class="go">PrivateKeyFile=/etc/cryptoserver/test.key</span>
+
+<span class="gp"># </span>LogLevel:<span class="w"> </span><span class="nv">NONE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="nv">ERROR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="nv">DEBUG</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span>
+<span class="go">LogLevel=1</span>
+<span class="go">LogPath=/tmp/kk-kriptoki.log</span>
+
+<span class="gp"># </span>Object<span class="w"> </span>List:<span class="w"> </span>KK<span class="w"> </span>doesn<span class="err">&#39;</span>t<span class="w"> </span>support<span class="w"> </span>enumeration<span class="w"> </span>of<span class="w"> </span>object<span class="w"> </span>by<span class="w"> </span>only<span class="w"> </span>its<span class="w"> </span>class<span class="w"> </span><span class="o">(</span>C_FindObjectsInit<span class="o">)</span>
+<span class="gp"># </span>If<span class="w"> </span>pkcs11<span class="w"> </span>object<span class="w"> </span>enumareted<span class="w"> </span>by<span class="w"> </span>only<span class="w"> </span>class<span class="w"> </span>eg:<span class="w"> </span>CKO_CERTIFICATE,<span class="w"> </span>id<span class="w"> </span>will<span class="w"> </span>be<span class="w"> </span>used<span class="w"> </span>from<span class="w"> </span>this<span class="w"> </span>config
+<span class="gp"># </span>Format<span class="w"> </span>is<span class="w"> </span>list<span class="w"> </span>of<span class="w"> </span>id<span class="w"> </span>separated<span class="w"> </span>by<span class="w"> </span>comma<span class="w"> </span><span class="o">(</span>id1,id2<span class="o">)</span>
+<span class="gp"># </span>Currently<span class="w"> </span>supported<span class="w"> </span>:<span class="w"> </span>CKA_CERTIFICATE,<span class="w"> </span>CKO_PUBLIC_KEY,<span class="w"> </span>CKO_PRIVATE_KEY
+<span class="gp"># </span>ECDSAP256Sign,p11rsa2048,p11rsa3072,p11rsa4096,p11ecdsap256,p11ecdsap384,p11ecdsap512,p11eddsaed25519
+<span class="gp"># </span>Note<span class="w"> </span>that<span class="w"> </span><span class="k">for</span><span class="w"> </span>tomcat<span class="w"> </span>only<span class="w"> </span><span class="m">1</span><span class="w"> </span>keypair<span class="w"> </span>supported<span class="w"> </span><span class="o">(</span>only<span class="w"> </span>the<span class="w"> </span>first<span class="w"> </span>found<span class="w"> </span>cert/priv<span class="w"> </span>will<span class="w"> </span>be<span class="w"> </span>used<span class="o">)</span>
+<span class="go">KeyPairObject=rsaSigning2048</span>
+</pre></div>
+</div>
+</li>
+<li><p>Ensure the <code class="docutils literal notranslate"><span class="pre">KK_CRYPTOKI_CONFIG</span></code> is set as the environment variable.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">KK_CRYPTOKI_CONFIG</span><span class="o">=</span>/path/to/kk-cryptoki.conf
+</pre></div>
+</div>
+</li>
+<li><p>Configure the provider’s name and path of <code class="docutils literal notranslate"><span class="pre">libkk-cryptoki.so</span></code> in <code class="docutils literal notranslate"><span class="pre">kk_sunp11.cfg</span></code>.</p></li>
+<li><p>Before executing the JAR file signing, specify the path of <code class="docutils literal notranslate"><span class="pre">kk_sunp11.cfg</span></code> as provider and configure it in <code class="docutils literal notranslate"><span class="pre">java.security</span></code>,
+specifically on the <code class="docutils literal notranslate"><span class="pre">SunPKCS11</span></code> provider line.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>
+<span class="gp"># </span>List<span class="w"> </span>of<span class="w"> </span>providers<span class="w"> </span>and<span class="w"> </span>their<span class="w"> </span>preference<span class="w"> </span>orders<span class="w"> </span><span class="o">(</span>see<span class="w"> </span>above<span class="o">)</span>:
+<span class="gp">#</span>
+<span class="go">security.provider.1=SUN</span>
+<span class="go">security.provider.2=SunRsaSign</span>
+<span class="go">security.provider.3=SunEC</span>
+<span class="go">security.provider.4=SunJSSE</span>
+<span class="go">security.provider.5=SunJCE</span>
+<span class="go">security.provider.6=SunJGSS</span>
+<span class="go">security.provider.7=SunSASL</span>
+<span class="go">security.provider.8=XMLDSig</span>
+<span class="go">security.provider.9=SunPCSC</span>
+<span class="go">security.provider.10=JdkLDAP</span>
+<span class="go">security.provider.11=JdkSASL</span>
+<span class="go">security.provider.12=SunPKCS11 /path/to/kk_sunp11.cfg</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<section id="sign-and-verify-using-jarsigner">
+<h2>Sign and Verify using Jarsigner<a class="headerlink" href="#sign-and-verify-using-jarsigner" title="Link to this heading"></a></h2>
+<p>The jarsigner tool can sign various data types, such as images, audio files, ZIP archives, Android APKs, and
+more. It requires a public/private key pair to generate an entity’s signature and one or more certificates to authenticate its
+public key. Currently, Kripta Key supports connecting with jarsigner version 21.0.5 and 17.</p>
+<ol class="arabic">
+<li><p>To sign a JAR file with the jarsigner tool, run the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>jarsigner<span class="w"> </span>-verbose<span class="w"> </span>-sigalg<span class="w"> </span>SHA256withRSA<span class="w"> </span>-digestalg<span class="w"> </span>SHA256<span class="w"> </span>-storetype<span class="w"> </span>PKCS11<span class="w"> </span>-providerName<span class="w"> </span>SunPKCS11Name<span class="w"> </span>-signedjar<span class="w"> </span>/path/to/signed-output.apk<span class="w"> </span>/path/to/input.apk<span class="w"> </span>mykeyalias
+</pre></div>
+</div>
+<p>By default, if we are not passing the <code class="docutils literal notranslate"><span class="pre">-sigalg</span></code> and <code class="docutils literal notranslate"><span class="pre">-digestalg</span></code>, jarsigner will sign the JAR file by using sha384Hashed.</p>
+<p>Notes:</p>
+<ul class="simple">
+<li><p>verbose : Enables detailed information about the signing process.</p></li>
+<li><p>sigalg : Specifies the signature algorithm used to sign the JAR file. Supported algorithms are listed <a class="reference external" href="https://docs.oracle.com/en/java/javase/11/tools/jarsigner.html#GUID-925E7A1B-B3F3-44D2-8B49-0B3FA2C54864__SUPPORTEDALGORITHMS-9B9E0E06.">here</a>.</p></li>
+</ul>
+<ul class="simple">
+<li><p>digestalg : Specifies the message digest algorithm used when hashing the entries of a JAR file.</p></li>
+<li><p>storetype : Defines the keystore type to be instantiated. For this case, the store type should be set to “PKCS11”.</p></li>
+<li><p>providerName : Specifies the provider name that set in <code class="docutils literal notranslate"><span class="pre">kk-sunp11.cfg</span></code> (such as KKCryptoki).</p></li>
+<li><p>signedjar : Defines the output file name and path for the signed JAR.</p></li>
+<li><p>Input JAR file : Specifies the plain (unsigned) JAR file to be signed.</p></li>
+<li><p>Key alias :  Refers to the key alias used for signing the JAR file. The key must be generated on Kripta Key. In this example, the ID of the
+signing key is <code class="docutils literal notranslate"><span class="pre">rsaSigning2048</span></code>.</p></li>
+</ul>
+<p>Example:</p>
+<p>below is an example with provider name <code class="docutils literal notranslate"><span class="pre">KKCryptoki</span></code> and signing key ID <code class="docutils literal notranslate"><span class="pre">rsaSigning2048</span></code>.</p>
+<p>When prompted for the keystore passphrase, enter the partition password.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>jarsigner<span class="w"> </span>-verbose<span class="w"> </span>-sigalg<span class="w"> </span>SHA256withRSA<span class="w"> </span>-digestalg<span class="w"> </span>SHA256<span class="w"> </span>-storetype<span class="w"> </span>PKCS11<span class="w"> </span>-providerName<span class="w"> </span>KKCryptoki<span class="w"> </span>-signedjar<span class="w"> </span>/home/user/Documents/signed-output.apk<span class="w"> </span>/home/user/Documents/input.apk<span class="w"> </span>rsaSigning2048
+<span class="go">Enter Passphrase for keystore:</span>
+<span class="go">adding: META-INF/MANIFEST.MF</span>
+<span class="go">adding: META-INF/RSASIGNI.SF</span>
+<span class="go">adding: META-INF/RSASIGNI.RSA</span>
+<span class="go">signing: META-INF/version-control-info.textproto</span>
+<span class="go">signing: META-INF/androidx.activity_activity-compose.version</span>
+<span class="go">signing: META-INF/androidx.activity_activity-ktx.version</span>
+<span class="go">signing: META-INF/androidx.activity_activity.version</span>
+<span class="go">signing: META-INF/androidx.annotation_annotation-experimental.version</span>
+<span class="go">signing: META-INF/androidx.arch.core_core-runtime.version</span>
+<span class="go">signing: META-INF/androidx.autofill_autofill.version</span>
+<span class="go">signing: META-INF/androidx.compose.animation_animation-core.version</span>
+<span class="go">signing: META-INF/androidx.compose.animation_animation.version</span>
+<span class="go">signing: META-INF/androidx.compose.foundation_foundation-layout.version</span>
+<span class="go">signing: META-INF/androidx.compose.foundation_foundation.version</span>
+<span class="go">signing: META-INF/androidx.compose.material3_material3.version</span>
+<span class="go">signing: META-INF/androidx.compose.material_material-icons-core.version</span>
+<span class="go">signing: META-INF/androidx.compose.material_material-ripple.version</span>
+<span class="go">signing: META-INF/androidx.compose.runtime_runtime-saveable.version</span>
+<span class="go">signing: META-INF/androidx.compose.runtime_runtime.version</span>
+<span class="go">signing: META-INF/androidx.compose.ui_ui-geometry.version</span>
+<span class="go">signing: META-INF/androidx.compose.ui_ui-graphics.version</span>
+<span class="go">signing: META-INF/androidx.compose.ui_ui-text.version</span>
+<span class="go">signing: META-INF/androidx.compose.ui_ui-tooling-preview.version</span>
+<span class="go">signing: META-INF/androidx.compose.ui_ui-unit.version</span>
+<span class="go">signing: META-INF/androidx.compose.ui_ui-util.version</span>
+<span class="go">signing: META-INF/androidx.compose.ui_ui.version</span>
+<span class="go">signing: META-INF/androidx.core_core-ktx.version</span>
+<span class="go">signing: META-INF/androidx.core_core.version</span>
+<span class="go">signing: META-INF/androidx.customview_customview-poolingcontainer.version</span>
+<span class="go">signing: META-INF/androidx.emoji2_emoji2.version</span>
+<span class="go">signing: META-INF/androidx.interpolator_interpolator.version</span>
+<span class="go">signing: META-INF/androidx.lifecycle_lifecycle-livedata-core.version</span>
+<span class="go">signing: META-INF/androidx.lifecycle_lifecycle-process.version</span>
+<span class="go">signing: META-INF/androidx.lifecycle_lifecycle-runtime-ktx.version</span>
+<span class="go">signing: META-INF/androidx.lifecycle_lifecycle-runtime.version</span>
+<span class="go">signing: META-INF/androidx.lifecycle_lifecycle-viewmodel-ktx.version</span>
+<span class="go">signing: META-INF/androidx.lifecycle_lifecycle-viewmodel-savedstate.version</span>
+<span class="go">signing: META-INF/androidx.lifecycle_lifecycle-viewmodel.version</span>
+<span class="go">signing: META-INF/androidx.profileinstaller_profileinstaller.version</span>
+<span class="go">signing: META-INF/androidx.savedstate_savedstate-ktx.version</span>
+<span class="go">signing: META-INF/androidx.savedstate_savedstate.version</span>
+<span class="go">signing: META-INF/androidx.startup_startup-runtime.version</span>
+<span class="go">signing: META-INF/androidx.tracing_tracing.version</span>
+<span class="go">signing: META-INF/androidx.versionedparcelable_versionedparcelable.version</span>
+<span class="go">signing: META-INF/kotlinx_coroutines_android.version</span>
+<span class="go">signing: META-INF/kotlinx_coroutines_core.version</span>
+<span class="go">signing: META-INF/com/android/build/gradle/app-metadata.properties</span>
+<span class="go">signing: assets/dexopt/baseline.prof</span>
+<span class="go">signing: assets/dexopt/baseline.profm</span>
+<span class="go">signing: classes.dex</span>
+<span class="go">signing: classes2.dex</span>
+<span class="go">signing: DebugProbesKt.bin</span>
+<span class="go">signing: META-INF/services/kotlinx.coroutines.CoroutineExceptionHandler</span>
+<span class="go">signing: META-INF/services/kotlinx.coroutines.internal.MainDispatcherFactory</span>
+<span class="go">signing: kotlin-tooling-metadata.json</span>
+<span class="go">signing: kotlin/annotation/annotation.kotlin_builtins</span>
+<span class="go">signing: kotlin/collections/collections.kotlin_builtins</span>
+<span class="go">signing: kotlin/coroutines/coroutines.kotlin_builtins</span>
+<span class="go">signing: kotlin/internal/internal.kotlin_builtins</span>
+<span class="go">signing: kotlin/kotlin.kotlin_builtins</span>
+<span class="go">signing: kotlin/ranges/ranges.kotlin_builtins</span>
+<span class="go">signing: kotlin/reflect/reflect.kotlin_builtins</span>
+<span class="go">signing: AndroidManifest.xml</span>
+<span class="go">signing: res/-6.webp</span>
+<span class="go">signing: res/0K.xml</span>
+<span class="go">signing: res/0Z.png</span>
+<span class="go">signing: res/0w.xml</span>
+<span class="go">signing: res/2K.9.png</span>
+<span class="go">signing: res/4j.xml</span>
+<span class="go">signing: res/4z.xml</span>
+<span class="go">signing: res/5P.png</span>
+<span class="go">signing: res/5c.png</span>
+<span class="go">signing: res/5v.png</span>
+<span class="go">signing: res/6P.png</span>
+<span class="go">signing: res/6d.png</span>
+<span class="go">signing: res/71.png</span>
+<span class="go">signing: res/7V.png</span>
+<span class="go">signing: res/7m.png</span>
+<span class="go">signing: res/8t.xml</span>
+<span class="go">signing: res/9m.xml</span>
+<span class="go">signing: res/Ac.xml</span>
+<span class="go">signing: res/Ag.png</span>
+<span class="go">signing: res/BT.png</span>
+<span class="go">signing: res/BW.xml</span>
+<span class="go">signing: res/C_.9.png</span>
+<span class="go">signing: res/Ck.png</span>
+<span class="go">signing: res/D-.xml</span>
+<span class="go">signing: res/Ec.png</span>
+<span class="go">signing: res/Fd.xml</span>
+<span class="go">signing: res/Ff.png</span>
+<span class="go">signing: res/G2.xml</span>
+<span class="go">signing: res/GY.png</span>
+<span class="go">signing: res/LO.png</span>
+<span class="go">signing: res/MD.png</span>
+<span class="go">signing: res/MO.webp</span>
+<span class="go">signing: res/Ma.9.png</span>
+<span class="go">signing: res/OM.png</span>
+<span class="go">signing: res/OX.png</span>
+<span class="go">signing: res/OX1.png</span>
+<span class="go">signing: res/Q-.png</span>
+<span class="go">signing: res/Qq.xml</span>
+<span class="go">signing: res/Qr.xml</span>
+<span class="go">signing: res/S8.xml</span>
+<span class="go">signing: res/Sn.webp</span>
+<span class="go">signing: res/Tl.xml</span>
+<span class="go">signing: res/Tr.png</span>
+<span class="go">signing: res/U-.9.png</span>
+<span class="go">signing: res/VW.png</span>
+<span class="go">signing: res/W5.png</span>
+<span class="go">signing: res/Ws.xml</span>
+<span class="go">signing: res/Y3.png</span>
+<span class="go">signing: res/Y9.png</span>
+<span class="go">signing: res/YD.png</span>
+<span class="go">signing: res/_H.xml</span>
+<span class="go">signing: res/_y.xml</span>
+<span class="go">signing: res/a0.xml</span>
+<span class="go">signing: res/aR.png</span>
+<span class="go">signing: res/aU.png</span>
+<span class="go">signing: res/bi.png</span>
+<span class="go">signing: res/c6.xml</span>
+<span class="go">signing: res/cV.xml</span>
+<span class="go">signing: res/color/vector_tint_color.xml</span>
+<span class="go">signing: res/color/vector_tint_theme_color.xml</span>
+<span class="go">signing: res/cr.xml</span>
+<span class="go">signing: res/d2.webp</span>
+<span class="go">signing: res/df.xml</span>
+<span class="go">signing: res/fq.webp</span>
+<span class="go">signing: res/gK.9.png</span>
+<span class="go">signing: res/gr.png</span>
+<span class="go">signing: res/iQ.xml</span>
+<span class="go">signing: res/j_.webp</span>
+<span class="go">signing: res/je.9.png</span>
+<span class="go">signing: res/kS.png</span>
+<span class="go">signing: res/lR.xml</span>
+<span class="go">signing: res/nz.xml</span>
+<span class="go">signing: res/o_.9.png</span>
+<span class="go">signing: res/p8.png</span>
+<span class="go">signing: res/pY.png</span>
+<span class="go">signing: res/pu.png</span>
+<span class="go">signing: res/qs.webp</span>
+<span class="go">signing: res/s4.png</span>
+<span class="go">signing: res/sA.9.png</span>
+<span class="go">signing: res/sK.webp</span>
+<span class="go">signing: res/td.png</span>
+<span class="go">signing: res/u5.webp</span>
+<span class="go">signing: res/vL.9.png</span>
+<span class="go">signing: res/w7.png</span>
+<span class="go">signing: res/wN.9.png</span>
+<span class="go">signing: res/xN.xml</span>
+<span class="go">signing: res/xa.9.png</span>
+<span class="go">signing: res/yw.webp</span>
+<span class="go">signing: res/z-.9.png</span>
+<span class="go">signing: res/zL.png</span>
+<span class="go">signing: res/zz.png</span>
+<span class="go">signing: resources.arsc</span>
+
+<span class="go">&gt;&gt;&gt; Signer</span>
+<span class="go">    X.509, EMAILADDRESS=product@klavis.com, CN=www.rsasigning.com, OU=Product Development, O=Klavis Kripta, L=Batam, ST=Kepulauan Riau, C=ID</span>
+<span class="go">    Signature algorithm: SHA512withRSA, 2048-bit key</span>
+<span class="go">    [trusted certificate]</span>
+
+<span class="go">jar signed.</span>
+
+<span class="go">Warning:</span>
+<span class="go">The signer&#39;s certificate is self-signed.</span>
+<span class="go">POSIX file permission and/or symlink attributes detected. These attributes are ignored when signing and are not protected by the signature.</span>
+</pre></div>
+</div>
+</li>
+<li><p>To verify the signed jar file, run the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>jarsigner<span class="w"> </span>-verify<span class="w"> </span>-verbose<span class="w"> </span>/path/to/signed-app-release.apk
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="sign-and-verify-using-apksigner">
+<h2>Sign and Verify using Apksigner<a class="headerlink" href="#sign-and-verify-using-apksigner" title="Link to this heading"></a></h2>
+<p>Currently, Kripta Key supports connections with Apksigner version 0.9 and requires at least Android SDK 18. Apksigner retrieves the signing key from
+the configuration file. This tool can be used to sign APKs, and the signatures can be successfully verified on all Android platform versions supported
+by the APK.</p>
+<ol class="arabic">
+<li><p>To sign an APK with the apksigner tool, run the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>apksigner<span class="w"> </span>sign<span class="w"> </span>--ks-provider-name<span class="w"> </span>KKCryptoki<span class="w"> </span>--ks-type<span class="w"> </span>PKCS11<span class="w"> </span>--ks<span class="w"> </span>NONE<span class="w"> </span>--in<span class="w"> </span>/path/to/app-release.apk<span class="w"> </span>--out<span class="w"> </span>/path/to/signed-app-release.apk<span class="w"> </span>--min-sdk-version<span class="w"> </span><span class="m">18</span>
+</pre></div>
+</div>
+<p>By default, apksigner will sign the plain APK file by using sha256Hashed.</p>
+<p>Notes:</p>
+<ul class="simple">
+<li><p>–ks-provider-name : Specifies the provider name that set in <code class="docutils literal notranslate"><span class="pre">kk-sunp11.cfg</span></code> (such as KKCryptoki).</p></li>
+<li><p>–ks-type : Defines the keystore type to be instantiated. For this case, the store type should be set to “PKCS11”.</p></li>
+<li><p>–ks : The keystore location. Keystore is NONE if the keypair is stored in Kripta Key.</p></li>
+<li><p>–in : Specifies the plain (unsigned) APK to be signed.</p></li>
+<li><p>–out : Defines the output file name and path for the signed APK.</p></li>
+<li><p>–min-sdk-version :  Kripta Key library can support the APK signing with minimal SDK version 18.</p></li>
+</ul>
+<p>Example:</p>
+<p>below is an example with provider name <code class="docutils literal notranslate"><span class="pre">KKCryptoki</span></code> and signing key ID <code class="docutils literal notranslate"><span class="pre">rsaSigning2048</span></code>.</p>
+<p>When prompted for the keystore password, enter the partition password.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>apksigner<span class="w"> </span>sign<span class="w"> </span>--ks-provider-name<span class="w"> </span>KKCryptoki<span class="w"> </span>--ks-type<span class="w"> </span>PKCS11<span class="w"> </span>--ks<span class="w"> </span>NONE<span class="w"> </span>--in<span class="w"> </span>/home/user/Documents/app-release.apk<span class="w"> </span>--out<span class="w"> </span>/home/user/Documents/signed-app-release.apk<span class="w"> </span>--min-sdk-version<span class="w"> </span><span class="m">18</span>
+<span class="go">Keystore password for signer #1:</span>
+<span class="go">Signed</span>
+</pre></div>
+</div>
+</li>
+<li><p>To verify the signed jar file, run the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>apksigner<span class="w"> </span>verify<span class="w"> </span>-v<span class="w"> </span>signed-app-release.apk
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="App Integration Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="apache-tomcat.html" class="btn btn-neutral float-right" title="Integrate Apache Tomcat Web Server Applications to Kripta Key using PKCS#11 Connector" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

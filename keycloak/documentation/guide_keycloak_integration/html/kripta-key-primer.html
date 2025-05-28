@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kripta Key Primer &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation Guide" href="installation-guide/index.html" />
+    <link rel="prev" title="Revision History" href="revision-history.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="revision-history.html">Revision History</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Kripta Key Primer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#kripta-key-architecture">Kripta Key architecture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#kripta-key-manager-kk-manager-kk-m">Kripta Key Manager (KK-Manager/KK-M)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kripta-key-cryptographic-service-kk-cryptoservice-kk-cs">Kripta Key Cryptographic Service (KK-Cryptoservice/KK-CS)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kripta-key-auditor-kk-auditor-kk-a">Kripta Key Auditor (KK-Auditor/KK-A)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kripta-key-command-line-interface-clikk">Kripta Key Command Line Interface (CLIKK)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#kripta-key-deployment-types">Kripta Key deployment types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#kripta-key-access-control">Kripta Key access control</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="kkts-guide/index.html">KK-TS Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Kripta Key Primer</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/kripta-key-primer.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="kripta-key-primer">
+<h1>Kripta Key Primer<a class="headerlink" href="#kripta-key-primer" title="Link to this heading"></a></h1>
+<p>What is <strong>Kripta Key</strong>?</p>
+<p><strong>Kripta Key</strong> is a cryptographic key management software with a hardware-based <a class="reference internal" href="appendix.html#term-TEE"><span class="xref std std-term">TEE</span></a> as its root of trust.
+It manages cryptographic objects, such as keys and certificates, and carries out high-performance cryptographic
+operations in a secure manner. It is a secured and centralized key management system applications can efficiently
+access using <strong>Kripta Key SDK API</strong> or <strong>REST API</strong>.</p>
+<p><strong>Kripta Key</strong> comprises of three logically separated components, namely <strong>KK-Manager</strong>, <strong>KK-Cryptoservice</strong>,
+and <strong>KK-Auditor</strong>. They provide, respectively, key management services, cryptographic services,
+and audit log services. <strong>Kripta Key</strong> performs the following critical security functions:</p>
+<ul class="simple">
+<li><p>Authenticating users and the user’s security attributes.</p></li>
+<li><p>Executing cryptographic operations, in manners that preserve confidentiality and integrity, in a secure environment.</p></li>
+<li><p>Managing keys securely for their entire lifecycle: generating keys, storing keys, rotating keys, distributing keys
+to KK-Cryptoservice instances, securely importing or exporting keys, deactivating and, when necessary,
+disposing of certain keys.</p></li>
+<li><p>Communicating with a centralized service to synchronize the keys and ensure key availability.</p></li>
+<li><p>Keeping a secure record of all activities done by each administrator on the KK-Manager instance.</p></li>
+</ul>
+<p><strong>Kripta Key</strong> ensures the security of keys at rest, in transit, and in use within the KK-Cryptoservice
+and the KK-Manager instances: keys at rest are secured by <a class="reference internal" href="appendix.html#term-wrapping"><span class="xref std std-term">wrapping</span></a> and <a class="reference internal" href="appendix.html#term-SGX"><span class="xref std std-term">SGX</span></a> sealing,
+keys in transit are protected by <a class="reference internal" href="appendix.html#term-TLS"><span class="xref std std-term">TLS</span></a> 1.3 with endpoints in a <a class="reference internal" href="appendix.html#term-secure-memory"><span class="xref std std-term">secure memory</span></a>, while keys in use
+for cryptographic operations are exclusively used inside a secure memory, made possible by Intel® SGX.
+The confidentiality and integrity of the modules being run, the keys in use, as well as the relevant data
+are well-guarded since the keys never leave secured memory unprotected.</p>
+<p>Each KK-Manager or KK-Cryptoservice instance is equipped with a separate system log that records
+non-sensitive technical information during its operation. The log is intended for troubleshooting and
+technical support. The KK-Auditor instance records all administrator’s activities in a tamper-proof manner.</p>
+<p>Kripta Key stores and caches all its data in an embedded database. Confidential data such as keys, secrets,
+and certificates are encrypted and stored centrally in the KK-Manager embedded database. Concurrently,
+some data are cached in the KK-Cryptoservice databases. Each KK-Cryptoservice instance downloads the encrypted data
+from the KK-Manager instance through a channel protected by <a class="reference internal" href="appendix.html#term-mTLS"><span class="xref std std-term">mTLS</span></a>, and then stores it in its embedded database.</p>
+<section id="kripta-key-architecture">
+<h2>Kripta Key architecture<a class="headerlink" href="#kripta-key-architecture" title="Link to this heading"></a></h2>
+<p>This section describes each component of Kripta Key in more detail.</p>
+<section id="kripta-key-manager-kk-manager-kk-m">
+<h3>Kripta Key Manager (KK-Manager/KK-M)<a class="headerlink" href="#kripta-key-manager-kk-manager-kk-m" title="Link to this heading"></a></h3>
+<p>Known as the <strong>Key Management Server</strong>, its main functions are:</p>
+<ol class="arabic simple">
+<li><p>To securely manage the entire key life cycle, that is, to act as a key management system, that performs, among others, key generation, key distribution, and key rotation</p></li>
+<li><p>To store keys, secrets, and certificates centrally.</p></li>
+<li><p>To distribute the keys to each KK-Cryptoservice local vault by using a secure key exchange protocol.</p></li>
+</ol>
+<p>A deployment may have multiple KK-Manager instances. However, exactly one of these instances must be set to
+the main instance, while the rest must be set to DR mode.</p>
+<p>By setting a KK-Manager instance to the main instance, it will act as the main server in the deployment.
+All KK-Cryptoservice instances, the KK-Auditor instance, and CLIKK should connect to this KK-Manager instance.
+Since there’s always exactly one main KK-Manager instance in any deployment, it will be referred to as
+<strong>the KK-Manager instance</strong>.</p>
+<p>On the other hand, by setting a KK-Manager instance to <em>disaster recovery</em> (DR) mode, it will act
+as a backup to the main KK-Manager instance. These instances connect directly to the main KK-Manager instance.
+They passively receive updates to the vault from the main KK-Manager instance, and CLIKK commands
+that modify the vault are not permitted. Hereafter, KK-Manager instances on DR mode will be referred to
+as <strong>KK-Manager-DR instances</strong>.</p>
+</section>
+<section id="kripta-key-cryptographic-service-kk-cryptoservice-kk-cs">
+<h3>Kripta Key Cryptographic Service (KK-Cryptoservice/KK-CS)<a class="headerlink" href="#kripta-key-cryptographic-service-kk-cryptoservice-kk-cs" title="Link to this heading"></a></h3>
+<p>Known as the <strong>Cryptographic Server</strong>, its main functions are:</p>
+<ol class="arabic simple">
+<li><p>To store and cache the encryption keys, secrets, or certificates locally. The local database is sealed by the Intel SGX mechanisms, rooted in the hardware-based Intel SGX Root Provisioning Key called the Root Seal Key.</p></li>
+<li><p>To provide cryptographic operations to applications securely in the forms of:</p>
+<ul class="simple">
+<li><p><strong>Kripta Key SDK API</strong>: available in PHP, Java, .NET, and Go.</p></li>
+<li><p><strong>Kripta Key REST API</strong>: applications may send HTTP requests to the KK-Cryptoservice instance
+and receive responses in JSON format.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="kripta-key-auditor-kk-auditor-kk-a">
+<h3>Kripta Key Auditor (KK-Auditor/KK-A)<a class="headerlink" href="#kripta-key-auditor-kk-auditor-kk-a" title="Link to this heading"></a></h3>
+<p>Known as the <strong>KK-Auditor</strong>, its main function is to log all administrator activity in tamper-proof audit log,
+which is stored in the server’s embedded database. Just like other Kripta Key components, KK-Auditor is secured
+cryptographically with a hardware-based root of trust, enabled by Intel® SGX.</p>
+<p>For security reasons, Kripta Key does not provide any direct query utility that connects to the KK-Auditor instance.</p>
+</section>
+<section id="kripta-key-command-line-interface-clikk">
+<h3>Kripta Key Command Line Interface (CLIKK)<a class="headerlink" href="#kripta-key-command-line-interface-clikk" title="Link to this heading"></a></h3>
+<p>CLIKK is the sole endpoint for administrators and the special agent to interact with the KK-Manager instance.
+Unlike the rest of the Kripta Key components, other than on Red Hat Enterprise Linux, CLIKK may be installed
+and ran on Windows as well.</p>
+<p>CLIKK provides various commands and subcommands to manage the deployment, which, depending on the privilege level
+of the command, require different authentication methods. Further explanation can be found in the <a class="reference internal" href="sys-admin-guide/index.html"><span class="doc">System Administrator Guide</span></a>.</p>
+</section>
+</section>
+<section id="kripta-key-deployment-types">
+<h2>Kripta Key deployment types<a class="headerlink" href="#kripta-key-deployment-types" title="Link to this heading"></a></h2>
+<p>Kripta Key is designed so that it can be deployed on various configurations, depending on the needs of the customer
+and the scale of the applications it needs to serve.</p>
+<p>Application that require Kripta Key services would connect using the SDK API or by using the REST API.</p>
+<p>The following non-exhaustive list demonstrates some forms of Kripta Key deployment:</p>
+<ul>
+<li><p>Quick and easy deployment</p>
+<p>Designed for a small enterprise or simply for a quick demo, this configuration installs both KK-Cryptoservice
+and KK-Manager in the same machine, while KK-Auditor is installed on a separate machine.</p>
+<figure class="align-default" id="id1">
+<img alt="_images/kk_installation_1.png" src="_images/kk_installation_1.png" />
+<figcaption>
+<p><span class="caption-text">Example of a quick and easy deployment.</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>Scaled up, high availability deployment</p>
+<p>For a customer that needs high availability or prefers to distribute the load to gain higher throughput,
+this architecture requires each of the KK-Cryptoservice, the KK-Manager, and the KK-Auditor instances
+to be installed in separate physical servers. Applications connect to a load balancer that distributes
+the load evenly among the KK-Cryptoservice servers.</p>
+<figure class="align-default" id="id2">
+<img alt="_images/kk_installation_2.png" src="_images/kk_installation_2.png" />
+<figcaption>
+<p><span class="caption-text">Example of a scaled up deployment.</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>On cloud deployment</p>
+<p>For distributed applications where the applications run on cloud, it is also possible to deploy Kripta Key
+partially on cloud. The KK-Manager instance is installed to a machine on premise,
+while the KK-Cryptoservice instances are installed on the cloud.</p>
+<p>For customers that requires a “bring-your-own-key” model, this type of deployment is recommended.</p>
+<figure class="align-default" id="id3">
+<img alt="_images/kk_installation_cloud.png" src="_images/kk_installation_cloud.png" />
+<figcaption>
+<p><span class="caption-text">Example of a cloud-based deployment.</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>Disaster recovery-ready deployment</p>
+<p>Customers may opt to set up a second instance of KK-Manager set to <a class="reference internal" href="appendix.html#term-DR"><span class="xref std std-term">DR</span></a> mode to minimize downtime
+when the main KK-Manager instance goes down. Keys and other data are replicated one-way from the main instance
+to the DR instance(s). In the event of unavailability, administrators may promote a KK-Manager-DR instance
+to be the main KK-Manager instance.</p>
+</li>
+</ul>
+</section>
+<section id="kripta-key-access-control">
+<h2>Kripta Key access control<a class="headerlink" href="#kripta-key-access-control" title="Link to this heading"></a></h2>
+<p>Kripta Key recognizes three types of users: administrators, recovery account, and applications.</p>
+<p>An <strong>administrator</strong> authenticates themselves with a password and an administrator card. Administrators can perform
+key management operations such as creating, updating, and deleting an object. Administrators can also review the
+audit log record.</p>
+<p>The <strong>recovery account</strong> authenticates itself with a set of recovery cards. The recovery account has the privilege
+to perform management operations at the EMERGENCY privilege level, such as resetting an administrator’s password
+without dual control or restoring KK-Manager’s database from a backup. Due to the magnitude of the actions
+the recovery account is capable of performing, it is highly recommended that the recovery cards are held
+by stakeholders and/or executives.</p>
+<p>An <strong>application</strong> authenticates themselves with a certificate that is pre-registered in the Kripta Key’s system. An application
+may only access partitions that the system permits it to, and it still has to authenticate itself
+using the partition’s password. Applications, and only applications, perform cryptographic operations such as
+encryption, decryption, sealing, unsealing, signing, MAC generation, and so on.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="revision-history.html" class="btn btn-neutral float-left" title="Revision History" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="installation-guide/index.html" class="btn btn-neutral float-right" title="Installation Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

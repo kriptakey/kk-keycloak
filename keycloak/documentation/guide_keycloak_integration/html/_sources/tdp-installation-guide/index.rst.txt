@@ -1,0 +1,25 @@
+TDP Installation Guide
+======================
+
+Preface
+-------
+
+Intended reader
+~~~~~~~~~~~~~~~
+
+This document is intended for administrators as a guide to installing Kripta Key Transparent Data Protection (TDP).
+
+
+Document scope
+~~~~~~~~~~~~~~
+
+This document explains the process of deploying transparent data protection with this version of Kripta Key.
+This deployment of Kripta Key allows protection of data without changing the application source code. Hence,
+the data is protected transparently.
+
+
+Related documents
+~~~~~~~~~~~~~~~~~
+
+*   :doc:`/sys-admin-guide/index`
+*   :doc:`/dev-guide/index`

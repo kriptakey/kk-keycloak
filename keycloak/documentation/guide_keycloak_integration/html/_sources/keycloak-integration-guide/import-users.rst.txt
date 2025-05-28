@@ -1,0 +1,29 @@
+Import Users to KeyCloak DB 
+===========================
+
+In the case of registering many users, instead of creating user one by one, the admin can import the list of users by using 
+a custom tool provided by KK. To use that tool, write the users including their data on a .csv file. The tool is developed 
+in a bash script. The following steps explain how to use the tool:
+
+.. code-block:: console
+
+    $ ./import-users-from-csv.sh --import users.csv
+
+Once you run the above command, you will be prompted to enter some data as follows:
+
+.. code-block:: console
+
+    Base URL (e.g: https://myhostname/auth): http://localhost:8080
+    Admin realm: master
+    Operational realm: myrealm
+    Client ID (create this client in the above Keycloak realm): security-admin-console
+    Admin username: admin
+    Admin Password: 
+
+To register users to Keycloak, you can utilize admin cli commands. However, you need to provide several data above including 
+the admin realm and the intended realm where you want to register users. You can use default admin client id security-admin-console 
+but you have to ensure during user registration, Direct access grants is enabled. If it is necessary, you can disable the grant 
+access once the data import done.
+
+We provide the tool in our github. You can clone [TODO: put the github link for the repository] and use the tool.
+    

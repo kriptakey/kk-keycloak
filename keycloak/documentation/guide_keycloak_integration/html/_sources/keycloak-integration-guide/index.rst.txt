@@ -1,0 +1,24 @@
+KeyCloak Integration Guide
+==========================
+
+Preface
+-------
+
+Intended reader
+~~~~~~~~~~~~~~~
+
+This document is intended for experienced developers and security administrators as a guide
+to integrating KeyCloak with Kripta Key, including the required attributes: Redis and WebSocket. 
+
+
+Document scope
+~~~~~~~~~~~~~~
+
+This document explains use cases and setup procedures to integrate KeyCloak. 
+
+
+Related documents
+~~~~~~~~~~~~~~~~~
+
+*   :doc:`/installation-guide/index`
+*   :doc:`/sys-admin-guide/index`

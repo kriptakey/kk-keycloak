@@ -1,0 +1,22 @@
+Tokenization services
+=====================
+
+Kripta Key Tokenization Service (KK-TS) provides the following services, in addition to all services provided
+by KK-Cryptoservice.
+
+.. glossary::
+
+    Vault-based tokenization
+        Applications requiring tokenization services that finds the vaultless tokenization service inadequate
+        should opt to use KK-TS's vault-based tokenization. This tokenization has desirable properties in exchange
+        for space, which is used by the vault.
+
+    Vault-based detokenization
+        This service detokenizes vault-based tokenized input. It retrieves the underlying sensitive value
+        by looking up its vault.
+
+    Sensitive value masking
+        Masking redacts parts of sensitive values, replacing each masked character with the masking character.
+        As a result, no unmasking service is offered, as data is discarded in the process of masking.
+
+For more details on accessing and using the KK-TS services, refer to :doc:`/rest-api-docs/index`.

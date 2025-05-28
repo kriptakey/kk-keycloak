@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design motivation &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="KK-Tokenization Service Setup and Configuration" href="kkts-installation.html" />
+    <link rel="prev" title="KK-TS Guide" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">KK-TS Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Design motivation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tokenization-basics">Tokenization basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#format-preserving-encryption">Format-preserving encryption</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-kripta-key-tokenization-service">What is Kripta Key Tokenization Service?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="kkts-installation.html">KK-Tokenization Service Setup and Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kkts-backuprestore.html">KK-Tokenization Service Backup and Restore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cassandra-setting-consideration.html">Apache Cassandra Setting Consideration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cassandra-setting-recommendation.html">Apache Cassandra Setting Recommendation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domain-configuration.html">Domain configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kkts-license.html">KK-TS License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command-line-interface.html">KK-TS command line interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kms-tokenization-services.html">Tokenization services</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">KK-TS Guide</a></li>
+      <li class="breadcrumb-item active">Design motivation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/kkts-guide/design-motivation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="design-motivation">
+<h1>Design motivation<a class="headerlink" href="#design-motivation" title="Link to this heading"></a></h1>
+<section id="tokenization-basics">
+<h2>Tokenization basics<a class="headerlink" href="#tokenization-basics" title="Link to this heading"></a></h2>
+<p>At its core, tokenization is a process that modifies sensitive value and produces a benign token. Other systems
+can then treat the token as a replacement of the original value, performing operations that is associated
+with the original sensitive value, while the system that performs the tokenization can detokenize it to obtain
+the underlying sensitive value.</p>
+<p>Tokenization can be done in two ways: vault-based or vaultless. A vault-based tokenization engine essentially
+keeps an internal lookup table so that it can produce tokens and quickly detokenize it. While this is quick and easy,
+a vault-based tokenization’s lookup table can grow extremely large as time goes on.</p>
+<p>Kripta Key aims to keep as little state as possible. Hence, it provides vaultless tokenization instead.
+However, but this comes at a cost:</p>
+<ul class="simple">
+<li><p>Tokenization produces metadata that must be stored by the application.</p></li>
+<li><p>Tokenization alters the length and the format of the sensitive data, which may be not expected by other systems.</p></li>
+</ul>
+</section>
+<section id="format-preserving-encryption">
+<h2>Format-preserving encryption<a class="headerlink" href="#format-preserving-encryption" title="Link to this heading"></a></h2>
+<p>One possible solution for a vaultless tokenization engine would be to use a format-preserving encryption,
+instead of using AES to encrypt the sensitive value. Such a method has been published by NIST, providing
+recommendations for block cipher modes of operations to accomplish format-preserving encryption. These
+encryption methods are called FF1 and FF3-1.</p>
+<p>However, research has shown that both FF1 and FF3-1 are insecure, and it is possible to perform
+full key recovery attacks on these encryption methods. As a result, neither FF1 nor FF3-1 are implemented in OpenSSL.
+To avoid providing cryptography implementation with known vulnerabilities, Kripta Key does not offer
+format-preserving encryption via FF1 or FF3-1. Instead, Kripta Key provides an alternative vault-based engine
+for format-preserving tokenization in the form of Kripta Key Tokenization Service.</p>
+</section>
+<section id="what-is-kripta-key-tokenization-service">
+<h2>What is Kripta Key Tokenization Service?<a class="headerlink" href="#what-is-kripta-key-tokenization-service" title="Link to this heading"></a></h2>
+<p>To reiterate, Kripta Key Tokenization Service (KK-TS) is a vault-based tokenization service, provided separately
+from KK-Cryptoservice for customers who find the tokenization service provided by KK-Cryptoservice inadequate
+for their needs. KK-TS interfaces with KK-Cryptoservice in the background, handling encryption-based tokenization
+while providing additional API endpoints for format-preserving tokenization. As a result, KK-TS is capable
+of providing vault-based, format-preserving tokenization that does not store the sensitive value anywhere in its vault.
+This prevents data breaches even if the vault is compromised.</p>
+<p>KK-TS organizes its vault by separating the tokenization parameters for each data domain, which is stored
+under separate configuration IDs. Then, each data domain configuration is associated to a specific application
+that has been registered to KK-Manager. KK-TS then uses the subject key identifier, which is obtained by hashing
+the public key, to identify each application.</p>
+<p>KK-TS should be deployed as a fault-tolerant system, to avoid a single point of failure. This is accomplished
+by deploying several instances of KK-TS servers behind a load balancer that connects to a clustered database system,
+to avoid data loss if one database instance is unreachable.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="KK-TS Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="kkts-installation.html" class="btn btn-neutral float-right" title="KK-Tokenization Service Setup and Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

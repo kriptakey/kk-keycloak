@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apache Cassandra Setting Consideration &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Apache Cassandra Setting Recommendation" href="cassandra-setting-recommendation.html" />
+    <link rel="prev" title="KK-Tokenization Service Backup and Restore" href="kkts-backuprestore.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">KK-TS Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design-motivation.html">Design motivation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kkts-installation.html">KK-Tokenization Service Setup and Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kkts-backuprestore.html">KK-Tokenization Service Backup and Restore</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Apache Cassandra Setting Consideration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#number-of-nodes">Number of nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#replication">Replication</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#replication-factor-rf">Replication Factor (RF)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#replication-strategy">Replication strategy</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#consistency-level-cl">Consistency Level (CL)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cassandra-setting-for-kk-ts">Cassandra Setting for KK-TS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cassandra-setting-recommendation.html">Apache Cassandra Setting Recommendation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domain-configuration.html">Domain configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kkts-license.html">KK-TS License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command-line-interface.html">KK-TS command line interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kms-tokenization-services.html">Tokenization services</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">KK-TS Guide</a></li>
+      <li class="breadcrumb-item active">Apache Cassandra Setting Consideration</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/kkts-guide/cassandra-setting-consideration.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="apache-cassandra-setting-consideration">
+<h1>Apache Cassandra Setting Consideration<a class="headerlink" href="#apache-cassandra-setting-consideration" title="Link to this heading"></a></h1>
+<p>This section explains aspects to be considered when using Apache Cassandra as a database for KK-TS services.</p>
+<section id="number-of-nodes">
+<h2>Number of nodes<a class="headerlink" href="#number-of-nodes" title="Link to this heading"></a></h2>
+<p>The number of nodes is closely related to the Replication Factor (RF) and consistency level (CL) to optimize
+Cassandra’s functionality and performance. When deciding on the number of nodes, it is important to consider the number of datacenters, the need for
+horizontal scaling, availability, and performance.</p>
+</section>
+<section id="replication">
+<h2>Replication<a class="headerlink" href="#replication" title="Link to this heading"></a></h2>
+<p>Data in Cassandra can be replicated to multiple replica nodes, providing reliability and fault tolerance. In Cassandra, data is replicated according to the
+replication factor (RF) and replication strategy defined at the Keyspace level.</p>
+<section id="replication-factor-rf">
+<h3>Replication Factor (RF)<a class="headerlink" href="#replication-factor-rf" title="Link to this heading"></a></h3>
+<p>Replication Factor (RF) defines the number of copies of data replication that will be stored in replica nodes. RF must be less than or equal to the number of nodes in a datacenter.
+A replica node is a node that receives data to be stored, while a coordinator node is a node that receives requests from users and distributes data to
+the replica nodes. A single node can function as both a replica and a coordinator. The RF determines the number of replica nodes.</p>
+</section>
+<section id="replication-strategy">
+<h3>Replication strategy<a class="headerlink" href="#replication-strategy" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>SimpleStrategy</p>
+<ul class="simple">
+<li><p>Primarily used for single datacenter setups.</p></li>
+<li><p>Not recommended for environment with multiple datacenters, as it lacks datacenter awareness.</p></li>
+</ul>
+</li>
+<li><p>NetworkTopologyStrategy</p>
+<ul class="simple">
+<li><p>Suitable for deployments with multiple datacenters.</p></li>
+<li><p>Allow configuration of the replication factor per datacenter.</p></li>
+<li><p>Recommended for multi datacenter environments with high-availability requirements.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<section id="consistency-level-cl">
+<h2>Consistency Level (CL)<a class="headerlink" href="#consistency-level-cl" title="Link to this heading"></a></h2>
+<p>Consistency Level (CL) is differentiated into <code class="docutils literal notranslate"><span class="pre">read</span></code> and <code class="docutils literal notranslate"><span class="pre">write</span></code> operations. For details, please refer to <a class="reference external" href="https://docs.datastax.com/en/cassandra-oss/2.2/cassandra/dml/dmlConfigConsistency.html">Apache Cassandra documentation</a>.</p>
+<blockquote>
+<div></div></blockquote>
+<p>Below are the differences of each Consistency Level:</p>
+<ul>
+<li><p>Consistency Level (CL)</p>
+<ol class="arabic simple">
+<li><p>ALL (A <code class="docutils literal notranslate"><span class="pre">read</span></code> or <code class="docutils literal notranslate"><span class="pre">write</span></code> operation is successful only if all replicas responds to the coordinate node).
+Suitable for application where performance &amp; availability are not a concern.</p></li>
+<li><p>EACH_QUORUM (A <code class="docutils literal notranslate"><span class="pre">read</span></code> or <code class="docutils literal notranslate"><span class="pre">write</span></code> operation is successful if a quorum of replicas in each datacenter responds to coordinate node).
+Suitable for application where consistency and availability on each datacenter is paramount.</p></li>
+<li><p>QUORUM (A <code class="docutils literal notranslate"><span class="pre">read</span></code> or <code class="docutils literal notranslate"><span class="pre">write</span></code> operation is successful if a majority of replicas (N/2 + 1) in all datacenters responds to coordinate node).
+Suitable for applications where both availability and consistency are important.</p></li>
+<li><p>LOCAL_QUORUM (A <code class="docutils literal notranslate"><span class="pre">read</span></code> or <code class="docutils literal notranslate"><span class="pre">write</span></code> operation is successful if a majority of replicas in the local datacenter responds to coordinate node).
+Suitable for applications primarily operating within a single datacenter.</p></li>
+<li><p>ONE (A <code class="docutils literal notranslate"><span class="pre">read</span></code> or <code class="docutils literal notranslate"><span class="pre">write</span></code> operation is successful if at least one replica responds to coordinate node).
+Suitable for applications that use multiple datacenters and want to achieve high performance.</p></li>
+<li><p>TWO (A <code class="docutils literal notranslate"><span class="pre">read</span></code> or <code class="docutils literal notranslate"><span class="pre">write</span></code> operation is successful if at least two replicas respond to coordinate node).
+Suitable when slightly better consistency is required but performance is still a concern.</p></li>
+<li><p>THREE (A <code class="docutils literal notranslate"><span class="pre">read</span></code> or <code class="docutils literal notranslate"><span class="pre">write</span></code> operation is successful if at least three replicas respond to coordinate node).
+Suitable for applications needing good consistency without reaching ALL.</p></li>
+<li><p>LOCAL_ONE (Similar to ONE, but the response comes from a replica in the local datacenter only).
+Suitable for applications that maintain data in local datacenter where performance is important.</p></li>
+<li><p>ANY (A write is considered successful if at least one replica has acknowledged it, regardless of whether it is a hinted handoff or a replica).
+Suitable for applications.</p></li>
+</ol>
+</li>
+<li><p>Serial Consistency Level (SCL)</p>
+<p>This is the consistency level for lightweight transactions.</p>
+<ol class="arabic simple">
+<li><p>SERIAL (Ensures that the operation is linearizable).
+Suitable for applications that require consistency across datacenter.</p></li>
+<li><p>LOCAL_SERIAL (Similar to SERIAL but operates only on replicas in the local datacenter).
+Suitable for applications that do not need replication across data center.</p></li>
+</ol>
+</li>
+</ul>
+</section>
+<section id="cassandra-setting-for-kk-ts">
+<h2>Cassandra Setting for KK-TS<a class="headerlink" href="#cassandra-setting-for-kk-ts" title="Link to this heading"></a></h2>
+<p><strong>With above consideration, the following are Cassandra setup for Kripta Key:</strong></p>
+<ul class="simple">
+<li><p>Number of nodes: 2 in a datacenter</p></li>
+<li><p>Replication Factor (RF): 2</p></li>
+<li><p>Replication Strategy (RS): SimpleStrategy</p></li>
+<li><p>Consistency Level (CL): ALL</p></li>
+<li><p>Serial Consistency Level (SCL): LOCAL_SERIAL</p></li>
+</ul>
+<p>Apart from the above settings, Kripta Key requires you to setup your own backup.
+It is important to have backup to eliminate the possibility of data loss in case a server goes down.</p>
+<p>The settings must be configured according to the recommendations above. Any settings outside of these recommendations are the sole responsibility of the user.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="kkts-backuprestore.html" class="btn btn-neutral float-left" title="KK-Tokenization Service Backup and Restore" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cassandra-setting-recommendation.html" class="btn btn-neutral float-right" title="Apache Cassandra Setting Recommendation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

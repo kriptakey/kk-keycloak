@@ -1,0 +1,108 @@
+Apache Cassandra Setting Consideration
+======================================
+
+This section explains aspects to be considered when using Apache Cassandra as a database for KK-TS services. 
+
+Number of nodes
+---------------
+
+The number of nodes is closely related to the Replication Factor (RF) and consistency level (CL) to optimize 
+Cassandra's functionality and performance. When deciding on the number of nodes, it is important to consider the number of datacenters, the need for 
+horizontal scaling, availability, and performance. 
+
+
+Replication
+-----------
+
+Data in Cassandra can be replicated to multiple replica nodes, providing reliability and fault tolerance. In Cassandra, data is replicated according to the 
+replication factor (RF) and replication strategy defined at the Keyspace level.
+
+Replication Factor (RF)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Replication Factor (RF) defines the number of copies of data replication that will be stored in replica nodes. RF must be less than or equal to the number of nodes in a datacenter. 
+A replica node is a node that receives data to be stored, while a coordinator node is a node that receives requests from users and distributes data to 
+the replica nodes. A single node can function as both a replica and a coordinator. The RF determines the number of replica nodes.
+
+Replication strategy
+~~~~~~~~~~~~~~~~~~~~
+
+#.  SimpleStrategy
+
+    *   Primarily used for single datacenter setups.
+    *   Not recommended for environment with multiple datacenters, as it lacks datacenter awareness. 
+
+#.  NetworkTopologyStrategy
+
+    *   Suitable for deployments with multiple datacenters.
+    *   Allow configuration of the replication factor per datacenter.
+    *   Recommended for multi datacenter environments with high-availability requirements. 
+
+
+
+Consistency Level (CL)
+----------------------
+
+Consistency Level (CL) is differentiated into ``read`` and ``write`` operations. For details, please refer to `Apache Cassandra documentation`__.
+
+    __ https://docs.datastax.com/en/cassandra-oss/2.2/cassandra/dml/dmlConfigConsistency.html
+
+Below are the differences of each Consistency Level:
+
+*   Consistency Level (CL)
+
+    #.  ALL (A ``read`` or ``write`` operation is successful only if all replicas responds to the coordinate node).
+        Suitable for application where performance & availability are not a concern. 
+
+    #.  EACH_QUORUM (A ``read`` or ``write`` operation is successful if a quorum of replicas in each datacenter responds to coordinate node).
+        Suitable for application where consistency and availability on each datacenter is paramount. 
+
+    #.  QUORUM (A ``read`` or ``write`` operation is successful if a majority of replicas (N/2 + 1) in all datacenters responds to coordinate node).
+        Suitable for applications where both availability and consistency are important.
+
+    #.  LOCAL_QUORUM (A ``read`` or ``write`` operation is successful if a majority of replicas in the local datacenter responds to coordinate node).
+        Suitable for applications primarily operating within a single datacenter.
+
+    #.  ONE (A ``read`` or ``write`` operation is successful if at least one replica responds to coordinate node).
+        Suitable for applications that use multiple datacenters and want to achieve high performance.
+
+    #.  TWO (A ``read`` or ``write`` operation is successful if at least two replicas respond to coordinate node).
+        Suitable when slightly better consistency is required but performance is still a concern.
+
+    #.  THREE (A ``read`` or ``write`` operation is successful if at least three replicas respond to coordinate node).
+        Suitable for applications needing good consistency without reaching ALL.
+
+    #.  LOCAL_ONE (Similar to ONE, but the response comes from a replica in the local datacenter only).
+        Suitable for applications that maintain data in local datacenter where performance is important.
+
+    #.  ANY (A write is considered successful if at least one replica has acknowledged it, regardless of whether it is a hinted handoff or a replica).
+        Suitable for applications.
+
+
+*   Serial Consistency Level (SCL)
+
+    This is the consistency level for lightweight transactions. 
+
+    #.  SERIAL (Ensures that the operation is linearizable).
+        Suitable for applications that require consistency across datacenter. 
+
+    #.  LOCAL_SERIAL (Similar to SERIAL but operates only on replicas in the local datacenter).
+        Suitable for applications that do not need replication across data center. 
+
+
+Cassandra Setting for KK-TS
+---------------------------
+
+**With above consideration, the following are Cassandra setup for Kripta Key:**
+
+*   Number of nodes: 2 in a datacenter
+*   Replication Factor (RF): 2
+*   Replication Strategy (RS): SimpleStrategy
+*   Consistency Level (CL): ALL
+*   Serial Consistency Level (SCL): LOCAL_SERIAL
+
+Apart from the above settings, Kripta Key requires you to setup your own backup. 
+It is important to have backup to eliminate the possibility of data loss in case a server goes down.
+
+The settings must be configured according to the recommendations above. Any settings outside of these recommendations are the sole responsibility of the user.
+

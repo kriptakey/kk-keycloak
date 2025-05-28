@@ -1,0 +1,172 @@
+Kripta Key Primer
+=================
+
+What is **Kripta Key**?
+
+**Kripta Key** is a cryptographic key management software with a hardware-based :term:`TEE` as its root of trust.
+It manages cryptographic objects, such as keys and certificates, and carries out high-performance cryptographic
+operations in a secure manner. It is a secured and centralized key management system applications can efficiently
+access using **Kripta Key SDK API** or **REST API**.
+
+**Kripta Key** comprises of three logically separated components, namely **KK-Manager**, **KK-Cryptoservice**,
+and **KK-Auditor**. They provide, respectively, key management services, cryptographic services,
+and audit log services. **Kripta Key** performs the following critical security functions:
+
+*   Authenticating users and the user's security attributes.
+*   Executing cryptographic operations, in manners that preserve confidentiality and integrity, in a secure environment.
+*   Managing keys securely for their entire lifecycle: generating keys, storing keys, rotating keys, distributing keys
+    to KK-Cryptoservice instances, securely importing or exporting keys, deactivating and, when necessary,
+    disposing of certain keys.
+*   Communicating with a centralized service to synchronize the keys and ensure key availability.
+*   Keeping a secure record of all activities done by each administrator on the KK-Manager instance.
+
+**Kripta Key** ensures the security of keys at rest, in transit, and in use within the KK-Cryptoservice
+and the KK-Manager instances: keys at rest are secured by :term:`wrapping` and :term:`SGX` sealing,
+keys in transit are protected by :term:`TLS` 1.3 with endpoints in a :term:`secure memory`, while keys in use
+for cryptographic operations are exclusively used inside a secure memory, made possible by Intel® SGX.
+The confidentiality and integrity of the modules being run, the keys in use, as well as the relevant data
+are well-guarded since the keys never leave secured memory unprotected.
+
+Each KK-Manager or KK-Cryptoservice instance is equipped with a separate system log that records
+non-sensitive technical information during its operation. The log is intended for troubleshooting and
+technical support. The KK-Auditor instance records all administrator's activities in a tamper-proof manner.
+
+Kripta Key stores and caches all its data in an embedded database. Confidential data such as keys, secrets,
+and certificates are encrypted and stored centrally in the KK-Manager embedded database. Concurrently,
+some data are cached in the KK-Cryptoservice databases. Each KK-Cryptoservice instance downloads the encrypted data
+from the KK-Manager instance through a channel protected by :term:`mTLS`, and then stores it in its embedded database.
+
+
+Kripta Key architecture
+-----------------------
+
+This section describes each component of Kripta Key in more detail.
+
+
+Kripta Key Manager (KK-Manager/KK-M)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Known as the **Key Management Server**, its main functions are:
+
+#.  To securely manage the entire key life cycle, that is, to act as a key management system, that performs, among others, key generation, key distribution, and key rotation
+#.  To store keys, secrets, and certificates centrally.
+#.  To distribute the keys to each KK-Cryptoservice local vault by using a secure key exchange protocol.
+
+A deployment may have multiple KK-Manager instances. However, exactly one of these instances must be set to
+the main instance, while the rest must be set to DR mode.
+
+By setting a KK-Manager instance to the main instance, it will act as the main server in the deployment.
+All KK-Cryptoservice instances, the KK-Auditor instance, and CLIKK should connect to this KK-Manager instance.
+Since there's always exactly one main KK-Manager instance in any deployment, it will be referred to as
+**the KK-Manager instance**.
+
+On the other hand, by setting a KK-Manager instance to *disaster recovery* (DR) mode, it will act
+as a backup to the main KK-Manager instance. These instances connect directly to the main KK-Manager instance.
+They passively receive updates to the vault from the main KK-Manager instance, and CLIKK commands
+that modify the vault are not permitted. Hereafter, KK-Manager instances on DR mode will be referred to
+as **KK-Manager-DR instances**.
+
+
+Kripta Key Cryptographic Service (KK-Cryptoservice/KK-CS)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Known as the **Cryptographic Server**, its main functions are:
+
+#.  To store and cache the encryption keys, secrets, or certificates locally. The local database is sealed by the Intel SGX mechanisms, rooted in the hardware-based Intel SGX Root Provisioning Key called the Root Seal Key.
+#.  To provide cryptographic operations to applications securely in the forms of:
+
+    *   **Kripta Key SDK API**: available in PHP, Java, .NET, and Go.
+    *   **Kripta Key REST API**: applications may send HTTP requests to the KK-Cryptoservice instance
+        and receive responses in JSON format.
+
+
+Kripta Key Auditor (KK-Auditor/KK-A)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Known as the **KK-Auditor**, its main function is to log all administrator activity in tamper-proof audit log,
+which is stored in the server's embedded database. Just like other Kripta Key components, KK-Auditor is secured
+cryptographically with a hardware-based root of trust, enabled by Intel® SGX.
+
+For security reasons, Kripta Key does not provide any direct query utility that connects to the KK-Auditor instance.
+
+
+Kripta Key Command Line Interface (CLIKK)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+CLIKK is the sole endpoint for administrators and the special agent to interact with the KK-Manager instance.
+Unlike the rest of the Kripta Key components, other than on Red Hat Enterprise Linux, CLIKK may be installed
+and ran on Windows as well.
+
+CLIKK provides various commands and subcommands to manage the deployment, which, depending on the privilege level
+of the command, require different authentication methods. Further explanation can be found in the :doc:`/sys-admin-guide/index`.
+
+
+Kripta Key deployment types
+---------------------------
+
+Kripta Key is designed so that it can be deployed on various configurations, depending on the needs of the customer
+and the scale of the applications it needs to serve.
+
+Application that require Kripta Key services would connect using the SDK API or by using the REST API.
+
+The following non-exhaustive list demonstrates some forms of Kripta Key deployment:
+
+*   Quick and easy deployment
+
+    Designed for a small enterprise or simply for a quick demo, this configuration installs both KK-Cryptoservice
+    and KK-Manager in the same machine, while KK-Auditor is installed on a separate machine.
+
+    .. figure:: /_static/kk_installation_1.png
+
+        Example of a quick and easy deployment.
+
+*   Scaled up, high availability deployment
+
+    For a customer that needs high availability or prefers to distribute the load to gain higher throughput,
+    this architecture requires each of the KK-Cryptoservice, the KK-Manager, and the KK-Auditor instances
+    to be installed in separate physical servers. Applications connect to a load balancer that distributes
+    the load evenly among the KK-Cryptoservice servers.
+
+    .. figure:: /_static/kk_installation_2.png
+
+        Example of a scaled up deployment.
+
+*   On cloud deployment
+
+    For distributed applications where the applications run on cloud, it is also possible to deploy Kripta Key
+    partially on cloud. The KK-Manager instance is installed to a machine on premise,
+    while the KK-Cryptoservice instances are installed on the cloud.
+
+    For customers that requires a "bring-your-own-key" model, this type of deployment is recommended.
+
+    .. figure:: /_static/kk_installation_cloud.png
+
+        Example of a cloud-based deployment.
+
+*   Disaster recovery-ready deployment
+
+    Customers may opt to set up a second instance of KK-Manager set to :term:`DR` mode to minimize downtime
+    when the main KK-Manager instance goes down. Keys and other data are replicated one-way from the main instance
+    to the DR instance(s). In the event of unavailability, administrators may promote a KK-Manager-DR instance
+    to be the main KK-Manager instance.
+
+
+Kripta Key access control
+-------------------------
+
+Kripta Key recognizes three types of users: administrators, recovery account, and applications.
+
+An **administrator** authenticates themselves with a password and an administrator card. Administrators can perform
+key management operations such as creating, updating, and deleting an object. Administrators can also review the
+audit log record.
+
+The **recovery account** authenticates itself with a set of recovery cards. The recovery account has the privilege
+to perform management operations at the EMERGENCY privilege level, such as resetting an administrator's password
+without dual control or restoring KK-Manager's database from a backup. Due to the magnitude of the actions
+the recovery account is capable of performing, it is highly recommended that the recovery cards are held
+by stakeholders and/or executives.
+
+An **application** authenticates themselves with a certificate that is pre-registered in the Kripta Key's system. An application
+may only access partitions that the system permits it to, and it still has to authenticate itself
+using the partition's password. Applications, and only applications, perform cryptographic operations such as
+encryption, decryption, sealing, unsealing, signing, MAC generation, and so on.

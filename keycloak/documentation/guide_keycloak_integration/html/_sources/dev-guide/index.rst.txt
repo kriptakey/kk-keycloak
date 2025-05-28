@@ -1,0 +1,27 @@
+Developer Guide
+===============
+
+Preface
+-------
+
+Intended reader
+~~~~~~~~~~~~~~~
+
+This document is intended for experienced application developers and security administrators as a guide
+to using the API in this version of Kripta Key.
+
+
+Document scope
+~~~~~~~~~~~~~~
+
+This document explains the API usage of this version of Kripta Key in supported application programming languages
+for cryptographic operations. The explanation includes, but is not limited to, the API purposes and patterns.
+
+
+Related documents
+~~~~~~~~~~~~~~~~~
+
+*   :doc:`/installation-guide/index`
+*   :doc:`/sys-admin-guide/index`
+*   :doc:`/rest-api-docs/index`
+*   :doc:`/sdk-api-docs/index`

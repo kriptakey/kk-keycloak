@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E2EE for data protection &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="E2EE for password-based authentication" href="e2ee-password-auth.html" />
+    <link rel="prev" title="E2EE prerequisites" href="e2ee-prerequisites.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kkts-guide/index.html">KK-TS Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">E2EE Developer Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e2ee-prerequisites.html">E2EE prerequisites</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">E2EE for data protection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#data-protection-from-client-to-server">Data protection from client to server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#client-key-establishment-protocol">Client key establishment protocol</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-protection-from-server-to-client">Data protection from server to client</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="e2ee-password-auth.html">E2EE for password-based authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e2ee-passwordless-auth.html">E2EE for passwordless authentication</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">E2EE Developer Guide</a></li>
+      <li class="breadcrumb-item active">E2EE for data protection</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/e2ee-dev-guide/e2ee-data-protection.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="e2ee-for-data-protection">
+<h1>E2EE for data protection<a class="headerlink" href="#e2ee-for-data-protection" title="Link to this heading"></a></h1>
+<p>It is important to secure user data transmitted from the backend to the frontend and vice-versa, especially if the user
+data is personally identifiable. The data protection flows are intended to protect user data in transit.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The Kripta Key admin <strong>MUST</strong> have generated a specific AES key to encrypt the data. This is called
+the permanent key.</p>
+</div>
+<section id="data-protection-from-client-to-server">
+<h2>Data protection from client to server<a class="headerlink" href="#data-protection-from-client-to-server" title="Link to this heading"></a></h2>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><a class="reference internal" href="e2ee-prerequisites.html#e2ee-pre-authentication"><span class="std std-ref">E2EE pre-authentication</span></a> must have been done prior to executing this flow.</p>
+</div>
+<p>This flow is used to protect user data sent from the frontend to the backend. The user data is protected in transit
+using the transport public key chosen randomly during pre-authentication, and at rest using the data encryption key.</p>
+<p>The following are the steps to perform E2EE data protection from frontend to backend:</p>
+<ol class="arabic simple">
+<li><p>Frontend calls <code class="docutils literal notranslate"><span class="pre">e2eeEncrypt</span></code> from the SDK, encrypting the data with the transport public key
+and OAEP label established in pre-authentication.</p></li>
+<li><p>Frontend sends the encrypted data block and its metadata, and the session ID to the backend.</p></li>
+<li><p>Backend fetches the OAEP label and wrapped transport private key from the session cache using the session ID.</p></li>
+<li><p>Backend calls <code class="docutils literal notranslate"><span class="pre">e2ee/reencryptFromSessionKeyToPermanentKey</span></code> from Kripta Key API, reencrypting the data using the
+wrapped transport private key and the permanent key.</p></li>
+<li><p>Backend stores the encrypted data into its database.</p></li>
+<li><p>Backend sends the outcome of the operation to the frontend.</p></li>
+</ol>
+<p class="plantuml">
+<img src="../_images/plantuml-354746e6956c07914a1c9dc3093f2f44f2cff041.png" alt="&#64;startuml
+
+skinparam maxMessageSize 240
+
+box &quot;Frontend&quot; #FFD700
+   participant &quot;User&quot; as user
+   participant &quot;Mobile App&quot; as client
+   participant &quot;E2EE Mobile SDK&quot; as clientlib
+end box
+box &quot;Backend&quot;
+   participant &quot;App Server&quot; as appserver
+   participant &quot;Kripta Key&quot; as kk
+end box
+
+== E2EE for Data Protection (Client to Server) ==
+
+autonumber
+user -&gt; client : input data
+client -&gt; clientlib : call &quot;&quot;e2eeEncrypt&quot;&quot;, passing in data, transport public key and OAEP label
+clientlib -&gt; client : return encrypted data block (EDB) and metadata
+client -&gt; appserver : send EDB and metadata
+appserver -&gt; appserver : fetch OAEP label and wrapped transport private key from E2EE session cache by using the session ID
+appserver -&gt; kk : call &quot;&quot;e2ee/reencryptFromSessionKeyToPermanentKey&quot;&quot;, passing in wrapping key ID, wrapped transport private key, OAEP label, and EDB
+kk -&gt; appserver : reencrypted data
+appserver -&gt; appserver : store reencrypted data to database
+appserver -&gt; client : status
+
+&#64;enduml"/>
+</p>
+</section>
+<section id="client-key-establishment-protocol">
+<h2>Client key establishment protocol<a class="headerlink" href="#client-key-establishment-protocol" title="Link to this heading"></a></h2>
+<p>Before encrypted data can flow from the backend to the frontend, the frontend must first receive an AES key from Kripta
+Key. This AES key, called the client key, will be secured in transit using an RSA public key that is generated by the
+frontend, and at rest by being wrapped using a Kripta Key-stored key that has been prepared beforehand.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The Kripta Key admin <strong>MUST</strong> have generated the Kripta Key-stored key to wrap the client key.</p>
+</div>
+<p>These steps establish the client key that secures user data between the frontend, the backend, and Kripta Key. This key
+is ephemeral — each time the frontend starts, a new client key will be created as the old one is discarded.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <a class="reference internal" href="../appendix.html#term-device-binding"><span class="xref std std-term">device binding</span></a> is enabled (see <a class="reference internal" href="e2ee-passwordless-auth.html#device-registration"><span class="std std-ref">Device registration</span></a>),
+then this flow only needs to run once, during device registration. Otherwise, this flow <strong>MUST</strong> run
+every time the frontend bootstraps.</p>
+</div>
+<p>The following are the steps to establish a client key between the frontend and the backend:</p>
+<ol class="arabic simple">
+<li><p>Frontend calls <code class="docutils literal notranslate"><span class="pre">createKeyPairInSecureStore</span></code> from the SDK, creating a key pair that is stored securely by the
+device’s operating system.</p></li>
+<li><p>Frontend requests a client key, sending the generated public key to the backend.</p></li>
+<li><p>Backend calls <code class="docutils literal notranslate"><span class="pre">appstored/key/generate</span></code> from Kripta Key API, generating a payload containing the client key,
+which is encrypted using the frontend’s public key. Do ensure that the endpoint is called with the appropriate
+operating system parameter.</p></li>
+<li><p>Backend sends the payload to the frontend.</p></li>
+<li><p>Frontend calls <code class="docutils literal notranslate"><span class="pre">updateClientKeyToSecureStorage</span></code> from the SDK, decrypting the payload with its private key.
+The decrypted payload is stored in secure storage.</p></li>
+</ol>
+<p class="plantuml">
+<img src="../_images/plantuml-0e8e2471240a7818c3eb6e39a6caaf351e9c8849.png" alt="&#64;startuml
+
+skinparam maxMessageSize 240
+
+box &quot;Frontend&quot; #FFD700
+    participant &quot;User&quot; as user
+    participant &quot;Mobile App&quot; as client
+    participant &quot;E2EE Mobile SDK&quot; as clientlib
+end box
+box &quot;Backend&quot;
+    participant &quot;App Server&quot; as appserver
+    participant &quot;Kripta Key&quot; as kk
+end box
+
+== Client Key Establishment Protocol ==
+
+autonumber
+user -&gt; client : start app
+client -&gt; clientlib : call &quot;&quot;createKeyPairInSecureStore&quot;&quot;
+clientlib -&gt; client : return public key from secure storage
+client -&gt; appserver : request ephemeral client key, passing secure store public key
+appserver -&gt; kk : call &quot;&quot;appstored/key/generate&quot;&quot; with wrapping method &quot;&quot;android&quot;&quot; for Android or &quot;&quot;iOS&quot;&quot;  for iOS
+kk -&gt; appserver : wrapped key payload
+appserver -&gt; client : wrapped key payload
+client -&gt; clientlib : call &quot;&quot;updateClientKeyToSecureStorage&quot;&quot; passing in wrapped key payload
+clientlib -&gt; client : status
+
+&#64;enduml"/>
+</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The payload consists of the client key <strong>AND</strong> the client key wrapped using the prepared Kripta Key-stored key.
+This way, neither the backend nor Kripta Key needs to store the client key — that task is delegated
+to the frontend.</p>
+</div>
+</section>
+<section id="data-protection-from-server-to-client">
+<h2>Data protection from server to client<a class="headerlink" href="#data-protection-from-server-to-client" title="Link to this heading"></a></h2>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><a class="reference internal" href="#client-key-establishment-protocol"><span class="std std-ref">Client key establishment protocol</span></a> must have been done
+prior to executing this flow.</p>
+</div>
+<p>After the client key has been successfully established, this flow may execute as many times as necessary.</p>
+<p>The following are the steps to perform E2EE data protection from backend to frontend:</p>
+<ol class="arabic simple">
+<li><p>Frontend calls <code class="docutils literal notranslate"><span class="pre">getWrappedClientKey</span></code> from the SDK, fetching the wrapped client key from secure storage,
+a nonce (additional authenticated data), and metadata.</p></li>
+<li><p>Frontend caches the nonce.</p></li>
+<li><p>Frontend sends the wrapped client key and the metadata to the backend.</p></li>
+<li><p>Backend fetches the encrypted data from its database.</p></li>
+<li><p>Backend calls <code class="docutils literal notranslate"><span class="pre">e2ee/reencryptFromPermanentKeyToSessionKey</span></code> from Kripta Key API, reencrypting the stored data
+using the permanent key and the wrapped client key.</p></li>
+<li><p>Backend sends the encrypted data to the frontend.</p></li>
+<li><p>Frontend calls <code class="docutils literal notranslate"><span class="pre">e2eeDecrypt</span></code> from the SDK, decrypting the data and using the cached nonce to verify
+that it has not been tampered with.</p></li>
+</ol>
+<p class="plantuml">
+<img src="../_images/plantuml-2030c01ff2e819acba95ba53acc21730744abd4a.png" alt="&#64;startuml
+
+skinparam maxMessageSize 240
+
+box &quot;Frontend&quot; #FFD700
+    participant &quot;User&quot; as user
+    participant &quot;Mobile App&quot; as client
+    participant &quot;E2EE Mobile SDK&quot; as clientlib
+end box
+box &quot;Backend&quot;
+    participant &quot;App Server&quot; as appserver
+    participant &quot;Kripta Key&quot; as kk
+end box
+
+== E2EE for Data Protection (Server to Client) ==
+
+autonumber
+user -&gt; client : fetch data
+client -&gt; clientlib : call &quot;&quot;getWrappedClientKey&quot;&quot;
+clientlib -&gt; client : wrapped client key, nonce, and metadata
+client -&gt; client : cache nonce
+client -&gt; appserver : send wrapped client key and metadata
+appserver -&gt; appserver : fetch encrypted data from database
+appserver -&gt; kk : call &quot;&quot;e2ee/reencryptFromPermanentKeyToSessionKey&quot;&quot;, passing in permanent key ID, encrypted data, wrapped client key and metadata
+kk -&gt; appserver : encrypted data block (EDB)
+appserver -&gt; client : EDB
+client -&gt; clientlib: call &quot;&quot;e2eeDecrypt&quot;&quot;, passing in EDB and nonce (as AAD)
+clientlib -&gt; client : plaintext
+
+&#64;enduml"/>
+</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="e2ee-prerequisites.html" class="btn btn-neutral float-left" title="E2EE prerequisites" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="e2ee-password-auth.html" class="btn btn-neutral float-right" title="E2EE for password-based authentication" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

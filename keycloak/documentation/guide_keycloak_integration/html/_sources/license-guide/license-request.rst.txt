@@ -1,0 +1,24 @@
+Requesting a license
+====================
+
+Customers who wish to continue using Kripta Key after the evaluation license has expired must apply
+for a full license. To do so, follow the steps below:
+
+#.  An administrator must generate a license request file by running the command:
+
+    .. code-block:: console
+
+        $ clikk kk-manager request-license --out-license-request=/path/to/license-request.file
+
+    This command is **normal** privilege level, which requires an administrator's password.
+
+#.  The customer then sends the license request file to the sales team (sales@klaviskripta.com),
+    along with other required information:
+
+    *   Customer name
+    *   Deployment ID
+    *   Product edition (Standard or Enterprise)
+    *   License duration (1, 3, or 5 years)
+    *   Number of KK-Cryptoservice instances
+    *   Number of KK-Manager-DR instances
+    *   Optionally, list of desired add-on features

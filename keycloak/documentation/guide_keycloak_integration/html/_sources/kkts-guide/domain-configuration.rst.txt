@@ -1,0 +1,130 @@
+Domain configuration
+====================
+
+In Kripta Key Tokenization Service, data domains are associated with applications. The tokenization
+of each data domain can be configured separately.
+
+
+Application configuration
+-------------------------
+
+An application has the following configurations:
+
+Application SKI
+    This is subject key identifier of the application, which is derived from the application's certificate.
+    The subject key identifier is calculated by hashing the certificate's public key, and is used
+    to identify the application. One application SKI is associated with only one partition ID and one key ID. 
+
+Partition ID
+    This is the identifier of the partition associated with the key that is used for tokenization.
+
+Key ID
+    This is the identifier of the key that is used for tokenization.
+
+
+Data configuration
+------------------
+
+A data domain has the following configurations:
+
+Application SKI
+    This is the subject key identifier of the application this data domain belongs to.
+
+Config ID
+    This is the identifier of this data domain.
+
+Tokenization type
+    This is the tokenization type of this data domain. There are four tokenization types available:
+
+    *   ``FORMAT_CHAR`` (0)
+
+        This tokenization type uses the format string configuration to determine which part of the sensitive value
+        gets tokenized.
+
+    *   ``FULL`` (1)
+
+        This tokenization type tokenizes the entire sensitive value.
+
+    *   ``FIRST_HALF`` (2)
+
+        This tokenization type tokenizes the first half of the sensitive value, rounded down.
+
+    *   ``LAST_HALF`` (3)
+
+        This tokenization type tokenizes the second half of the sensitive value, rounded up.
+
+    The values in brackets are the indexes of each tokenization type, for use with the command line interface.
+
+Format string
+    This is the format string that specifies how a sensitive value will be tokenized. This field is exclusively used
+    with the ``FORMAT_CHAR`` tokenization type.
+
+    A format string consists of only ``%``, ``$``, and ``*`` characters:
+
+    *   ``%`` indicates characters that will be preserved in the tokenization process.
+    *   ``$`` indicates characters that will be substituted with a benign value in the tokenization process.
+    *   ``*`` indicates a variable amount of ``%`` characters. There can only be at most one occurence of ``*``
+        within the format string, and if a ``*`` is present, then the format string cannot contain any ``%``. 
+        For example, ``$$$*$$$`` for 10 characters of USV, it means there are 4 characters in the middle of the word that will be preserved.
+
+Tokenization charset
+    This is the tokenization character set of this data domain. Each character set has its own minimum length. The system will refuse to tokenize inputs
+    that are susceptible to brute-force attacks. There are four tokenization character sets available:
+
+    *   ``NUMERIC`` (0)
+
+        This tokenization character set replaces all tokenized characters with numbers. The tokenized minimum length is ten characters.
+
+    *   ``ALPHABETIC`` (1)
+
+        This tokenization character set replaces all tokenized characters with mixed case letters. The tokenized minimum length is six characters.
+
+    *   ``ALPHANUMERIC`` (2)
+
+        This tokenization character set replaces all tokenized characters with mixed case letters and numbers. The tokenized minimum length is six characters.
+    
+    *   ``ALPHANUMSPEC`` (3)
+
+        This tokenization character set replaces all tokenized characters with mixed case letters, numbers, and special characters. The tokenized minimum length is six characters.
+
+
+    The values in brackets are the indexes of each tokenization type, for use with the command line interface.
+
+Minimum length
+    This is the minimum length of user sensitive value (USV). This minimum length depends on the :ref:`tokenization type <kkts-guide/domain-configuration:Tokenization type>`
+    and :ref:`tokenization charset <kkts-guide/domain-configuration:Tokenization type>`. For example, set data config and assume the tokenized minimum length as N. 
+    
+    *   ``FORMAT_CHAR``
+
+        #.  Dinamic 
+        
+            The minimum length should be greater than N. 
+        
+            For example, if we set the data configuration with tokenization charset ``NUMERIC`` and format char ``$$$$$*$$$$$``, the minimum length must be greater than 10. 
+
+        #.  Static 
+
+            The minimum length must be equal to number of `$` set on the format char. 
+
+            For example, if we set the data configuration with tokenization charset ``NUMERIC`` and format char ``$$$$$$$$$$$%%%``, the minimum length must be equal to the format char, in this case 14.
+    
+    *   ``FULL``
+
+        The minimum length should be equal to or greater than N.
+        
+        For example, if we set the data configuration with tokenization charset ``ALPHABETIC``, the minimum length must be equal to or greater than 6. 
+
+    *   ``FIRST_HALF``
+
+        The minimum length should be equal to or greater than 2*N.
+        
+        For example, if we set the data configuration with tokenization charset ``ALPHANUMERIC``, the minimum length must be equal to or greater than 12.
+
+    *   ``LAST_HALF`` 
+
+        The minimum length should be equal to or greater than 2*N.
+        
+        For example, if we set the data configuration with tokenization charset ``ALPHANUMSPEC``, the minimum length must be equal to or greater than 12. 
+    
+  
+

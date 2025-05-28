@@ -1,0 +1,182 @@
+Supplementary CLIKK usage
+=========================
+
+Exporting a key from Kripta Key
+-------------------------------
+
+The following steps demonstrate the method of exporting a key from Kripta Key to be used in another system.
+In this example, OpenSSL is used to create the wrapping key.
+
+#.  Create a 3072-bit RSA private key.
+
+    .. code-block:: console
+
+        $ openssl genrsa -out privateKey.pem 3072
+
+#.  Extract the public key from the private key.
+
+    .. code-block:: console
+
+        $ openssl rsa -in privateKey.pem -pubout -out publicKey.pem
+
+#.  Export the desired key using CLIKK, passing in the public key file created in the previous step.
+
+    .. code-block:: console
+
+        $ clikk key export --partition-id=1 --key-id=AESKey --key-version=1 --pubkey-path=/home/user/Documents/publicKey.pem --output-file-path=/home/user/Documents/AESExport.bin
+
+#.  Extract the wrapped session key and the wrapped exported key from the file created by CLIKK.
+
+    .. code-block:: console
+
+        $ dd if=AESExport.bin of=wrappedSessionKey.bin bs=1 count=$(echo $((384))) > /dev/null 2>&1
+        $ dd if=AESExport.bin of=wrappedExportedKey.bin bs=1 skip=$(echo $((384))) > /dev/null 2>&1
+
+#.  Unwrap the exported key using the RSA private key. The unwrapped key will be saved into ``clearKey.pem``.
+
+    .. code-block:: console
+
+        $ openssl pkeyutl -decrypt -inkey privateKey.pem -keyform PEM -in wrappedSessionKey.bin -out sessionKey.bin -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256s
+        $ openssl enc -d -id-aes256-wrap-pad -iv A65959A6 -K $( hexdump -v -e '/1 "%02x"' < sessionKey.bin ) -in wrappedExportedKey.bin -out clearKey.pem
+
+    When exporting asymmetric keys, the output will be in DER format. It can be converted to PEM format
+    with the following command:
+
+    .. code-block:: console
+
+        $ openssl pkcs8 -topk8 -inform DER -outform PEM -in clearKey.der -out clearKey.pem -nocrypt
+
+.. warning::
+
+    Performing the final step will result in the exported key material being exposed in the system.
+    Never do this with keys protecting sensitive information. Key export can be prohibited by setting
+    the key to be not extractable.
+
+
+Importing a key to Kripta Key
+-----------------------------
+
+The following steps demonstrate the method of importing a key from another system to be used in Kripta Key.
+In this example, OpenSSL is used to create the imported key.
+
+#.  Create the wrapping key in Kripta Key. This will be used to wrap the target key, which is the key
+    that will be imported to Kripta Key.
+
+    .. code-block:: console
+
+        $ clikk key add --partition-id=1 --key-id=rsaWrappingKey --key-label=KeyImport --key-algo=2 --key-length=3072 --key-purpose=2 --key-lifetime=30
+
+#.  Examine the key info, and then copy the public key and save it to ``wrappingKey.pem``.
+
+    .. code-block:: console
+
+        $ clikk key info --partition-id=1 --key-id=rsaWrappingKey
+
+#.  Generate the target key.
+
+    .. code-block:: console
+
+        $ openssl3 rand -out targetKey.bin 32
+
+    Note that this creates an AES key. Importing asymmetric keys requires the keys to be in DER format.
+
+#.  Generate the session key, as required by PKCS#11 key wrapping mechanism.
+
+    .. code-block:: console
+
+        $ openssl3 rand -out sessionKey.bin 32
+
+#.  Wrap the session key using the public key created in step 2.
+
+    .. code-block:: console
+
+        $ openssl3 pkeyutl -encrypt -pubin -inkey rsaWrappingKey.pem -keyform PEM -in sessionKey.bin -out wrappedSessionKey.bin -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256
+
+#.  Wrap the target key using the session key.
+
+    .. code-block:: console
+
+        $ openssl3 enc -e -id-aes256-wrap-pad -iv A65959A6 -K $( hexdump -v -e '/1 "%02x"' < sessionKey.bin ) -in targetKey.bin -out wrappedTargetKey.bin
+
+#.  Concatenate the wrapped session key and wrapped target key.
+
+    .. code-block:: console
+
+        $ cat wrappedTargetKey.bin >> wrappedSessionKey.bin
+
+#.  Import the key using ``clikk key import-pkcs11``.
+
+    .. code-block:: console
+
+        $ clikk key import-pkcs11 --partition-id=1 --key-id=importedAesKey --key-label=ImportedKey --key-algo=1 --key-length=256 --key-lifetime=365 --key-purpose=1 --wrapping-key-id=rsaWrappingKey --wrapping-key-partition-id=1 --wrapped-key-path=/home/user/wrappedSessionkey.bin
+
+
+Importing a PKCS#12 key to Kripta Key
+-------------------------------------
+
+The following steps demonstrate the method of importing an asymmetric key with its certificate chain
+from another system to be used in Kripta Key. In this example, OpenSSL is used to create the imported key.
+
+#.  Generate an asymmetric key. This example generates a 3072-bit RSA key pair.
+
+    .. code-block:: console
+
+        $ openssl genrsa -out rsaKey.pem 3072
+
+#.  Create the CSR for the key pair.
+
+    .. code-block:: console
+
+        $ openssl req -new -sha256 -key rsaKey.pem -out rsaKey.csr
+
+#.  Generate the X509 certificate.
+
+    .. code-block:: console
+
+        $ openssl req -x509 -sha256 -days 365 -key rsaKey.pem -in rsaKey.csr -out certificate.pem
+
+#.  Export the certificate in P12 format.
+
+    .. code-block:: console
+
+        $ openssl pkcs12 -export -out certificate.p12 -inkey RSAKey.pem -in certificate.pem
+
+#.  Import the certificate using ``clikk key import-pkcs12``.
+
+    .. code-block:: console
+
+        $ clikk key import-pkcs12 --partition-id=2 --key-id=Finance02 --key-label=finance02ImportKey --keystore-path=/home/user/Documents/certificate.p12
+
+
+Creating a CSR for an application
+---------------------------------
+
+The following steps demonstrate the method of creating the CSR for an application that will be used to register
+the application in Kripta Key. In this example, OpenSSL is used to create the application's CSR.
+
+#.  Generate the application's key pair. This example generates an ECDSA P-256 key pair.
+
+    .. code-block:: console
+
+        $ openssl ecparam -name prime256v1 -genkey -noout -out private.key
+
+#.  Create the CSR for the key pair.
+
+    .. code-block:: console
+
+        $ openssl req -new -sha256 -key private.key -out appCsr.pem
+
+#.  Register the application using ``clikk app add``, passing in the path to the CSR.
+
+    .. code-block:: console
+
+        $ clikk app add --csr-file-path=appCsr.pem --app-id=Example --validity-period=365 --output-cert-path=/home/user/Documents/appCertificate.pem
+
+#.  Add the application to a partition using ``clikk partition add-app``.
+
+    .. code-block:: console
+
+        $ clikk partition add-app --partition-id=1 --app-id=Example
+
+Now, the application may use REST API to access cryptographic services with objects in the partition it was added to.
+Provide the certificate and the key pair so that the KK-Cryptoservice instance permits the requests.

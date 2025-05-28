@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accessing cryptographic services &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="E2EE Developer Guide" href="../e2ee-dev-guide/index.html" />
+    <link rel="prev" title="End-to-end cryptographic services" href="kms-e2e-crypto-services.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kkts-guide/index.html">KK-TS Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kms-authentication.html">Authentication services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kms-general-crypto-services.html">General cryptographic services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kms-e2e-crypto-services.html">End-to-end cryptographic services</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Accessing cryptographic services</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-rest-api">Using REST API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-sdk-api">Using SDK API</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#php">PHP</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#java">Java</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#net">.NET</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#golang">Golang</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Developer Guide</a></li>
+      <li class="breadcrumb-item active">Accessing cryptographic services</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/dev-guide/kms-crypto-services-access.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="accessing-cryptographic-services">
+<h1>Accessing cryptographic services<a class="headerlink" href="#accessing-cryptographic-services" title="Link to this heading"></a></h1>
+<section id="using-rest-api">
+<h2>Using REST API<a class="headerlink" href="#using-rest-api" title="Link to this heading"></a></h2>
+<p>Applications may use REST API to access the cryptographic services offered by Kripta Key. The REST API endpoints
+may only be accessed over mutual TLS with a valid certificate. Make sure that the KK-Cryptoservice common name
+as written in the certificate (KK-Cryptoservice hostname) has been added to the DNS server.</p>
+<p>The request and responses made via REST API are in JSON. For this version of Kripta Key, all API endpoints
+are prefixed with <code class="docutils literal notranslate"><span class="pre">v24.1/</span></code>. The server will return HTTP status 200 on success, and 400 on failure. Additionally,
+on error, it also returns a fault response code, which describes the error in more detail for that particular endpoint.
+For more details, developers may consult the <a class="reference internal" href="../rest-api-docs/index.html"><span class="doc">REST API Documentation</span></a>.</p>
+</section>
+<section id="using-sdk-api">
+<h2>Using SDK API<a class="headerlink" href="#using-sdk-api" title="Link to this heading"></a></h2>
+<p>This section covers the use of the SDK in a number of popular languages to access cryptographic services.</p>
+<p>Kripta Key SDK allows developers to access the Kripta Key API endpoints in their code via TCP without using
+the REST API endpoints. Additionally, the SDK also wraps Kripta Key objects into objects native to the language.
+This results in cleaner code with less boilerplate that is easy to maintain.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Code examples below contain some predefined sample files and objects:</p>
+<ol class="arabic simple">
+<li><p>CA certificate filename: <code class="docutils literal notranslate"><span class="pre">ca.pem</span></code></p></li>
+<li><p>Application private key filename: <code class="docutils literal notranslate"><span class="pre">Priv.key</span></code></p></li>
+<li><p>Application certificate filename: <code class="docutils literal notranslate"><span class="pre">App.pem</span></code></p></li>
+<li><p>Partition ID: <code class="docutils literal notranslate"><span class="pre">1</span></code></p></li>
+<li><p>Password: <code class="docutils literal notranslate"><span class="pre">Password1!</span></code></p></li>
+<li><p>KK-Cryptoservice certificate CN: <code class="docutils literal notranslate"><span class="pre">kk-cs.klaviskripta.com</span></code></p></li>
+<li><p>KK-Cryptoservice port: <code class="docutils literal notranslate"><span class="pre">8084</span></code></p></li>
+<li><p>Key IDs:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">AESMACKey</span></code> for an AES key whose purpose is MAC generation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EncryptionKey</span></code> for an AES or an RSA key whose purpose is encryption.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AESEncryptionKey</span></code> for an AES key whose purpose is encryption.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSAEncryptionKey</span></code> for an RSA whose purpose is encryption.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSASigningKey</span></code> for an RSA key whose purpose is signing.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECDSASigningKey</span></code> for an ECDSA key whose purpose is signing.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CertSigningKey</span></code> for an RSA or an ECDSA key whose purpose is certificate signing.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WrappingKey</span></code> for an AES or an RSA key whose purpose is key wrapping.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PermanentKey</span></code> for an AES key whose purpose is encryption, to be used with E2EE services.</p></li>
+</ul>
+</li>
+</ol>
+</div>
+<section id="php">
+<h3>PHP<a class="headerlink" href="#php" title="Link to this heading"></a></h3>
+<p>Kripta Key SDK for PHP is available for PHP versions 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, and 8.2.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Kripta Key SDK for PHP only supports NTS mode of operation.</p>
+</div>
+<section id="php-sdk-configuration">
+<h4>PHP SDK configuration<a class="headerlink" href="#php-sdk-configuration" title="Link to this heading"></a></h4>
+<p>Kripta Key SDK for PHP is an extension that can be loaded by configuring <code class="docutils literal notranslate"><span class="pre">php.ini</span></code>. To locate it,
+run the following command.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>php<span class="w"> </span>--ini
+</pre></div>
+</div>
+<p>To set up the SDK, open the <code class="docutils literal notranslate"><span class="pre">php.ini</span></code> file with a text editor. Search for the <code class="docutils literal notranslate"><span class="pre">Dynamic</span> <span class="pre">Extensions</span></code> section,
+and add the following line, substituting the appropriate PHP version.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">extension</span><span class="o">=</span><span class="s">libkk-php-x.x.so</span>
+</pre></div>
+</div>
+<p>If the SDK shared library file is not present at the extension directory, specify an absolute path instead.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">extension</span><span class="o">=</span><span class="s">/path/to/extension/libkk-php-x.x.so</span>
+</pre></div>
+</div>
+</section>
+<section id="php-sdk-usage">
+<h4>PHP SDK usage<a class="headerlink" href="#php-sdk-usage" title="Link to this heading"></a></h4>
+<p>Kripta Key SDK for PHP provides a PHP class, <code class="docutils literal notranslate"><span class="pre">ConnectionHandler</span></code>, that wraps the TCP connection
+and exposes the Kripta Key API endpoints as methods. This class needs to be created and initialized
+before the developer can make calls to Kripta Key API.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="sd">/**</span>
+<span class="sd">* ConnectionHandler object will hold the target host, target port, client certificate,</span>
+<span class="sd">* client private key, and CA certificate, once initialized.</span>
+<span class="sd">*</span>
+<span class="sd">* Note that the certificates and the key must be in PEM format.</span>
+<span class="sd">*/</span>
+<span class="nv">$connectionHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ConnectionHandler</span><span class="p">();</span>
+
+<span class="sd">/**</span>
+<span class="sd">* Initialize the connection by specifying the target host, target port, client certificate,</span>
+<span class="sd">* client private key, and CA certificate. This will be stored by the ConnectionHandler object.</span>
+<span class="sd">*</span>
+<span class="sd">* initializeConnection() will return 0 on success, or error code on failure.</span>
+<span class="sd">*/</span>
+<span class="nv">$kkcsd_host</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">;</span>
+<span class="nv">$kkcsd_port</span> <span class="o">=</span> <span class="s2">&quot;8084&quot;</span><span class="p">;</span>
+<span class="nv">$clientCert</span> <span class="o">=</span> <span class="s2">&quot;App.pem&quot;</span><span class="p">;</span>
+<span class="nv">$clientPrivKey</span> <span class="o">=</span> <span class="s2">&quot;Priv.Key&quot;</span><span class="p">;</span>
+<span class="nv">$partitionId</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="nv">$partitionPassword</span> <span class="o">=</span> <span class="s2">&quot;Password1!&quot;</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">kk\ConnectionHandler</span><span class="p">;</span>
+
+<span class="nv">$connectionHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ConnectionHandler</span><span class="p">();</span>
+<span class="nv">$initRes</span> <span class="o">=</span> <span class="nv">$connectionHandler</span><span class="o">-&gt;</span><span class="na">initializeConnection</span><span class="p">(</span><span class="nv">$kkcsd_host</span><span class="p">,</span> <span class="nv">$kkcsd_port</span><span class="p">,</span> <span class="nv">$clientCert</span><span class="p">,</span> <span class="nv">$clientPrivKey</span><span class="p">,</span> <span class="nv">$clientCert</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$initRes</span><span class="o">-&gt;</span><span class="na">getStatus</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="p">(</span><span class="s2">&quot;Connection initialization failed. Error: &quot;</span> <span class="o">.</span> <span class="nv">$initRes</span><span class="o">-&gt;</span><span class="na">getStatus</span><span class="p">()</span> <span class="o">.</span> <span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">);</span>
+    <span class="nb">var_dump</span><span class="p">(</span><span class="nv">$initRes</span><span class="p">);</span>
+    <span class="k">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="p">(</span><span class="s2">&quot;Connection initialized successfully.</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The following snippets demonstrate how a developer may use the connection handler object to access
+the Kripta Key API endpoints.</p>
+<ul>
+<li><p>Logging in</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="sd">/**</span>
+<span class="sd">* @brief Log in to a partition using its password.</span>
+<span class="sd">*</span>
+<span class="sd">* @param partitionId        The partition ID.</span>
+<span class="sd">* @param partitionPassword  The partition pasword.</span>
+<span class="sd">* @return SDKResponse object, containing the status (1 if success, fault code otherwise) and response (complex array)</span>
+<span class="sd">*/</span>
+<span class="k">echo</span> <span class="p">(</span><span class="s2">&quot;=============================Login=========================</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">);</span>
+
+<span class="nv">$loginRes</span> <span class="o">=</span> <span class="nv">$connectionHandler</span><span class="o">-&gt;</span><span class="na">login</span><span class="p">(</span><span class="nv">$partitionId</span><span class="p">,</span> <span class="nv">$partitionPassword</span><span class="p">);</span>
+<span class="nb">var_dump</span><span class="p">(</span><span class="nv">$loginRes</span><span class="o">-&gt;</span><span class="na">getStatus</span><span class="p">());</span>
+<span class="nb">var_dump</span><span class="p">(</span><span class="nv">$loginRes</span><span class="o">-&gt;</span><span class="na">getResponse</span><span class="p">());</span>
+
+<span class="nv">$sessionToken</span> <span class="o">=</span> <span class="nv">$loginRes</span><span class="o">-&gt;</span><span class="na">getResponse</span><span class="p">()[</span><span class="s2">&quot;sessionToken&quot;</span><span class="p">];</span>
+<span class="k">echo</span> <span class="p">(</span><span class="s2">&quot;Session Token Value = &quot;</span> <span class="o">.</span> <span class="nv">$sessionToken</span><span class="p">);</span>
+
+<span class="k">echo</span> <span class="p">(</span><span class="s2">&quot;==========================End of Login=====================</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+<li><p>Encrypting data</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="c1">// Create multiple encryption requests</span>
+<span class="nv">$aadPrefix</span> <span class="o">=</span> <span class="s2">&quot;aad&quot;</span><span class="p">;</span>
+<span class="nv">$encryptAESRequest</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">EncryptionRequest</span><span class="p">();</span>
+<span class="k">for</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$aad</span> <span class="o">=</span> <span class="nv">$aadPrefix</span> <span class="o">.</span> <span class="nv">$i</span><span class="p">;</span>
+    <span class="nv">$plaintext</span> <span class="o">=</span> <span class="s2">&quot;plaintext for AES Encrypt &quot;</span> <span class="o">.</span> <span class="nv">$i</span><span class="p">;</span>
+    <span class="nv">$encryptAESRequest</span><span class="o">-&gt;</span><span class="na">Add</span><span class="p">(</span><span class="nv">$plaintext</span><span class="p">,</span> <span class="nv">$aad</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">echo</span> <span class="p">(</span><span class="s2">&quot;=============================Encrypt AES=========================</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">);</span>
+
+<span class="nv">$encRes</span> <span class="o">=</span> <span class="nv">$connectionHandler</span><span class="o">-&gt;</span><span class="na">encrypt</span><span class="p">(</span><span class="nv">$partitionId</span><span class="p">,</span> <span class="nv">$sessionToken</span><span class="p">,</span> <span class="nv">$encryptionKeyAES</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="nv">$encryptAESRequest</span><span class="p">);</span> <span class="c1">// null = does not use session key</span>
+<span class="nv">$cipherText</span> <span class="o">=</span> <span class="nv">$encRes</span><span class="o">-&gt;</span><span class="na">getResponse</span><span class="p">()[</span><span class="s2">&quot;ciphertext&quot;</span><span class="p">];</span>
+<span class="nb">var_dump</span><span class="p">(</span><span class="nv">$encRes</span><span class="o">-&gt;</span><span class="na">getStatus</span><span class="p">());</span>
+<span class="nb">var_dump</span><span class="p">(</span><span class="nv">$encRes</span><span class="o">-&gt;</span><span class="na">getResponse</span><span class="p">());</span>
+
+<span class="k">echo</span> <span class="p">(</span><span class="s2">&quot;=========================End of Encrypt AES======================</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+<li><p>Decrypting data</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="c1">// Create multiple decryption requests from the result of AES encryption</span>
+<span class="nv">$decryptAESRequest</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">DecryptionRequest</span><span class="p">();</span>
+<span class="nv">$encryptCipher</span> <span class="o">=</span> <span class="nv">$encRes</span><span class="o">-&gt;</span><span class="na">getResponse</span><span class="p">()[</span><span class="s2">&quot;ciphertext&quot;</span><span class="p">];</span> <span class="c1">// get the array of ciphertexts</span>
+<span class="nv">$keyVersion</span> <span class="o">=</span> <span class="nv">$encRes</span><span class="o">-&gt;</span><span class="na">getResponse</span><span class="p">()[</span><span class="s2">&quot;keyVersion&quot;</span><span class="p">];</span> <span class="c1">// get the key version</span>
+
+<span class="nv">$aadCounter</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$encryptCipher</span> <span class="k">as</span> <span class="nv">$cipher</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$sessionKey</span> <span class="o">=</span> <span class="nb">array_key_exists</span><span class="p">(</span><span class="s2">&quot;wrappedSessionKey&quot;</span><span class="p">,</span> <span class="nv">$cipher</span><span class="p">)</span> <span class="o">?</span> <span class="nv">$cipher</span><span class="p">[</span><span class="s2">&quot;wrappedSessionKey&quot;</span><span class="p">]</span> <span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+    <span class="nv">$aad</span> <span class="o">=</span> <span class="nv">$aadPrefix</span> <span class="o">.</span> <span class="nv">$aadCounter</span><span class="o">++</span><span class="p">;</span>
+    <span class="nv">$decryptAESRequest</span><span class="o">-&gt;</span><span class="na">Add</span><span class="p">(</span><span class="nv">$encryptionKeyAES</span><span class="p">,</span><span class="nv">$keyVersion</span><span class="p">,</span><span class="nv">$aad</span><span class="p">,</span> <span class="nv">$cipher</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">],</span> <span class="nv">$cipher</span><span class="p">[</span><span class="s2">&quot;iv&quot;</span><span class="p">],</span> <span class="nv">$cipher</span><span class="p">[</span><span class="s2">&quot;mac&quot;</span><span class="p">],</span> <span class="k">null</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">echo</span> <span class="p">(</span><span class="s2">&quot;=============================Decrypt AES=========================</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">);</span>
+
+<span class="nv">$decryptAESResponse</span> <span class="o">=</span> <span class="nv">$connectionHandler</span><span class="o">-&gt;</span><span class="na">decrypt</span><span class="p">(</span><span class="nv">$partitionId</span><span class="p">,</span> <span class="nv">$sessionToken</span><span class="p">,</span><span class="nv">$decryptAESRequest</span><span class="p">);</span>
+<span class="nb">var_dump</span><span class="p">(</span><span class="nv">$decryptAESResponse</span><span class="o">-&gt;</span><span class="na">getStatus</span><span class="p">());</span>
+<span class="nb">var_dump</span><span class="p">(</span><span class="nv">$decryptAESResponse</span><span class="o">-&gt;</span><span class="na">getResponse</span><span class="p">());</span>
+
+<span class="k">echo</span> <span class="p">(</span><span class="s2">&quot;=============================End Of Decrypt AES=========================</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please refer to the PHP SDK API documentation for detailed information about other Kripta Key API interfaces,
+their proper usage, and their code examples.</p>
+</div>
+</section>
+</section>
+<section id="java">
+<h3>Java<a class="headerlink" href="#java" title="Link to this heading"></a></h3>
+<section id="java-sdk-configuration">
+<h4>Java SDK configuration<a class="headerlink" href="#java-sdk-configuration" title="Link to this heading"></a></h4>
+<p>Kripta Key SDK for Java is a Java archive (JAR) file that can be loaded into a Java project as a library.
+A native library is embedded into the JAR file, compiled for RHEL, to handle the communication between
+the KK-Cryptoservice instance and the application. If the developer does not want to use the native library
+embedded in the JAR file, the <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> environment variable must be set.</p>
+<p>The developer may import the JAR file into an existing Java project via the command line.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>javac<span class="w"> </span>-classpath<span class="w"> </span>kk-server-sdk-1.1.jar:.<span class="w"> </span>&lt;App<span class="w"> </span><span class="nb">source</span><span class="w"> </span>files&gt;
+<span class="gp">$ </span>java<span class="w"> </span>-classpath<span class="w"> </span>kk-server-sdk-1.1.jar:.<span class="w"> </span>&lt;App<span class="w"> </span>class<span class="w"> </span>name&gt;
+</pre></div>
+</div>
+<p>The above class path configuration may vary across Java IDEs. For example, on Eclipse, the class path configuration
+is found under the menu Project → Properties → Java Build Path → Add External JARs.</p>
+</section>
+<section id="java-sdk-usage">
+<h4>Java SDK usage<a class="headerlink" href="#java-sdk-usage" title="Link to this heading"></a></h4>
+<p>Kripta Key SDK for Java provides a single pure Java class, <code class="docutils literal notranslate"><span class="pre">SDKConnection</span></code>, that wraps the TCP connection to
+the KK-Cryptoservice instance. Developer simply declare and initialize this class in order to access Kripta Key
+endpoints.</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">com.klaviskripta.serversdk.*</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DemoSDK</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Configure connection</span>
+<span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">DEMO_HOSTNAME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;target-kk-cs.com&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">DEMO_PORT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">short</span><span class="p">)</span><span class="w"> </span><span class="mi">8084</span><span class="p">;</span>
+<span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">DEMO_CLIENT_CERTIFICATE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/PathToClient/Cert.pem&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">DEMO_CLIENT_PRIVATE_KEY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/PathToClientKey/Priv.key&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">DEMO_CA_CERTIFICATE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/PathToClient/Cert.pem&quot;</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">SDKConnectionBuilder</span><span class="w"> </span><span class="n">sdkBuilder</span><span class="w"> </span><span class="o">=</span>
+<span class="w">            </span><span class="n">SDKConnection</span><span class="p">.</span><span class="na">newBuilder</span><span class="p">()</span>
+<span class="w">                </span><span class="p">.</span><span class="na">setHost</span><span class="p">(</span><span class="n">DEMO_HOSTNAME</span><span class="p">)</span>
+<span class="w">                </span><span class="p">.</span><span class="na">setPort</span><span class="p">(</span><span class="n">DEMO_PORT</span><span class="p">)</span>
+<span class="w">                </span><span class="p">.</span><span class="na">setClientCertificate</span><span class="p">(</span><span class="n">DEMO_CLIENT_CERTIFICATE</span><span class="p">)</span>
+<span class="w">                </span><span class="p">.</span><span class="na">setClientPrivateKey</span><span class="p">(</span><span class="n">DEMO_CLIENT_PRIVATE_KEY</span><span class="p">)</span>
+<span class="w">                </span><span class="p">.</span><span class="na">setCACertificate</span><span class="p">(</span><span class="n">DEMO_CA_CERTIFICATE</span><span class="p">)</span>
+
+<span class="w">        </span><span class="c1">// Instantiate SDK and auto release resource</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">SDKConnection</span><span class="w"> </span><span class="n">sdk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sdkBuilder</span><span class="p">.</span><span class="na">build</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// Your code here</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">SDKServerException</span><span class="w"> </span><span class="n">sdkException</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// Handle the exception</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">IOException</span><span class="w"> </span><span class="n">connectionException</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// Handle if the KMS endpoint is unreachable</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The following snippets demonstrate how a developer may use the SDK connection object to access
+the Kripta Key API endpoints.</p>
+<ul>
+<li><p>Logging in</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="c1">// Login parameters</span>
+<span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">DEMO_PARTITION_ID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">DEMO_PARTITION_PASSWORD</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Password1!&quot;</span><span class="p">;</span>
+
+<span class="c1">// Login to get the session token</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Call login API...&quot;</span><span class="p">);</span>
+
+<span class="n">AuthenticationResult</span><span class="w"> </span><span class="n">authnResult</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sdk</span><span class="p">.</span><span class="na">login</span><span class="p">(</span><span class="n">DEMO_PARTITION_ID</span><span class="p">,</span><span class="w"> </span><span class="n">DEMO_PARTITION_PASSWORD</span><span class="p">);</span>
+<span class="n">String</span><span class="w"> </span><span class="n">sessionToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">authnResult</span><span class="p">.</span><span class="na">getSessionToken</span><span class="p">();</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Login successful, result:&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">authnResult</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+<li><p>Encrypting data</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="c1">// Encrypt parameters</span>
+<span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Plaintext</span><span class="o">[]</span><span class="w"> </span><span class="n">DEMO_MULTIPLE_PLAINTEXT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Plaintext</span><span class="o">[]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">Plaintext</span><span class="p">(</span><span class="s">&quot;Plaintext1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;aad1&quot;</span><span class="p">),</span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">Plaintext</span><span class="p">(</span><span class="s">&quot;Plaintext2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;aad2&quot;</span><span class="p">)</span>
+<span class="p">};</span>
+
+<span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">DEMO_KEY_ID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;AESEncryptionKey&quot;</span><span class="p">;</span>
+
+<span class="c1">// Encrypt with SDK</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Encrypting data...&quot;</span><span class="p">);</span>
+<span class="n">EncryptResult</span><span class="w"> </span><span class="n">encryptResult</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sdk</span><span class="p">.</span><span class="na">encrypt</span><span class="p">(</span><span class="n">DEMO_PARTITION_ID</span><span class="p">,</span><span class="w"> </span><span class="n">sessionToken</span><span class="p">,</span><span class="w"> </span><span class="n">DEMO_KEY_ID</span><span class="p">,</span><span class="w"> </span><span class="n">DEMO_MULTIPLE_PLAINTEXT</span><span class="p">);</span>
+
+<span class="c1">// Get key version and ciphertext</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">keyVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">encryptResult</span><span class="p">.</span><span class="na">getKeyVersion</span><span class="p">();</span>
+<span class="n">EncryptResultCiphertext</span><span class="o">[]</span><span class="w"> </span><span class="n">ciphertextResults</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">encryptResult</span><span class="p">.</span><span class="na">getCiphertext</span><span class="p">();</span>
+</pre></div>
+</div>
+</li>
+<li><p>Decrypting data</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="c1">// Decrypt all values (in one shot)</span>
+<span class="n">Ciphertext</span><span class="o">[]</span><span class="w"> </span><span class="n">ciphertextForDecrypt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Ciphertext</span><span class="o">[</span><span class="n">ciphertextResults</span><span class="p">.</span><span class="na">length</span><span class="o">]</span><span class="p">;</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">ciphertextResults</span><span class="p">.</span><span class="na">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">EncryptResultCiphertext</span><span class="w"> </span><span class="n">ciphertextResult</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ciphertextResults</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ciphertextForDecrypt</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Ciphertext</span><span class="p">(</span><span class="n">ciphertextResult</span><span class="p">.</span><span class="na">getText</span><span class="p">(),</span><span class="w"> </span><span class="n">ciphertextResult</span><span class="p">.</span><span class="na">getMAC</span><span class="p">(),</span>
+<span class="w">        </span><span class="n">ciphertextResult</span><span class="p">.</span><span class="na">getIV</span><span class="p">(),</span><span class="w"> </span><span class="n">DEMO_MULTIPLE_PLAINTEXT</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">.</span><span class="na">getAAD</span><span class="p">(),</span><span class="w"> </span><span class="n">keyVersion</span><span class="p">,</span><span class="w"> </span><span class="n">DEMO_KEY_ID</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Decrypt with SDK</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Decrypting ciphertext...&quot;</span><span class="p">);</span>
+<span class="n">DecryptResult</span><span class="w"> </span><span class="n">plaintextResult</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sdk</span><span class="p">.</span><span class="na">decrypt</span><span class="p">(</span><span class="n">DEMO_PARTITION_ID</span><span class="p">,</span><span class="w"> </span><span class="n">sessionToken</span><span class="p">,</span><span class="w"> </span><span class="n">ciphertextForDecrypt</span><span class="p">);</span>
+
+<span class="n">print</span><span class="p">(</span><span class="s">&quot;Decrypted ciphertexts:&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">plaintextResult</span><span class="p">.</span><span class="na">getPlaintext</span><span class="p">());</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please refer to the Java SDK API documentation for detailed information about other Kripta Key API interfaces,
+their proper usage, and their code examples.</p>
+</div>
+</section>
+</section>
+<section id="net">
+<h3>.NET<a class="headerlink" href="#net" title="Link to this heading"></a></h3>
+<p>Kripta Key provides an SDK written in C# for the .NET framework. The SDK is thread-safe, making it suitable
+for use in multithreaded applications. The SDK is built using .NET 7, and as such, it can only be used with
+applications running on .NET 7 or higher.</p>
+<section id="net-sdk-configuration">
+<h4>.NET SDK configuration<a class="headerlink" href="#net-sdk-configuration" title="Link to this heading"></a></h4>
+<p>Kripta Key provides SDKs for both Linux-x64 and Windows-x64 platforms. To use it, developers need to add
+the SDK as an assembly reference in their project files — the <code class="docutils literal notranslate"><span class="pre">.csproj</span></code> file for C#, or the <code class="docutils literal notranslate"><span class="pre">.vbproj</span></code> file
+for VB.NET. In general, integrating the SDK into your project invovles editing the project file and adding
+the following lines:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;Project</span><span class="w"> </span><span class="na">Sdk=</span><span class="s">&quot;Microsoft.NET.Sdk&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span>...
+<span class="w">    </span><span class="nt">&lt;ItemGroup&gt;</span>
+<span class="w">        </span>...
+<span class="w">        </span><span class="nt">&lt;Reference</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;kk-dotnet-sdk&quot;</span><span class="nt">&gt;</span>
+<span class="w">            </span><span class="nt">&lt;HintPath&gt;</span>/path/to/kk-dotnet-sdk.dll<span class="nt">&lt;/HintPath&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/Reference&gt;</span>
+<span class="w">        </span>...
+<span class="w">    </span><span class="nt">&lt;/ItemGroup&gt;</span>
+<span class="w">    </span>...
+<span class="nt">&lt;/Project&gt;</span>
+</pre></div>
+</div>
+<p>The SDK provides two files:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">kk-core.dll</span></code> (for Windows-x64) or <code class="docutils literal notranslate"><span class="pre">kk-core.so</span></code> (for Linux-x64)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kk-dotnet-sdk.dll</span></code></p></li>
+</ul>
+<p>Ensure that when you add <code class="docutils literal notranslate"><span class="pre">kk-dotnet-sdk.dll</span></code> as an assembly reference, all files are located in the same directory.</p>
+</section>
+<section id="net-sdk-usage">
+<h4>.NET SDK usage<a class="headerlink" href="#net-sdk-usage" title="Link to this heading"></a></h4>
+<p>Kripta Key SDK for .NET provides a class, <code class="docutils literal notranslate"><span class="pre">ConnectionHandler</span></code>, that wraps the TCP connection
+and exposes the Kripta Key API endpoints as methods of the object. Developers simply must declare
+and initialize this class before accessing the API endpoints.</p>
+<div class="highlight-c# notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.IO</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Reflection</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KK.Sdk</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KK.Sdk.Structure</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">KKExampleCode</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">LoginAndRefreshSession</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="n">kkConnection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;kkcsdhost.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;7000&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/PathToClient/Cert.pem&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/PathToClientKey/Priv.key&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/PathToClient/Cert.pem&quot;</span><span class="p">};</span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="n">partitionId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">partitionPassword</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Password1!&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="n">SessionInformation</span><span class="w"> </span><span class="n">sessionInformation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SessionInformation</span><span class="p">();</span>
+
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">KKConnection</span><span class="p">(</span><span class="n">kkConnection</span><span class="p">[</span><span class="m">0</span><span class="p">],</span><span class="w"> </span><span class="kt">short</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">kkConnection</span><span class="p">[</span><span class="m">1</span><span class="p">]),</span><span class="w"> </span><span class="n">kkConnection</span><span class="p">[</span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="n">kkConnection</span><span class="p">[</span><span class="m">3</span><span class="p">],</span><span class="w"> </span><span class="n">kkConnection</span><span class="p">[</span><span class="m">4</span><span class="p">]))</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// Your code here</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The following snippets demonstrate how a developer may use the connection handler object to access
+the Kripta Key API endpoints.</p>
+<ul>
+<li><p>Logging in</p>
+<div class="highlight-c# notranslate"><div class="highlight"><pre><span></span><span class="kt">uint</span><span class="w"> </span><span class="n">partitionId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">;</span>
+<span class="kt">string</span><span class="w"> </span><span class="n">partitionPassword</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Password1!&quot;</span><span class="p">;</span>
+<span class="n">sessionInformation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="n">Login</span><span class="p">(</span><span class="n">partitionId</span><span class="p">,</span><span class="w"> </span><span class="n">partitionPassword</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+<li><p>Encrypting data</p>
+<div class="highlight-c# notranslate"><div class="highlight"><pre><span></span><span class="c1">// Encrypt</span>
+<span class="kt">string</span><span class="w"> </span><span class="n">aesEncryptionKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;AESEncryptionKey&quot;</span><span class="p">;</span>
+<span class="kt">string</span><span class="w"> </span><span class="n">aad</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;aad1&quot;</span><span class="p">;</span>
+
+<span class="n">List</span><span class="o">&lt;</span><span class="n">SingleEncryptionRequest</span><span class="o">&gt;</span><span class="w"> </span><span class="n">encryptionRequest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">SingleEncryptionRequest</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="m">10</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">plaintext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Plaintext&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">j</span><span class="p">.</span><span class="n">ToString</span><span class="p">();</span>
+<span class="w">    </span><span class="n">encryptionRequest</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">SingleEncryptionRequest</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span><span class="w"> </span><span class="n">aad</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="kt">var</span><span class="w"> </span><span class="n">encryptedData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="n">Encrypt</span><span class="p">(</span><span class="n">partitionId</span><span class="p">,</span><span class="w"> </span><span class="n">sessionInformation</span><span class="p">,</span><span class="w"> </span><span class="n">aesEncryptionKey</span><span class="p">,</span><span class="w"> </span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="n">encryptionRequest</span><span class="p">);</span>
+<span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">iter</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">encryptedData</span><span class="p">.</span><span class="n">data</span><span class="p">)</span>
+<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Ciphertext = &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">iter</span><span class="p">.</span><span class="n">ciphertext</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;|&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">iter</span><span class="p">.</span><span class="n">mac</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;|&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">iter</span><span class="p">.</span><span class="n">iv</span><span class="w"> </span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+<li><p>Decrypting data</p>
+<div class="highlight-c# notranslate"><div class="highlight"><pre><span></span><span class="c1">// Decrypt</span>
+<span class="n">List</span><span class="o">&lt;</span><span class="n">SingleDecryptionRequest</span><span class="o">&gt;</span><span class="w"> </span><span class="n">decryptionRequest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">SingleDecryptionRequest</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">iter</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">encryptedData</span><span class="p">.</span><span class="n">data</span><span class="p">)</span>
+<span class="w">    </span><span class="n">decryptionRequest</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">SingleDecryptionRequest</span><span class="p">(</span><span class="n">iter</span><span class="p">.</span><span class="n">ciphertext</span><span class="p">,</span><span class="w"> </span><span class="n">aesEncryptionKey</span><span class="p">,</span><span class="w"> </span><span class="n">aad</span><span class="p">,</span><span class="w"> </span><span class="n">iter</span><span class="p">.</span><span class="n">iv</span><span class="p">,</span><span class="w"> </span><span class="n">iter</span><span class="p">.</span><span class="n">mac</span><span class="p">,</span><span class="w"> </span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="n">encKeyIdVersion</span><span class="p">));</span>
+
+<span class="kt">var</span><span class="w"> </span><span class="n">decryptedData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="n">Decrypt</span><span class="p">(</span><span class="n">partitionId</span><span class="p">,</span><span class="w"> </span><span class="n">sessionInformation</span><span class="p">,</span><span class="w"> </span><span class="n">decryptionRequest</span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="m">10</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="o">++</span><span class="p">)</span>
+<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Decrypted text = &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">decryptedData</span><span class="p">[</span><span class="n">k</span><span class="p">]);</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please refer to the .NET SDK API documentation for detailed information about other Kripta Key API interfaces,
+their proper usage, and their code examples.</p>
+</div>
+</section>
+</section>
+<section id="golang">
+<h3>Golang<a class="headerlink" href="#golang" title="Link to this heading"></a></h3>
+<p>Kripta Key SDK for Golang enables Golang developers to use the Kripta Key API endpoint in their Golang code, calling
+the API directly through a TCP endpoint without using Rest API. The SDK wraps all Rest API endpoints into Golang objects
+and functions. We provide SDK in Golang version 1.18, and this SDK file is still relevant to use in the newer version of Golang.</p>
+<section id="go-sdk-configuration">
+<h4>Go SDK configuration<a class="headerlink" href="#go-sdk-configuration" title="Link to this heading"></a></h4>
+<p>Kripta Key provides SDKs for Linux-x64 platforms.
+To use our SDK, developers need to import our SDK into their code. Please download our SDK in <a class="reference external" href="https://github.com/kriptakey/kk-go-sdk-v24.1">https://github.com/kriptakey/kk-go-sdk-v24.1</a>
+(this link may change at any time, please confirm with <a class="reference external" href="mailto:support&#37;&#52;&#48;klaviskripta&#46;com">support<span>&#64;</span>klaviskripta<span>&#46;</span>com</a>). The native is provided on the github.</p>
+<ul>
+<li><p>Installation
+Import the SDK</p>
+<div class="highlight-Go notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/kriptakey/kk-go-sdk-v2/kriptakey&quot;</span>
+</pre></div>
+</div>
+<p>and run <code class="docutils literal notranslate"><span class="pre">go</span> <span class="pre">get</span></code> without parameters.</p>
+</li>
+</ul>
+</section>
+<section id="go-sdk-usage">
+<h4>Go SDK usage<a class="headerlink" href="#go-sdk-usage" title="Link to this heading"></a></h4>
+<p>Every call to SDK API needs an object named <code class="docutils literal notranslate"><span class="pre">ConnectionHandler</span></code>, that must be initialized before any call to the SDK is made.
+This is due to the need to store all variables related to the target, which is a KK-Cryptoservice. The variables include certificates,
+the KK-Cryptoservice’s host, and the port information.</p>
+<div class="highlight-Go notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+<span class="w">    </span><span class="s">&quot;log&quot;</span>
+<span class="w">    </span><span class="s">&quot;os&quot;</span>
+
+<span class="w">    </span><span class="s">&quot;google.golang.org/protobuf/encoding/protojson&quot;</span>
+
+<span class="w">    </span><span class="nx">kk</span><span class="w"> </span><span class="s">&quot;github.com/kriptakey/kk-go-sdk-v2/kriptakey&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+
+<span class="c1">// Change these constants to the actual value in your</span>
+<span class="nx">environment</span>
+<span class="nx">DEMO_HOSTNAME</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;target-kk-cs.com&quot;</span>
+<span class="nx">DEMO_PORT</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">8084</span>
+
+<span class="nx">DEMO_CLIENT_CERTIFICATE</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;/PathToClient/Cert.pem&quot;</span>
+<span class="nx">DEMO_CLIENT_PRIVATE_KEY</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;/PathToClientKey/Priv.key&quot;</span>
+<span class="nx">DEMO_CA_CERTIFICATE</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;/PathToClient/Cert.pem&quot;</span>
+
+<span class="nx">connection</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">kk</span><span class="p">.</span><span class="nx">InitializeConnection</span><span class="p">(</span>
+<span class="nx">DEMO_HOSTNAME</span><span class="p">,</span><span class="w"> </span><span class="nx">DEMO_PORT</span><span class="p">,</span><span class="w"> </span><span class="nx">DEMO_CLIENT_CERTIFICATE</span><span class="p">,</span>
+<span class="nx">DEMO_CLIENT_PRIVATE_KEY</span><span class="p">,</span><span class="w"> </span><span class="nx">DEMO_CA_CERTIFICATE</span><span class="p">)</span>
+
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">Error</span><span class="p">())</span>
+<span class="w">    </span><span class="nx">os</span><span class="p">.</span><span class="nx">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The following snippets demonstrate how a developer may use the connection handler object to access
+the Kripta Key API endpoints.</p>
+<ul>
+<li><p>Logging in</p>
+<div class="highlight-Go notranslate"><div class="highlight"><pre><span></span><span class="c1">// Change these constants to the actual value in your environment</span>
+<span class="nx">DEMO_HOSTNAME</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;target-kk-cs.com&quot;</span>
+<span class="nx">DEMO_PORT</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">8084</span>
+
+<span class="nx">DEMO_PARTITION_ID</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">1</span>
+<span class="nx">DEMO_PARTITION_PASSWORD</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;Password1!&quot;</span>
+
+<span class="nx">DEMO_CLIENT_CERTIFICATE</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;/PathToClient/Cert.pem&quot;</span>
+<span class="nx">DEMO_CLIENT_PRIVATE_KEY</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;/PathToClientKey/Priv.key&quot;</span>
+
+<span class="nx">connection</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">kk</span><span class="p">.</span><span class="nx">KK_InitializeConnection</span><span class="p">(</span><span class="nx">DEMO_HOSTNAME</span><span class="p">,</span><span class="w"> </span><span class="nb">uint16</span><span class="p">(</span><span class="nx">DEMO_PORT</span><span class="p">),</span><span class="w"> </span><span class="nx">DEMO_CLIENT_CERTIFICATE</span><span class="p">,</span><span class="w"> </span><span class="nx">DEMO_CLIENT_PRIVATE_KEY</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">Error</span><span class="p">())</span>
+<span class="w">    </span><span class="nx">os</span><span class="p">.</span><span class="nx">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nx">session</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">connection</span><span class="p">.</span><span class="nx">KK_AppAuthenticate</span><span class="p">(</span><span class="nb">uint32</span><span class="p">(</span><span class="nx">DEMO_PARTITION_ID</span><span class="p">),</span><span class="w"> </span><span class="nx">DEMO_PARTITION_PASSWORD</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">Error</span><span class="p">())</span>
+<span class="w">    </span><span class="nx">os</span><span class="p">.</span><span class="nx">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;- Session: &quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">protojson</span><span class="p">.</span><span class="nx">Format</span><span class="p">(</span><span class="nx">session</span><span class="p">))</span>
+</pre></div>
+</div>
+</li>
+<li><p>Encrypting data</p>
+<div class="highlight-Go notranslate"><div class="highlight"><pre><span></span><span class="c1">// Change these constants to the actual value in your environment</span>
+<span class="nx">DEMO_KEY_ID</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;AESEncryptionKey&quot;</span>
+
+<span class="nx">connection</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">kk</span><span class="p">.</span><span class="nx">KK_InitializeConnection</span><span class="p">(</span><span class="nx">DEMO_HOSTNAME</span><span class="p">,</span><span class="w"> </span><span class="nb">uint16</span><span class="p">(</span><span class="nx">DEMO_PORT</span><span class="p">),</span><span class="w"> </span><span class="nx">DEMO_CLIENT_CERTIFICATE</span><span class="p">,</span><span class="w"> </span><span class="nx">DEMO_CLIENT_PRIVATE_KEY</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">Error</span><span class="p">())</span>
+<span class="w">    </span><span class="nx">os</span><span class="p">.</span><span class="nx">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nx">session</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">connection</span><span class="p">.</span><span class="nx">KK_AppAuthenticate</span><span class="p">(</span><span class="nb">uint32</span><span class="p">(</span><span class="nx">DEMO_PARTITION_ID</span><span class="p">),</span><span class="w"> </span><span class="nx">DEMO_PARTITION_PASSWORD</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">Error</span><span class="p">())</span>
+<span class="w">    </span><span class="nx">os</span><span class="p">.</span><span class="nx">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;- Session: &quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">protojson</span><span class="p">.</span><span class="nx">Format</span><span class="p">(</span><span class="nx">session</span><span class="p">))</span>
+
+<span class="nx">plaintexts</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="o">*</span><span class="nx">v1_0</span><span class="p">.</span><span class="nx">APIRequestSingleEncrypt</span><span class="w"> </span><span class="p">{}</span>
+<span class="nx">plaintexts</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">plaintexts</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">v1_0</span><span class="p">.</span><span class="nx">APIRequestSingleEncrypt</span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Text</span><span class="p">:</span><span class="w"> </span><span class="nx">wrapperspb</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="s">&quot;Klavis&quot;</span><span class="p">),</span>
+<span class="w">    </span><span class="nx">Aad</span><span class="p">:</span><span class="w"> </span><span class="nx">wrapperspb</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="s">&quot;aad1&quot;</span><span class="p">),</span>
+<span class="p">})</span>
+
+<span class="nx">encrypted</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">connection</span><span class="p">.</span><span class="nx">KK_Encrypt_AES</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nx">session</span><span class="p">.</span><span class="nx">SessionToken</span><span class="p">,</span><span class="w"> </span><span class="nx">DEMO_KEY_ID</span><span class="p">,</span><span class="w"> </span><span class="nx">plaintexts</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">Error</span><span class="p">())</span>
+<span class="w">    </span><span class="nx">os</span><span class="p">.</span><span class="nx">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;- KK_Encrypt_AES: &quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">protojson</span><span class="p">.</span><span class="nx">Format</span><span class="p">(</span><span class="nx">encrypted</span><span class="p">))</span>
+</pre></div>
+</div>
+</li>
+<li><p>Decrypting data</p>
+<div class="highlight-Go notranslate"><div class="highlight"><pre><span></span><span class="c1">// Change these constants to the actual value in your environment</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">ciphertexts</span><span class="w"> </span><span class="p">[]</span><span class="o">*</span><span class="nx">v1_1</span><span class="p">.</span><span class="nx">APIRequestSingleDecrypt</span>
+
+<span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">el</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">encrypted</span><span class="p">.</span><span class="nx">Ciphertext</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">ciphertexts</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">ciphertexts</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">v1_1</span><span class="p">.</span><span class="nx">APIRequestSingleDecrypt</span><span class="p">{</span>
+<span class="w">        </span><span class="nx">Iv</span><span class="p">:</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">Iv</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">Mac</span><span class="p">:</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">Mac</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">Aad</span><span class="p">:</span><span class="w"> </span><span class="nx">wrapperspb</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="s">&quot;aad1&quot;</span><span class="p">),</span>
+<span class="w">        </span><span class="nx">KeyId</span><span class="p">:</span><span class="w"> </span><span class="nx">wrapperspb</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="nx">DEMO_KEY_ID</span><span class="p">),</span>
+<span class="w">        </span><span class="nx">KeyVersion</span><span class="p">:</span><span class="w"> </span><span class="nx">encrypted</span><span class="p">.</span><span class="nx">KeyVersion</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">Text</span><span class="p">:</span><span class="w"> </span><span class="nx">wrapperspb</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">Text</span><span class="p">),</span>
+<span class="w">        </span><span class="nx">WrappedSessionKey</span><span class="p">:</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">WrappedSessionKey</span><span class="p">,</span>
+<span class="w">    </span><span class="p">})</span>
+<span class="p">}</span>
+<span class="nx">decrypted</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">connection</span><span class="p">.</span><span class="nx">KK_Decrypt</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nx">session</span><span class="p">.</span><span class="nx">SessionToken</span><span class="p">,</span><span class="w"> </span><span class="nx">ciphertexts</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">Error</span><span class="p">())</span>
+<span class="w">    </span><span class="nx">os</span><span class="p">.</span><span class="nx">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;- KK_Decrypt: &quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">protojson</span><span class="p">.</span><span class="nx">Format</span><span class="p">(</span><span class="nx">decrypted</span><span class="p">))</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please refer to the Golang SDK API documentation for detailed information about other Kripta Key API interfaces,
+their proper usage, and their code examples.</p>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="kms-e2e-crypto-services.html" class="btn btn-neutral float-left" title="End-to-end cryptographic services" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../e2ee-dev-guide/index.html" class="btn btn-neutral float-right" title="E2EE Developer Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

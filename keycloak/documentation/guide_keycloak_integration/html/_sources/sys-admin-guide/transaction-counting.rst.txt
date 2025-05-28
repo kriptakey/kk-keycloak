@@ -1,0 +1,27 @@
+Transaction counting
+====================
+
+Transaction counting is a mechanism for counting the number of cryptographic service usage, separated by the endpoints,
+in each KK-Cryptoservice instance.
+
+Each instance counts the number of endpoint access every 5 minutes and logs it into a billing file.
+A sample snippet of the billing information is shown below:
+
++-------------+---------------+--------------+----------------+-----+-----+---------------+
+| timestamp   | applicationId | agentLogin   | refreshSession | rng | ... | signature     |
++=============+===============+==============+================+=====+=====+===============+
+| 1,68052E+12 | EmxcUqozuY=   | 51           | 42             | 0   | ... | fLbfjhMrXdqg= |
++-------------+---------------+--------------+----------------+-----+-----+---------------+
+| 1,68052E+12 | U1mxcyozuY=   | 3            | 1              | 5   | ... | KS7hkx1OsME=  |
++-------------+---------------+--------------+----------------+-----+-----+---------------+
+| 1,68052E+12 | sEmxcUqozuY=  | 1            | 0              | 12  | ... | hls7GRVD+lFk= |
++-------------+---------------+--------------+----------------+-----+-----+---------------+
+| 1,68052E+12 | U1mxcyozuY=   | 2            | 0              | 2   | ... | su+hdDv/GrQ=  |
++-------------+---------------+--------------+----------------+-----+-----+---------------+
+
+The billing file is generated every day, and stored in the ``txncount`` directory, inside the KK-Cryptoservice's
+working directory. The files are organized by month and year, and are labeled with the machine's QE ID.
+
+The integrity of this file is guaranteed by the signature field, which is an HMAC that guarantees the integrity
+of all rows that come before it. The last HMAC for that month's billing file is shown in the access control list,
+accessible by running ``clikk kk-manager acl``.

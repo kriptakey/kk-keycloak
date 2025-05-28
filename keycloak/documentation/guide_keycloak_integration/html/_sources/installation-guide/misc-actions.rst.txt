@@ -1,0 +1,476 @@
+Miscellaneous operations
+========================
+
+Version checking
+----------------
+
+Kripta Key requires that all modules in operation within a deployment be of the same major
+and minor version. Each module's executable provides a command to check its version,
+which are listed below:
+
+*   CLIKK
+
+    .. code-block:: console
+
+        $ clikk conf version
+
+*   KK-Auditor
+
+    .. code-block:: console
+
+        $ sudo -u kripta kk-ad --version
+
+*   KK-Manager
+
+    .. code-block:: console
+
+        $ sudo -u kripta kk-md --version
+
+*   KK-Cryptoservice
+
+    .. code-block:: console
+
+        $ sudo -u kripta kk-csd --version
+
+
+Automatic KK-Manager backup
+---------------------------
+
+Any :term:`CUD` command executed via CLIKK triggers KK-Manager to automatically create a database backup.
+The backups are saved to the ``backup`` directory within KK-Manager's working directory. Administrators are advised
+to regularly (and preferably automatically) export the backups, to be stored outside of the KK-Manager machine.
+
+
+Exporting Kripta Key Backup To Remote Machine
+---------------------------------------------
+
+Here is a recommendation for automatically exporting backups. The backup will be copied to a remote machine, utilizing 
+``rsync`` and ``ssh`` for the process.
+
+#.  Initially set up a backup machine to receive the Kripta Key backup database. This machine should run Linux and have 
+    the SSH service installed. Execute the command below to ensure the service is enabled. 
+
+    .. code-block:: console
+
+        $ sudo systemctl status sshd
+
+#.  Check that SSH service is already running.
+
+    .. code-block:: console
+
+        $ sudo systemctl list-units sshd*
+        UNIT               LOAD   ACTIVE SUB     DESCRIPTION          
+        sshd.service       loaded active running OpenSSH server daemon
+
+#.  Allow the firewall to accept SSH connections on the backup machine.
+
+    .. code-block:: console
+
+        $ sudo firewall-cmd --permanent --zone=public --add-port=22/tcp
+        $ sudo firewall-cmd --reload
+
+#.  Then, login to Kripta Key machine and generate a new SSH key pair 
+    (assign a specific name to the key pair, such as ``id_klavis``), leaving the passphrase empty.
+
+    .. code-block:: console
+
+        $ ssh-keygen -t ed25519 -C "KriptaKey" -f ~/.ssh/id_klavis
+        Generating public/private ed25519 key pair.
+        Enter passphrase (empty for no passphrase): 
+        Enter same passphrase again: 
+        Your identification has been saved in /home/klavis/.ssh/id_klavis
+        Your public key has been saved in /home/klavis/.ssh/id_klavis.pub
+        The key fingerprint is:
+        SHA256:VhxfeMwmcmOuAfoji95k1JHlPuJkgR7EAyjwKIwur3E KriptaKey
+        The key's randomart image is:
+        +--[ED25519 256]--+
+        |o  ..o.   o  +.  |
+        |+o.  .o..=.o*.=  |
+        |+o.   oo+.+=.=   |
+        |o    ..o =. .    |
+        |..    o.S oo     |
+        |..   ..=o...     |
+        |. E  .oo..       |
+        | +  .+.          |
+        |.  .. .          |
+        +----[SHA256]-----+
+
+#.  Transfer the generated SSH key pair from the Kripta Key machine to the backup machine. Execute the following command 
+    on the Kripta Key machine, replacing USERNAME and BACKUP_MACHINE_IP with the appropriate username and IP address of 
+    the backup machine.
+
+    .. code-block:: console
+
+        $ ssh-copy-id -i id_klavis <USERNAME@BACKUP_MACHINE_IP>
+
+        $ ## for example
+        $ ssh-copy-id -i ~/.ssh/id_klavis <USERNAME@BACKUP_MACHINE_IP>
+        /usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/home/klavis/.ssh/id_klavis.pub"
+        /usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+        /usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+        klavis@192.168.1.88's password: 
+
+        Number of key(s) added: 1
+
+        Now try logging into the machine, with:   "ssh 'USERNAME@BACKUP_MACHINE_IP'"
+        and check to make sure that only the key(s) you wanted were added.
+
+#.  Add a new SSH configuration file or edit it if it already exists (~/.ssh/config) on the Kripta Key machine. Populate it 
+    with the following information. 
+
+    .. code-block:: console
+
+        Host dbbackup
+        HostName BACKUP_MACHINE_IP
+        User USERNAME
+        IdentityFile ~/.ssh/id_klavis
+
+#.  While still on the Kripta Key machine, invoke ``rsync`` in dry-run mode to test if it can transfer files to the backup machine.
+
+    .. code-block:: console
+
+        $ rsync -navze ssh /var/local/kriptakey/kk-manager/backup/ dbbackup:/tmp/klavis
+        sending incremental file list
+        created directory /tmp/klavis
+        ./
+        kkm-20241121-14:55:46.backup
+        kkm-20241121-14:55:46.backup.log
+        kkm-20241121-14:56:09.backup
+        kkm-20241121-14:56:09.backup.log
+        kkm-20241121-14:56:30.backup
+        kkm-20241121-14:56:30.backup.log
+        kkm-20241121-15:46:16-manual.backup
+        kkm-20241121-15:52:51-manual.backup
+        kkm-20241121-16:11:25.backup
+        kkm-20241121-16:11:25.backup.log
+        kkm-20241121-16:34:31.backup
+        kkm-20241121-16:34:31.backup.log
+        kkm-20241121-17:01:56.backup
+        kkm-20241121-17:01:56.backup.log
+        kkm-20241121-17:02:50.backup
+        kkm-20241121-17:02:50.backup.log
+        kkm-20241121-17:18:22.backup
+        kkm-20241121-17:18:22.backup.log
+        kkm-20241121-17:19:12.backup
+        kkm-20241121-17:19:12.backup.log
+        kkm-20241121-17:20:15.backup
+        kkm-20241121-17:20:15.backup.log
+        kkm-20241203-19:45:58.backup
+        kkm-20241203-19:45:58.backup.log
+        kkm-20241203-19:49:04.backup
+        kkm-20241203-19:49:04.backup.log
+        kkm-20241212-17:33:52.backup
+        kkm-20241212-17:33:52.backup.log
+        kkm-20241212-18:02:27.backup
+        kkm-20241212-18:02:27.backup.log
+        kkm-20241212-18:02:55.backup
+        kkm-20241212-18:02:55.backup.log
+        kkm-20241212-18:02:58.backup
+        kkm-20241212-18:02:58.backup.log
+        kkm-20241212-18:05:42.backup
+        kkm-20241212-18:05:42.backup.log
+        kkm-20241212-18:06:05.backup
+        kkm-20241212-18:06:05.backup.log
+        kkm-20241212-18:06:47.backup
+        kkm-20241212-18:06:47.backup.log
+        kkm-20241212-18:07:03.backup
+        kkm-20241212-18:07:03.backup.log
+        kkm-20241212-18:41:50.backup
+        kkm-20241212-18:41:50.backup.log
+        kkm-20241212-18:42:29.backup
+        kkm-20241212-18:42:29.backup.log
+        kkm-20241213-11:13:42.backup
+        kkm-20241213-11:13:42.backup.log
+        kkm-20241213-16:49:28.backup
+        kkm-20241213-16:49:28.backup.log
+        kkm-20241213-16:50:02.backup
+        kkm-20241213-16:50:02.backup.log
+
+        sent 1.59K bytes  received 209 bytes  3.60K bytes/sec
+        total size is 5.82M  speedup is 3,236.74 (DRY RUN)
+
+#.  Create a new cronjob to automate the backup process. Execute the following command on the Kripta Key machine to edit the cronjob.
+
+    .. code-block:: console
+
+        $ crontab -e
+
+#.  Insert this entry into the cronjob to run the backup at midnight daily.
+
+    .. code-block:: console
+
+        0 0 * * * rsync -aze ssh /var/local/kriptakey/kk-manager/backup/ dbbackup:/home/klavis/kkmbackup >/dev/null 2>&1
+
+
+Resetting recovery cards
+-------------------------
+
+During emergencies, it may become necessary to perform certain highly privileged actions. Authenticating these actions
+requires the recovery cards. Two sets of recovery cards are provisioned during key ceremony, which must be kept safely
+and securely by each participant.
+
+.. important::
+
+    It is highly recommended to regularly run the command ``clikk kk-manager verify-recovery-cards`` to ensure
+    the integrity of the recovery cards.
+
+In the event that any of the recovery cards become corrupted and unusable, it is possible to reset the recovery cards.
+Administrators must then regenerate the backup key on the recovery cards. Before proceeding with resetting
+the recovery cards, prepare the deployment ID, the secure channel code (SCC), and both sets of the recovery cards.
+
+.. warning::
+
+    Regenerating the backup key MUST be done immediately after resetting the recovery cards. Delaying the backup key
+    regeneration runs the risk of lacking a sufficient amount of recovery cards during emergency procedures, which
+    may lead to irrecoverable data loss.
+
+The following command resets the recovery cards:
+
+.. code-block:: console
+
+    $ sudo -u kripta kk-md --reset-recovery-card
+
+    Enter the deployment ID, e.g., ENTERPRISE017048
+    Deployment ID: 617106PRXXXXXXXXX
+    Enter the secure channel code (SCC), e.g., 418464cad2908e49242cefb1b471612b
+    Secure channel code: d68ed587XXXXXXXXXXXXXXXXXXXXXXXX
+
+    Please insert the card to be reset into the card reader. Continue [y/N]? y
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Card number 1 has been successfully reset.
+    Please insert the card to be reset into the card reader. Continue [y/N]? y
+    Key in the PIN and press Enter on the PIN pad to read the SCKEKs.
+    Card number 2 has been successfully reset.
+    Please insert the card to be reset into the card reader. Continue [y/N]? y
+    Key in the PIN and press Enter on the PIN pad to read the SCKEKs.
+    Card number 3 has been successfully reset.
+    Please insert the card to be reset into the card reader. Continue [y/N]? y
+    Key in the PIN and press Enter on the PIN pad to read the SCKEKs.
+    Card number 4 has been successfully reset.
+    Please insert the card to be reset into the card reader. Continue [y/N]? n
+    Stopped.
+
+    A total of 4 cards have been reset successfully and can be reused to store new secrets.
+
+The following command regenerates the backup key:
+
+.. code-block:: console
+
+    $ clikk kk-manager regenerate-backup-key
+
+    This will regenerate the backup key and the recovery cards.
+    Recovery cards associated with the previous backup key will become UNUSEABLE.
+    Existing recovery cards may be used for this purpose.
+    Prepare two sets of 5 cards each.
+
+    Are you sure you want to continue? Type `DSIcE` to continue, or press Enter to cancel.
+    > DSIcE
+
+    Enter the secure channel code (SCC): b2baa436XXXXXXXXXXXXXXXXXXXXXXXX
+    Enter the deployment ID: ENTERPRIXXXXXXXX
+    Dual control authentication--credential of a second administrator is required.
+    admin1 is currently logged in.
+
+    Enter admin ID: admin2
+    Enter password: 
+
+    Insert the administrator card of admin2 for two-factor authentication.
+    Remove the card!
+
+    Please prepare 5 cards for the first set of recovery cards.
+    Insert a card!
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Secret 1 has been written successfully.
+    Remove the card!
+    Insert a card!
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Secret 2 has been written successfully.
+    Remove the card!
+    Insert a card!
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Secret 3 has been written successfully.
+    Remove the card!
+    Insert a card!
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Secret 4 has been written successfully.
+    Remove the card!
+    Insert a card!
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Secret 5 has been written successfully.
+    Remove the card!
+
+    Please prepare 5 cards for the second set of recovery cards.
+    Insert a card!
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Secret 1 has been written successfully.
+    Remove the card!
+    Insert a card!
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Secret 2 has been written successfully.
+    Remove the card!
+    Insert a card!
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Secret 3 has been written successfully.
+    Remove the card!
+    Insert a card!
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Secret 4 has been written successfully.
+    Remove the card!
+    Insert a card!
+
+    Key in the PIN and press Enter on the PIN pad to read the secure channel key encryption keys (SCKEKs).
+    Secret 5 has been written successfully.
+    Remove the card!
+
+    Backup key has been regenerated successfully.
+    It is strongly advised to test the regenerated recovery cards by running the `clikk kk-manager verify-recovery-cards` command.
+
+
+Uninstalling Kripta Key components
+----------------------------------
+
+The process of uninstalling each Kripta Key component is similar for all components. The following steps demonstrate
+how to uninstall KK-Cryptoservice. Adjust the commands accordingly for other components.
+
+#.  Uninstall using the RPM package.
+
+    .. code-block:: console
+
+        $ sudo dnf remove kk-cs-24.1.0007.el8.x86_64.rpm
+
+#.  Run post-uninstall script to clean up the SELinux policy.
+
+    .. code-block:: console
+
+        $ sudo /opt/kriptakey/kk-cs_postun.sh
+
+        Relabeled /etc/kriptakey/kk-csd.conf from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:etc_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/db from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/db/kk-csd.db from unconfined_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/sgxdata from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/sgxdata/pck_cert_42ACCC9FD3DFA721ADBCE60F89DE623D.pem from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/sgxdata/collateral_00A065310000.json from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/sgxdata/42ACCC9FD3DFA721ADBCE60F89DE623D.json from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/txncount from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/txncount/42ACCC9FD3DFA721ADBCE60F89DE623D_202310 from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/txncount/42ACCC9FD3DFA721ADBCE60F89DE623D_202310/TransactionCount-42ACCC9FD3DFA721ADBCE60F89DE623D-20231030.csv from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/txncount/42ACCC9FD3DFA721ADBCE60F89DE623D_202311 from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/txncount/42ACCC9FD3DFA721ADBCE60F89DE623D_202311/TransactionCount-42ACCC9FD3DFA721ADBCE60F89DE623D-20231102.csv from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/txncount/42ACCC9FD3DFA721ADBCE60F89DE623D_202311/TransactionCount-42ACCC9FD3DFA721ADBCE60F89DE623D-20231101.csv from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/.kk-csd.lck from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/backup from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/backup/kk-csd.db.20231031_1.old from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/backup/kk-csd.db.20231101_3.old from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/backup/kk-csd.db.20231101_1.old from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/backup/kk-csd.db.20231101_2.old from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/backup/kk-csd.db.20231031.old from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/backup/kk-csd.db.20231030.old from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        Relabeled /var/local/kriptakey/kk-cryptoservice/backup/kk-csd.db.20231101.old from system_u:object_r:kk_csd_var_t:s0 to system_u:object_r:var_t:s0
+        libsemanage.semanage_direct_remove_key: Removing last kk_csd module (no other kk_csd module exists at another priority).
+
+#.  Remove the firewall rules.
+
+    .. code-block:: console
+
+        $ sudo firewall-cmd --permanent --zone=public --remove-service=kk-csd.service
+
+#.  Optionally, remove the log files and the working directory. The log files can be found in ``/var/log/kriptakey``.
+    The working directory is configurable, but the default is ``/var/local/kriptakey``.
+
+.. note::
+
+    *   For KK-Manager, the commands are:
+
+        .. code-block:: console
+
+            $ sudo dnf remove kk-m-24.1.0007.el8.x86_64.rpm
+
+            $ sudo /opt/kriptakey/kk-m_postun.sh
+
+            $ sudo firewall-cmd --permanent --zone=public --remove-service=kk-md.service
+
+    *   For KK-Manager-DR, the commands are:
+
+        .. code-block:: console
+
+            $ sudo dnf remove kk-m-24.1.0007.el8.x86_64.rpm
+
+            $ sudo /opt/kriptakey/kk-m_postun.sh
+
+            $ sudo firewall-cmd --permanent --zone=public --remove-service=kk-md-dr.service
+
+    *   For KK-Auditor, the commands are:
+
+        .. code-block:: console
+
+            $ sudo dnf remove kk-a-24.1.0007.el8.x86_64.rpm
+
+            $ sudo /opt/kriptakey/kk-a_postun.sh
+
+            $ sudo firewall-cmd --permanent --zone=public --remove-service=kk-ad.service
+
+    
+Kripta Key Update
+-----------------
+
+Kripta Key is released with version 24.1.0007-GA. It will update periodically for the hot fix and update pack version.
+
+#.  Hot fix
+    Hot fix (HF) version is the solution for the showstopper bug. It will be released as soon as the showstopper bug is 
+    found. Hot Fix for the specific major and minor version is numbered based on the release order. 
+
+#.  Update Pack 
+    Update Pack (UP) version is the solution for non-showstopper bug. It will be released periodically. Update Pack for 
+    the specific major and minor version is numbered based on the release order.
+
+To get the hot fix and update pack version, you can update the existing version you have to the hot fix or update pack with 
+updater tool that we provide. Run command below on the specific module machine and ensure you pass the updated rpm file.
+
+*   KK-Auditor
+
+    .. code-block:: console
+
+       $ sudo ./kk-updatertool --kka-updater-file-path=/pathToUpdatedkkarpm/
+
+       [-] Installed package name: kk-a
+       [-] Installed package version: 24.1.0007.el8
+       [-] Updater package name: kk-a
+       [-] Updater package version: 24.1.0008.el8
+       [-] Updating kk-a package ...
+       [v] kk-a successfully updated to 24.1.0008.el8! 
+
+*   KK-Manager
+
+    .. code-block:: console
+
+       $ sudo ./kk-updatertool --kkm-updater-file-path=/pathToUpdatedkkmrpm/
+
+       [-] Installed package name: kk-m
+       [-] Installed package version: 24.1.0007.el8
+       [-] Updater package name: kk-m
+       [-] Updater package version: 24.1.0008.el8
+       [-] Updating kk-m package ...
+       [v] kk-a successfully updated to 24.1.0008.el8! 
+
+*   KK-Cryptoservice
+
+    .. code-block:: console
+
+       $ sudo ./kk-updatertool --kkcs-updater-file-path=/pathToUpdatedkkcsrpm/
+
+       [-] Installed package name: kk-cs
+       [-] Installed package version: 24.1.0007.el8
+       [-] Updater package name: kk-cs
+       [-] Updater package version: 24.1.0008.el8
+       [-] Updating kk-cs package ...
+       [v] kk-a successfully updated to 24.1.0008.el8! 

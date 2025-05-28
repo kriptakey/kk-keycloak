@@ -1,0 +1,63 @@
+On license expiry
+=================
+
+When the license expires and the customer does not apply for a renewal on time, some functionalities are disabled:
+
+*   Restrictions on CLIKK:
+
+    #.  For **subscription** license model
+
+        *   CUD commands are disabled. 
+
+        *   Informative commands are enabled.
+
+    #.  For **perpetual** license model
+
+        *   All commands are enabled. 
+
+*   There is no restriction for **subscription** and **perpetual** on RestAPI.
+
+
+The following is CUD commands:
+
+*   `clikk admin add`
+*   `clikk admin change-password`
+*   `clikk admin unlock`
+*   `clikk admin reset-password`
+*   `clikk admin delete`
+*   `clikk partition add`
+*   `clikk partition change-password`
+*   `clikk partition reset-password`
+*   `clikk partition add-app`
+*   `clikk partition unlock-app`
+*   `clikk partition remove-app`
+*   `clikk partition delete`
+*   `clikk key add`
+*   `clikk key rotate`
+*   `clikk key update`
+*   `clikk key import-pkcs11`
+*   `clikk key import-pkcs12`
+*   `clikk key revoke`
+*   `clikk key delete`
+*   `clikk cert self-sign`
+*   `clikk cert renew`
+*   `clikk cert import`
+*   `clikk cert revoke`
+*   `clikk cert delete`
+*   `clikk secret add`
+*   `clikk secret generate`
+*   `clikk secret update`
+*   `clikk secret delete`
+*   `clikk app add`
+*   `clikk app renew`
+*   `clikk app delete`
+*   `clikk kk-manager apply-license`
+*   `clikk kk-manager add-dr`
+*   `clikk kk-manager delete-dr`
+*   `clikk kk-cryptoservice add`
+*   `clikk kk-cryptoservice update`
+*   `clikk kk-cryptoservice add-partition`
+*   `clikk kk-cryptoservice delete-partition`
+*   `clikk kk-cryptoservice delete`
+*   `clikk kk-auditor add`
+

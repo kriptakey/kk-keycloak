@@ -1,0 +1,100 @@
+Installing CLIKK
+================
+
+.. important::
+
+    Before running the installer, perform :ref:`an integrity check <appendix:performing integrity checks>` first.
+    Also, make sure that the installer is appropriate for the machine's OS.
+
+.. note::
+
+    Please contact support@klaviskripta.com if any problems were encountered during installation.
+
+
+Red Hat Enterprise Linux
+------------------------
+
+If the smartcard reader driver has not been installed, install that before starting CLIKK's installer.
+
+#.  Download the smartcard reader driver (``acsccid-linux-bin-1.1.10-20230804.zip``) from `ACS's website`__.
+
+    __ https://www.acs.com.hk/download-driver-unified/13546/acsccid-linux-bin-1.1.10-20230804.zip
+
+#.  Extract the package.
+
+    .. code-block:: console
+
+        $ unzip acsccid-linux-bin-1.1.10-20230804.zip
+
+#.  Navigate to the ``acsccid-linux-bin-1.1.10-20230804.zip/epel/9`` directory and install the RPM.
+
+    .. code-block:: console
+
+        $ cd acsccid-linux-bin-1.1.10-20230804.zip/epel/9
+        $ sudo dnf install pcsc-lite-acsccid-1.1.10-1.el9.x86_64.rpm
+
+#.  Enable the pcsc-lite service.
+
+    .. code-block:: console
+
+        $ sudo systemctl enable pcscd.service --now
+
+#.  Make sure that the pcsc-lite service is running by examining the output of the following command.
+
+    .. code-block:: console
+
+        $ sudo systemctl status pcscd.service
+
+After confirming that the pcsc-lite service is running, CLIKK installation may be initiated.
+
+#.  Install CLIKK directly from the RPM.
+
+    .. code-block:: console
+
+        $ sudo dnf install clikk-2.0-0000.el8.x86_64.rpm
+
+#.  Configure CLIKK so it can reach the KK-Manager instance. To do this, the administrator must have
+    the host address and port ready.
+
+    .. code-block:: console
+
+        $ clikk conf server --kk-manager-host=<host address> --kk-manager-port=<port>
+
+#.  Close and reopen the terminal to enable CLIKK tab completion.
+
+
+Windows 10/11
+-------------
+
+.. note::
+
+    It is recommended to use PowerShell with CLIKK.
+
+On Windows, simply execute CLIKK's installer to start the installation process.
+
+#.  Select the folder where CLIKK will be installed. Click "Browse" if CLIKK should be installed
+    in a different location. Click "Next" to continue.
+
+    .. image:: /_static/clikk_installer_1.png
+
+#.  Tick the "Add to PATH variable" checkbox to allow CLIKK to be ran no matter the current working directory.
+    Click "Next" to continue.
+
+    .. image:: /_static/clikk_installer_2.png
+
+#.  Click "Install" to continue with the installation, or click "Back" to make changes to the installation settings.
+
+    .. image:: /_static/clikk_installer_3.png
+
+#.  Wait until the installation process is complete.
+
+#.  Installation has been completed. Click "Finish" to exit.
+
+    .. image:: /_static/clikk_installer_4.png
+
+#.  Configure CLIKK so it can reach the KK-Manager instance. To do this, the administrator must have
+    the host address and port ready.
+
+    .. code-block:: console
+
+        $ clikk conf server --kk-manager-host=<host address> --kk-manager-port=<port>

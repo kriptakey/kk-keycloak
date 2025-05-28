@@ -1,0 +1,28 @@
+Installation Guide
+==================
+
+Preface
+-------
+
+Intended reader
+~~~~~~~~~~~~~~~
+
+This document is intended for administrators as a guide to installing this version of Kripta Key.
+
+
+Document scope
+~~~~~~~~~~~~~~
+
+This document explains the installation of Kripta Key. Two deployment architectures are applicable for this version.
+The architectures supply further deployment options to better address situations specific to each customer.
+
+This document also describes the setup and configuration of Kripta Key.
+
+
+Related documents
+~~~~~~~~~~~~~~~~~
+
+*   :doc:`/sys-admin-guide/index`
+*   :doc:`/clikk-installation-guide/index`
+*   :doc:`/cloud-installation-guide/index`
+*   :doc:`/license-guide/index`

@@ -1,0 +1,26 @@
+Preface
+=======
+
+Kripta Key is the world's first software that provides cryptographic services with key management
+as distinct modules. Klavis Kripta developed this software as a solution to improve service availability
+and robustness even when the key management server encounters a problem.
+
+Kripta Key was developed in 2023 and released in Apr 2025.
+
+.. todo::
+
+    TODO:
+
+    *   [ ] Fill this page
+    *   [ ] Go thru each guide:
+
+        *   [ ] Installation Guide
+        *   [x] CLIKK Installation Guide
+        *   [x] Cloud Installation Guide
+        *   [x] TDP Installation Guide
+        *   [x] License Guide
+        *   [ ] System Administrator Guide
+        *   [x] Developer Guide
+        *   [x] E2EE Developer Guide
+
+    *   [ ] Note down terminologies

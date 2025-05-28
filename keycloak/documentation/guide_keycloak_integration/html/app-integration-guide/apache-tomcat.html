@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Integrate Apache Tomcat Web Server Applications to Kripta Key using PKCS#11 Connector &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="KeyCloak Integration Guide" href="../keycloak-integration-guide/index.html" />
+    <link rel="prev" title="Integrate Java Applications to Kripta Key using PKCS#11 Connector" href="java-app.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kkts-guide/index.html">KK-TS Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdp-installation-guide/index.html">TDP Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">App Integration Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="java-app.html">Integrate Java Applications to Kripta Key using PKCS#11 Connector</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Integrate Apache Tomcat Web Server Applications to Kripta Key using PKCS#11 Connector</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sign-and-verify-using-apache-tomcat">Sign and Verify using Apache Tomcat</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">App Integration Guide</a></li>
+      <li class="breadcrumb-item active">Integrate Apache Tomcat Web Server Applications to Kripta Key using PKCS#11 Connector</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/app-integration-guide/apache-tomcat.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="integrate-apache-tomcat-web-server-applications-to-kripta-key-using-pkcs-11-connector">
+<h1>Integrate Apache Tomcat Web Server Applications to Kripta Key using PKCS#11 Connector<a class="headerlink" href="#integrate-apache-tomcat-web-server-applications-to-kripta-key-using-pkcs-11-connector" title="Link to this heading"></a></h1>
+<p>Kripta Key supports <strong>signing</strong> using Apache Tomcat. Apache Tomcat can be integrated with Kripta Key using PKCS#11 connector. Its software powers numerous large-scale,
+mission-critical web applications across a diverse range of industries and organizations.</p>
+<p>For seamless integration with Kripta Key (KK), we recommend running Apache Tomcat within a Docker container. This approach enhances
+consistency and ensures an easily maintainable deployment environment.</p>
+<p>Kripta Key supports connecting with Apache Tomcat 9.0.98. To generate digital signatures for files, the Cryptoki configuration file
+retrieves key and certificate information from a keystore. When using Kripta Key, the key pair and certificates are accessed directly
+from Kripta Key. Java tools can be integrated with Kripta Key using the PKCS#11 interface, enabling secure access to the key pair and
+certificates.</p>
+<p>The following are the procedures to integrate Apache Tomcat running in a Docker container with Kripta Key using the PKCS#11 connector:</p>
+<ol class="arabic">
+<li><p>Generate a signing key pair in Kripta Key to sign the file. Currently, only RSA signing key pairs are supported to integrated
+with Apache Tomcat, with key lengths of 2048, 3072, or 4096 bits.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>clikk<span class="w"> </span>key<span class="w"> </span>add<span class="w"> </span>--partition-id<span class="o">=</span><span class="m">1</span><span class="w"> </span>--key-id<span class="o">=</span>rsaSigning2048<span class="w"> </span>--key-label<span class="o">=</span>signingKey<span class="w"> </span>--key-algo<span class="o">=</span><span class="m">2</span><span class="w"> </span>--key-length<span class="o">=</span><span class="m">2048</span><span class="w"> </span>--key-purpose<span class="o">=</span><span class="m">3</span><span class="w"> </span>--key-lifetime<span class="o">=</span><span class="m">365</span>
+</pre></div>
+</div>
+</li>
+<li><p>Prepare the KK-Cryptoki (application) certificate and private key in local storage. In the provided sample, name them <code class="docutils literal notranslate"><span class="pre">tomcat-test.key</span></code> and <code class="docutils literal notranslate"><span class="pre">tomcat-test.pem</span></code>.</p></li>
+<li><p>Configure the signing key, KK-Cryptoki application key, and other required objects in kk-cryptoki.conf. Please specify the file path set on Docker.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span><span class="o">[</span>Partition<span class="w"> </span>Configuration<span class="o">]</span>
+<span class="gp"># </span>Specify<span class="w"> </span>the<span class="w"> </span>partition<span class="w"> </span>ID<span class="w"> </span>and<span class="w"> </span>password<span class="w"> </span>to<span class="w"> </span>be<span class="w"> </span>used
+<span class="gp"># </span>kk-cryptoki<span class="w"> </span><span class="o">(</span>Application<span class="o">)</span><span class="w"> </span>must<span class="w"> </span>have<span class="w"> </span>access<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>partition
+<span class="go">PartitionID=1</span>
+<span class="go">PartitionPassword=Klavis1!</span>
+
+<span class="gp"># </span><span class="o">[</span>KK-CS<span class="w"> </span>Configuration<span class="o">]</span>
+<span class="gp"># </span>Specify<span class="w"> </span>KKCS<span class="w"> </span>target<span class="w"> </span>host<span class="w"> </span>to<span class="w"> </span>connect<span class="w"> </span>to
+<span class="gp"># </span>Connection<span class="w"> </span>established<span class="w"> </span>through<span class="w"> </span>kk-cryptoki<span class="w"> </span>as<span class="w"> </span>the<span class="w"> </span>Application<span class="w"> </span>using<span class="w"> </span>KKCS<span class="w"> </span>SDK<span class="w"> </span>Service
+<span class="go">KKCSTargetHost=192.168.100.25</span>
+<span class="go">KKCSTargetPort=7004</span>
+
+<span class="gp"># </span><span class="o">[</span>SDK<span class="w"> </span>Configuration<span class="o">]</span>
+<span class="gp"># </span>Specify<span class="w"> </span>kk-cryptoki<span class="w"> </span><span class="o">(</span>Application<span class="o">)</span><span class="w"> </span>Certificate<span class="w"> </span>and<span class="w"> </span>private<span class="w"> </span>key<span class="w"> </span>registered<span class="w"> </span>to<span class="w"> </span>KK-Manager
+<span class="go">ClientCertificateFile=/etc/cryptoserver/tomcat-test.pem</span>
+<span class="go">PrivateKeyFile=/etc/cryptoserver/tomcat-test.key</span>
+
+<span class="gp"># </span>LogLevel:<span class="w"> </span><span class="nv">NONE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="nv">ERROR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="nv">DEBUG</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span>
+<span class="go">LogLevel=1</span>
+<span class="go">LogPath=/tmp/kk-kriptoki.log</span>
+
+<span class="gp"># </span>Object<span class="w"> </span>List:<span class="w"> </span>KK<span class="w"> </span>doesn<span class="err">&#39;</span>t<span class="w"> </span>support<span class="w"> </span>enumeration<span class="w"> </span>of<span class="w"> </span>object<span class="w"> </span>by<span class="w"> </span>only<span class="w"> </span>its<span class="w"> </span>class<span class="w"> </span><span class="o">(</span>C_FindObjectsInit<span class="o">)</span>
+<span class="gp"># </span>If<span class="w"> </span>pkcs11<span class="w"> </span>object<span class="w"> </span>enumareted<span class="w"> </span>by<span class="w"> </span>only<span class="w"> </span>class<span class="w"> </span>eg:<span class="w"> </span>CKO_CERTIFICATE,<span class="w"> </span>id<span class="w"> </span>will<span class="w"> </span>be<span class="w"> </span>used<span class="w"> </span>from<span class="w"> </span>this<span class="w"> </span>config
+<span class="gp"># </span>Format<span class="w"> </span>is<span class="w"> </span>list<span class="w"> </span>of<span class="w"> </span>id<span class="w"> </span>separated<span class="w"> </span>by<span class="w"> </span>comma<span class="w"> </span><span class="o">(</span>id1,id2<span class="o">)</span>
+<span class="gp"># </span>Currently<span class="w"> </span>supported<span class="w"> </span>:<span class="w"> </span>CKA_CERTIFICATE,<span class="w"> </span>CKO_PUBLIC_KEY,<span class="w"> </span>CKO_PRIVATE_KEY
+<span class="gp"># </span>ECDSAP256Sign,p11rsa2048,p11rsa3072,p11rsa4096,p11ecdsap256,p11ecdsap384,p11ecdsap512,p11eddsaed25519
+<span class="gp"># </span>Note<span class="w"> </span>that<span class="w"> </span><span class="k">for</span><span class="w"> </span>tomcat<span class="w"> </span>only<span class="w"> </span><span class="m">1</span><span class="w"> </span>keypair<span class="w"> </span>supported<span class="w"> </span><span class="o">(</span>only<span class="w"> </span>the<span class="w"> </span>first<span class="w"> </span>found<span class="w"> </span>cert/priv<span class="w"> </span>will<span class="w"> </span>be<span class="w"> </span>used<span class="o">)</span>
+<span class="go">KeyPairObject=rsaSigning2048</span>
+</pre></div>
+</div>
+</li>
+<li><p>Configure the provider’s name and path of <code class="docutils literal notranslate"><span class="pre">libkk-cryptoki.so</span></code> in <code class="docutils literal notranslate"><span class="pre">kk_sunp11.cfg</span></code>.</p></li>
+<li><p>Specify file path of <code class="docutils literal notranslate"><span class="pre">kk_sunp11.cfg</span></code> as provider and configure it in <code class="docutils literal notranslate"><span class="pre">java.security</span></code>, specifically on the <code class="docutils literal notranslate"><span class="pre">SunPKCS11</span></code> provider line.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>
+<span class="gp"># </span>List<span class="w"> </span>of<span class="w"> </span>providers<span class="w"> </span>and<span class="w"> </span>their<span class="w"> </span>preference<span class="w"> </span>orders<span class="w"> </span><span class="o">(</span>see<span class="w"> </span>above<span class="o">)</span>:
+<span class="gp">#</span>
+<span class="go">security.provider.1=SUN</span>
+<span class="go">security.provider.2=SunRsaSign</span>
+<span class="go">security.provider.3=SunEC</span>
+<span class="go">security.provider.4=SunJSSE</span>
+<span class="go">security.provider.5=SunJCE</span>
+<span class="go">security.provider.6=SunJGSS</span>
+<span class="go">security.provider.7=SunSASL</span>
+<span class="go">security.provider.8=XMLDSig</span>
+<span class="go">security.provider.9=SunPCSC</span>
+<span class="go">security.provider.10=JdkLDAP</span>
+<span class="go">security.provider.11=JdkSASL</span>
+<span class="go">security.provider.12=SunPKCS11 /path/to/kk_sunp11.cfg</span>
+</pre></div>
+</div>
+</li>
+<li><p>Retrieve and store the <code class="docutils literal notranslate"><span class="pre">server.xml</span></code> file of Apache Tomcat. Add the script below to <code class="docutils literal notranslate"><span class="pre">server.xml</span></code> at line 80. Set the provider’s name, password, and signing key.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">&lt;Connector port=&quot;8443&quot; protocol=&quot;org.apache.coyote.http11.Http11NioProtocol&quot; sslImplementationName=&quot;org.apache.tomcat.util.net.jsse.JSSEImplementation&quot;</span>
+<span class="go">            maxThreads=&quot;150&quot; SSLEnabled=&quot;true&quot;&gt;</span>
+<span class="go">    &lt;SSLHostConfig</span>
+<span class="go">            protocols=&quot;TLSv1.3&quot;&gt;</span>
+<span class="go">        &lt;Certificate</span>
+<span class="go">        certificateKeystoreType=&quot;PKCS11&quot;</span>
+<span class="go">        certificateKeystoreFile=&quot;&quot;</span>
+<span class="go">        certificateKeystoreProvider=&quot;KKCryptoki&quot;</span>
+<span class="go">        certificateKeystorePassword=&quot;Klavis1!&quot;</span>
+<span class="go">        certificateKeyAlias=&quot;rsaSigning2048&quot;</span>
+<span class="go">                    type=&quot;RSA&quot; /&gt;</span>
+<span class="go">    &lt;/SSLHostConfig&gt;</span>
+<span class="go">&lt;/Connector&gt;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Open the <code class="docutils literal notranslate"><span class="pre">docker-compose.yaml</span></code> file and map files from local storage to Docker storage, including <code class="docutils literal notranslate"><span class="pre">server.xml</span></code>, <code class="docutils literal notranslate"><span class="pre">java.security</span></code>, <code class="docutils literal notranslate"><span class="pre">kk_sunp11.cfg</span></code>,
+<code class="docutils literal notranslate"><span class="pre">tomcat-test.pem</span></code>, <code class="docutils literal notranslate"><span class="pre">tomcat-test.key</span></code>, <code class="docutils literal notranslate"><span class="pre">libkk-cryptoki.so</span></code>, <code class="docutils literal notranslate"><span class="pre">logs</span></code>, and <code class="docutils literal notranslate"><span class="pre">tmp</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">volumes:</span>
+<span class="go">    - ./data/config/server.xml:/usr/local/tomcat/conf/server.xml</span>
+<span class="go">    - ./data/config/java.security:/opt/java/openjdk/conf/security/java.security</span>
+<span class="go">    - ./data/config/kk_sunp11.cfg:/opt/java/openjdk/conf/security/kk_sunp11.cfg</span>
+<span class="go">    - &quot;./data/config/kk-cryptoki.conf:/usr/lib/jvm/jre/lib/security/kk-cryptoki.conf&quot;</span>
+<span class="go">    - &quot;./data/config/tomcat-test.pem:/etc/cryptoserver/tomcat-test.pem&quot;</span>
+<span class="go">    - &quot;./data/config/tomcat-test.key:/etc/cryptoserver/tomcat-test.key&quot;</span>
+<span class="go">    - &quot;./data/lib/libkk-cryptoki.so:/usr/lib/kkpkcs11/libkk-cryptoki.so&quot;</span>
+<span class="go">    - &quot;./data/logs:/usr/local/tomcat/logs&quot;</span>
+<span class="go">    - &quot;./data/tmp:/tmp&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Enable triggering signing through website. Add <code class="docutils literal notranslate"><span class="pre">RUN</span> <span class="pre">cp</span> <span class="pre">-r</span> <span class="pre">$CATALINA_HOME/webapps.dist/*</span> <span class="pre">$CATALINA_HOME/webapps</span></code> in line 35 of <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>COPY<span class="w"> </span>entrypoint.sh<span class="w"> </span>.
+<span class="gp">#</span>ENTRYPOINT<span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;entrypoint.sh&quot;</span><span class="w"> </span><span class="o">]</span>
+<span class="go">RUN cp -r $CATALINA_HOME/webapps.dist/* $CATALINA_HOME/webapps</span>
+<span class="go">CMD [&quot;catalina.sh&quot;, &quot;run&quot;]</span>
+<span class="gp">#</span>CMD<span class="w"> </span><span class="o">[</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">TOMCAT_HOME</span><span class="si">}</span><span class="s2">/bin/catalina.sh&quot;</span>,<span class="w"> </span><span class="s2">&quot;run&quot;</span><span class="o">]</span>
+<span class="gp">#</span>ENTRYPOINT<span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;tail&quot;</span>,<span class="w"> </span><span class="s2">&quot;-f&quot;</span>,<span class="w"> </span><span class="s2">&quot;/dev/null&quot;</span><span class="w"> </span><span class="o">]</span>
+<span class="gp">#</span>CMD<span class="w"> </span><span class="o">[</span><span class="s2">&quot;/bin/bash&quot;</span><span class="o">]</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<section id="sign-and-verify-using-apache-tomcat">
+<h2>Sign and Verify using Apache Tomcat<a class="headerlink" href="#sign-and-verify-using-apache-tomcat" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p>Build the Docker container and sign a file using Apache Tomcat by running the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.yaml<span class="w"> </span>up<span class="w"> </span>--build<span class="w"> </span>--force-recreate
+</pre></div>
+</div>
+</li>
+<li><p>Trigger the Tomcat webpage at <code class="docutils literal notranslate"><span class="pre">https://localhost:8443</span></code> to initiate the signing process.</p>
+<p>The full response of the signing process:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pkcs11-tomcat-2  | 2025-02-21 04:59:07.282 Session info for session handle: 2 thread id: 139718465386176</span>
+<span class="go">pkcs11-tomcat-2  | opened: CKS_RW_PUBLIC_SESSION</span>
+<span class="go">pkcs11-tomcat-2  | operation: PKCS11_KK_CK_OPERATION_NONE</span>
+<span class="go">pkcs11-tomcat-2  | object map size: 2</span>
+<span class="go">pkcs11-tomcat-2  | 2025-02-21 04:59:07.282 C_SignInit</span>
+<span class="go">pkcs11-tomcat-2  | hSession: 2</span>
+<span class="go">pkcs11-tomcat-2  | pMechanism-&gt;mechanism: d</span>
+<span class="go">pkcs11-tomcat-2  | hKey: 1</span>
+<span class="go">pkcs11-tomcat-2  | keyId:rsaSigning2048</span>
+<span class="go">pkcs11-tomcat-2  | 2025-02-21 04:59:07.282 [CKM_RSA_PKCS_PSS] pMechanism-&gt;ulParameterLen: 24</span>
+<span class="go">pkcs11-tomcat-2  |      params.hashAlg: 592</span>
+<span class="go">pkcs11-tomcat-2  |      params.mgf: 2</span>
+<span class="go">pkcs11-tomcat-2  |      params.sLen: 32</span>
+<span class="go">pkcs11-tomcat-2  | 2025-02-21 04:59:07.282 C_Sign</span>
+<span class="go">pkcs11-tomcat-2  | ulDataLen: 32</span>
+<span class="go">pkcs11-tomcat-2  |       Data to be signed: ac 35 6e d5 8d c4 db fc 1c c f7 15 61 dc 74 f9 48 a9 3b 4b 7f ce 7a e2 39 4d c4 60 d3 78 3a 22</span>
+<span class="go">pkcs11-tomcat-2  |       Buffer size prepared: 4096</span>
+<span class="go">pkcs11-tomcat-2  |      pSignature: not null</span>
+<span class="go">pkcs11-tomcat-2  |      pData: not null</span>
+<span class="go">pkcs11-tomcat-2  | 2025-02-21 04:59:07.282 Session info for session handle: 2 thread id: 139718465386176</span>
+<span class="go">pkcs11-tomcat-2  | opened: CKS_RW_PUBLIC_SESSION</span>
+<span class="go">pkcs11-tomcat-2  | operation: PKCS11_KK_CK_OPERATION_SIGN</span>
+<span class="go">pkcs11-tomcat-2  | object map size: 2</span>
+<span class="go">pkcs11-tomcat-2  | 2025-02-21 04:59:07.282 Need Login: False</span>
+<span class="go">pkcs11-tomcat-2  | 2025-02-21 04:59:07.282 Need Refresh Session: False</span>
+<span class="go">pkcs11-tomcat-2  | 2025-02-21 04:59:07.292 ServerSDK Sign success, returned: K26L57c38+IAsXEGY3WdhOlfr2Il1Df1i2iXGNBvx91XffB7nntranUFCY/q5BXlVo9+bRxsF7UaMdOFU2DhseUD/Jo53HC+dWzoi/5ZBV0NavOV1ZjE6futE30jFkoR2RV3ZbSvFbtnqTjiy6Sde9wcx3Gi0xHUY1uoPd6BIiqrVhrFJ/tL2wWXvcCsM2OIUofaUQQdFxGmvlfn0GlLx3MsztJCvobX+XMGUOJJ1UwZsx/Qiua6YOeZi90cogJM5zRrMhmhiBrH3nogeRgAobYDJ65iHK6NbHEs2f7YOyQmZb9XHy39gqz/UFcMxD/JU8bUO+6g2JkSfz6nc+xl4Q==</span>
+<span class="go">pkcs11-tomcat-2  | 2025-02-21 04:59:07.292 Buffer prepared: 4096</span>
+<span class="go">pkcs11-tomcat-2  | Buffer needed: 256</span>
+<span class="go">pkcs11-tomcat-2  | 2025-02-21 04:59:07.292 Buffer prepared: 4096</span>
+<span class="go">pkcs11-tomcat-2  | Copying: 256 bytes.</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="java-app.html" class="btn btn-neutral float-left" title="Integrate Java Applications to Kripta Key using PKCS#11 Connector" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../keycloak-integration-guide/index.html" class="btn btn-neutral float-right" title="KeyCloak Integration Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

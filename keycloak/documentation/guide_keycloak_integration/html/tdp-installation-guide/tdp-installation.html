@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deploying Kripta Key TDP &mdash; Kripta Key Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b20cc3f5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=03d93ebb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="License Application Guide" href="../license-guide/index.html" />
+    <link rel="prev" title="Feature configuration" href="feature-configuration.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Kripta Key Documentation
+          </a>
+              <div class="version">
+                24.1.0015-RC-UP02
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../revision-history.html">Revision History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kripta-key-primer.html">Kripta Key Primer</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide/index.html">Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clikk-installation-guide/index.html">CLIKK Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cloud-installation-guide/index.html">Cloud Installation Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../kkts-guide/index.html">KK-TS Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">TDP Installation Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#preface">Preface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="before-installing.html">Before deploying Kripta Key TDP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="feature-configuration.html">Feature configuration</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Deploying Kripta Key TDP</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installing-database-server">Installing database server</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#using-mysql">Using MySQL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#using-postgresql">Using PostgreSQL</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#deploying-tdp-server">Deploying TDP server</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license-guide/index.html">License Application Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sys-admin-guide/index.html">System Administrator Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev-guide/index.html">Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../e2ee-dev-guide/index.html">E2EE Developer Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../func-module-guide/index.html">Functional Module Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app-integration-guide/index.html">App Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../keycloak-integration-guide/index.html">KeyCloak Integration Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-api-docs/index.html">SDK API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest-api-docs/index.html">REST API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whitepaper/index.html">Whitepaper</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">Appendix</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kripta Key Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">TDP Installation Guide</a></li>
+      <li class="breadcrumb-item active">Deploying Kripta Key TDP</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tdp-installation-guide/tdp-installation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="deploying-kripta-key-tdp">
+<h1>Deploying Kripta Key TDP<a class="headerlink" href="#deploying-kripta-key-tdp" title="Link to this heading"></a></h1>
+<p>Just like Kripta Key itself, the TDP deployment is supported only on Red Hat Enterprise Linux 9.2.
+This guide breaks down the steps into several sections.</p>
+<section id="installing-database-server">
+<h2>Installing database server<a class="headerlink" href="#installing-database-server" title="Link to this heading"></a></h2>
+<p>As mentioned in <a class="reference internal" href="before-installing.html#creating-the-tdp-certificates"><span class="std std-ref">Creating the TDP certificates</span></a>, this guide only covers
+MySQL and PostgreSQL database servers. Follow the steps for the appropriate database server below.</p>
+<section id="using-mysql">
+<h3>Using MySQL<a class="headerlink" href="#using-mysql" title="Link to this heading"></a></h3>
+<p><strong>Install MySQL</strong></p>
+<ol class="arabic">
+<li><p>Install MySQL.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>mariadb-server
+</pre></div>
+</div>
+</li>
+</ol>
+<p><strong>Enabling mTLS in MySQL</strong></p>
+<ol class="arabic">
+<li><p>Copy the prepared certificates and key to <code class="docutils literal notranslate"><span class="pre">/var/lib/mysql</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>cp<span class="w"> </span>database.crt<span class="w"> </span>database.key<span class="w"> </span>root.crt<span class="w"> </span>/var/lib/mysql/
+</pre></div>
+</div>
+</li>
+<li><p>Change the ownership of the certificate file to the MySQL user.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>chown<span class="w"> </span>mysql:mysql<span class="w"> </span>/var/lib/mysql/database.crt<span class="w"> </span>/var/lib/mysql/database.key<span class="w"> </span>/var/lib/mysql/root.crt
+</pre></div>
+</div>
+</li>
+<li><p>Change the permissions of the private key file.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">400</span><span class="w"> </span>/var/lib/mysql/database.key
+</pre></div>
+</div>
+</li>
+<li><p>Add the following settings to the <code class="docutils literal notranslate"><span class="pre">/etc/my.cnf</span></code> file.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[mysqld]</span>
+<span class="na">ssl</span>
+<span class="na">ssl-ca</span><span class="o">=</span><span class="s">/var/lib/mysql/root.crt</span>
+<span class="na">ssl-cert</span><span class="o">=</span><span class="s">/var/lib/mysql/database.crt</span>
+<span class="na">ssl-key</span><span class="o">=</span><span class="s">/var/lib/mysql/database.key</span>
+<span class="na">require_secure_transport</span><span class="o">=</span><span class="s">ON</span>
+</pre></div>
+</div>
+</li>
+<li><p>Restart mySQL, and then run this command to test if mTLS has been enabled successfully.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">mysql -u root -h mysql --ssl-ca=root.crt --ssl-cert=tdp-server.crt --ssl-key=tdp-server.key</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="using-postgresql">
+<h3>Using PostgreSQL<a class="headerlink" href="#using-postgresql" title="Link to this heading"></a></h3>
+<p><strong>Install PostgreSQL</strong></p>
+<ol class="arabic">
+<li><p>Install PostgreSQL.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>postgresql-server<span class="w"> </span>postgresql-contrib
+</pre></div>
+</div>
+</li>
+<li><p>Initialize the database.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>/usr/bin/postgresql-setup<span class="w"> </span>--initdb<span class="w"> </span>--unit<span class="w"> </span>postgresql
+</pre></div>
+</div>
+</li>
+</ol>
+<p><strong>Enabling mTLS in PostgreSQL</strong></p>
+<ol class="arabic">
+<li><p>Copy the prepared certificates and key to <code class="docutils literal notranslate"><span class="pre">/var/lib/pgsql/data</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>cp<span class="w"> </span>database.crt<span class="w"> </span>database.key<span class="w"> </span>root.crt<span class="w"> </span>/var/lib/pgsql/data/
+</pre></div>
+</div>
+</li>
+<li><p>Change the ownership of the certificate file to the PostgreSQL user.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>chown<span class="w"> </span>postgres:postgres<span class="w"> </span>/var/lib/pgsql/data/database.crt<span class="w"> </span>/var/lib/pgsql/data/database.key<span class="w"> </span>/var/lib/pgsql/data/root.crt
+</pre></div>
+</div>
+</li>
+<li><p>Change the permissions of the private key file.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">400</span><span class="w"> </span>/var/lib/pgsql/data/database.key
+</pre></div>
+</div>
+</li>
+<li><p>Edit the PostgreSQL configuration.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">listen_addresses</span> <span class="s1">&#39;*&#39;</span>
+<span class="n">ssl</span> <span class="n">on</span>
+<span class="n">ssl_ca_file</span> <span class="s1">&#39;root.crt&#39;</span>
+<span class="n">ssl_cert_file</span> <span class="s1">&#39;database.crt&#39;</span>
+<span class="n">ssl_key_file</span> <span class="s1">&#39;database.key&#39;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Restart PostgreSQL, and then run this command to test if mTLS has been enabled successfully.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>psql<span class="w"> </span><span class="s2">&quot;sslmode=verify-full sslrootcert=root.crt sslcert=tdp-client.crt sslkey=tdp-client.key host=postgresql port=5432 user=test dbname=test&quot;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+<section id="deploying-tdp-server">
+<h2>Deploying TDP server<a class="headerlink" href="#deploying-tdp-server" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p>Install KK-TDP.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>bash<span class="w"> </span>kk_tdp_installer.sh<span class="w"> </span>install<span class="w"> </span><span class="o">[</span>username<span class="o">]</span>
+</pre></div>
+</div>
+</li>
+<li><p>Configure the daemon service.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>bash<span class="w"> </span>kk_tdp_installer.sh<span class="w"> </span>configure-daemon-service
+</pre></div>
+</div>
+</li>
+<li><p>Start the KK-TDP service.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>kk-tdp.service
+</pre></div>
+</div>
+</li>
+<li><p>Test the database server.</p>
+<ul>
+<li><p>Test postgresql TDP server using command below.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>psql<span class="w"> </span><span class="s2">&quot;sslmode=verify-full sslrootcert=root.crt sslcert=tdp-client.crt sslkey=tdp-client.key host=tdp-server port=9393 user=test dbname=test&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Test mysql TDP server using command below.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mysql<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-h<span class="w"> </span>tdp-server<span class="w"> </span>-P<span class="w"> </span><span class="m">9393</span><span class="w"> </span>--ssl-ca<span class="o">=</span>root.crt<span class="w"> </span>--ssl-cert<span class="o">=</span>tdp-client.crt<span class="w"> </span>--ssl-key<span class="o">=</span>tdp-client.key
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="feature-configuration.html" class="btn btn-neutral float-left" title="Feature configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../license-guide/index.html" class="btn btn-neutral float-right" title="License Application Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PT Klavis Kripta Inovasi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

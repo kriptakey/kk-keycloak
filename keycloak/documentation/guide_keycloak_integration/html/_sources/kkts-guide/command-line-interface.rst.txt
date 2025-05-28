@@ -1,0 +1,547 @@
+KK-TS command line interface
+============================
+
+This section details all available commands in Kripta Key Tokenization Service. All commands will prompt for
+KK-TS CLI password.
+
+License
+-------
+
+These commands are used to manage KK-TS license.
+
+License Request
+---------------
+
+Generate request file for tokenization service.
+
+``kk-ts license request customer-cert``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Create customer certificate request file. 
+
+**Flags**:
+
+--customer-id=<customer ID>
+    The identifier of customer.
+
+--output-enc-privkey-path=<output path of private key>
+    The output encrypted private key path.
+
+--output-csr-path=<output path of CSR>
+    The output CSR path
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ kk-ts license request customer-cert --customer-id=customer1 --output-enc-privkey-path=/path/to/customer.key --output-csr-path=/path/to/customerCSR.pem
+    New customer private key password: 
+    New customer private key password confirmation: 
+    [v] Request customer certificate successfully created
+
+
+``kk-ts license request deploy-perm``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Create KK-TS signature to get deployment permission from RSI.
+
+**Flags**: None.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ kk-ts license request deploy-perm 
+    To enhance KKTS security against unauthorized administrator, you must set KKTS password to be used for most KKTS command line features
+    New KKTS command line password:
+    New KKTS command line password confirmation:
+    [v] Request deployment permission successfully created MEUCIQDuL7RMP4Vkkz3kr2CqFfXEZZ88aLdUnmeR+ynyaURzsQIgQer0Fm0CWWaqAqHWdnH87AlaYV/Tbtmhdfiu=
+
+
+License Apply
+-------------
+
+Apply Kripta Key Tokenization Service license.
+
+``kk-ts license apply customer-cert``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Apply the customer certificate to enable tokenization service. 
+The customer certificate is applied only once per customer. 
+
+**Flags**:
+
+--encrypted-private-key-path=<encrypted private key path>
+    The file path of encrypted customer private key is obtained from command ``kk-ts license request customer-cert``.
+
+--certificate-path=<customer certificate path>
+    The file path of customer certificate. 
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ kk-ts license apply customer-cert --encrypted-private-key-path=/path/to/customer.key --certificate-path=/path/to/customerCert.pem
+    Encrypted customer private key password: 
+    [v] Customer license sucessfully applied
+
+
+``kk-ts license apply deploy-perm``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Apply deployment permission file. 
+
+This command requires KK-TS and RSI signature.
+
+**Flags**:
+
+--kkts-signature=<KKTS signature>
+    The KK-TS signature.
+
+--rsi-signature=<RSI signature>
+    The RSI signature.
+
+--kkts-host=<KKTS host address>
+    The KK-TS IPv4 host address.
+
+--dns-name=<dns name>
+    Domain Name System of KK-TS server. 
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ kk-ts license apply deploy-perm --kkts-signature=MEUCIQDuL7RMP4Vkkz3kr2CqFfXEZZ88aLdUnmeR+ynyaURzsQIgQer0Fm0CWWaqAqHWdnH87AlaYV/Tbtmhdfiu= --rsi-signature=MIGHAkEgUfO0vnx1Ug77d7EFsTUrx0DQ0pJwsZy1JVLyqR96ia6zePfzAkV6LuCEerwtjZQ6DV1pjBl8A6vMpIp/nzUheQJCAKzUq8Y0ArSPNNcXzlCO6VZOfsgDhOcssHoJYdtVOB8MzjaLJY9V0RKy7rogdfduti --kkts-host=192.155.100.200 --dns-name=kkts
+    [v] Deployment permission license sucessfully applied
+
+
+KK-TS configuration
+-------------------
+
+This command is used to manage KK-TS configuration.
+
+``kkts config print``
+~~~~~~~~~~~~~~~~~~~~~
+
+Show the information of KK-TS configuration.
+
+**Flags**: None.
+
+**Usage example**:
+
+.. code-block:: console
+
+    kk-ts config print
+    [kkcs_connection]
+    host=192.155.100.200
+    port=7004
+    app_certificate="/path/to/KKTSVlientCert.pem"
+    app_privatekey="/path/to/KKTSClientKey.key"
+    [kkts_server]
+    port=8000
+    [cassandra_connection]
+    host=192.155.100.147
+    port=9042
+    certificate="/path/to/KKTSServerCertificate.pem"
+    privatekey="/path/to/KKTSServerKey.key"
+    [customer_info]
+    customer_id=customer1
+    encrypted_private_key_path="/home/user/.kkts/cust_enc_privkey.pem"
+    certificate_path="/home/user/.kkts/cust_cert.crt"
+
+
+``kkts config set``
+~~~~~~~~~~~~~~~~~~~
+
+Set Kripta Key Tokenization Service (KK-TS) configuration.
+
+**Flags**:
+
+--kkts-server-port=<KKTS server port>
+    The KK-TS server port.
+
+--kkcs-connection-host=<KKCS connection host>
+    The KK-CS connection host.
+
+--kkcs-connection-port=<KKCS connection port>
+    The KK-CS connection port.
+
+--kkcs-connection-appcertificate=<KKCS connection certificate>
+    The KK-CS connection certificate.
+
+--kkcs-connection-appprivatekey=<KKCS connection private key>
+    The KK-CS connection private key.
+
+--cassandra-connection-host=<cassandra connection host>
+    The Cassandra database managemnet connection host.
+
+--cassandra-connection-port=<cassandra connection port>
+    The Cassandra database management connection port. Check this as "native_transport_port" on cassandra.yaml.  
+
+--cassandra-connection-user=<cassandra connection user>
+    The user connection for Cassandra database management.
+
+--cassandra-connection-password=<cassandra connection password>
+    The password of Cassandra database management.  
+
+--cassandra-connection-certificate=<cassandra connection certificate>
+    The certificate of Cassandra database management.
+
+--cassandra-connection-privatekey=<cassandra connection private key>
+    The private key of Cassandra database management.
+
+--cassandra-consistency=<cassandra consistency level>
+    Cassandra cluster consistency level, please refer to :ref:`kkts-guide/cassandra-setting-consideration:Cassandra Setting for KK-TS`.
+
+--cassandra-serial-consistency=<cassandra serial consistency level>
+    Cassandra cluster serial consistency level, please refer to :ref:`kkts-guide/cassandra-setting-consideration:Cassandra Setting for KK-TS`.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ kk-ts config set --kkts-server-port=8000 --kkcs-connection-host=192.155.100.200 --kkcs-connection-port=7004 --kkcs-connection-appcertificate=/path/to/KKTSVlientCert.pem --kkcs-connection-appprivatekey=/path/to/KKTSClientKey.key --cassandra-connection-host=192.155.100.147 --cassandra-connection-port=9042 --cassandra-connection-user=klavis --cassandra-connection-password=Password1! --cassandra-connection-certificate=/path/to/KKTSServerCertificate.pem --cassandra-connection-privatekey=/path/to/KKTSServerKey.key --cassandra-consistency=EACH_QUORUM --cassandra-serial-consistency=SERIAL
+
+
+Client management
+-----------------
+
+These commands are used to manage client that connect to Kripta Key Tokenization Service (KK-TS).
+
+``kk-ts client gen-cert``
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Generate KK-TS client certificate.
+
+This command requires the client CSR.
+
+**Flags**:
+
+--csr-path=<client CSR path>
+    The absolute path to the client CSR file, in PEM format.
+
+--output-cert-path=<output certificate path>
+    The output client certificate path, in PEM format.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ kk-ts client-app gen-cert --csr-path=/path/to/clientCSR.csr --output-cert-path=/path/to/outputClientCert.pem
+    KKTS command line password:
+    Encrypted customer private key password:
+    [v] Client certificate successfully generated
+
+
+Partition configuration
+-----------------------
+
+These commands are used to manage partition access configurations. Partition to which the client application is assigned must be 
+added first before it can access the tokenization service. 
+
+``kk-ts partition add``
+~~~~~~~~~~~~~~~~~~~~~~
+
+Create a new partition configuration.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ kk-ts partition add --partition-id=1
+    KKTS command line password: 
+    Partition password: 
+    Partition password confirmation:    
+    [v] Partition configuration successfully added
+
+
+``kk-ts partition list``
+~~~~~~~~~~~~~~~~~~~~~~~
+
+List partition configuration.
+
+**Flags**: None.
+
+**Usage example**:
+
+.. code-block:: console
+    
+    $ kk-ts partition list
+    KKTS command line password: 
+    +--------------+
+    | Partition Id |
+    +--------------+
+    | 1            |
+    +--------------+
+
+
+``kk-ts partition delete``
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Delete existing partition configuration. Please restart the KK-TS service after execute this command. 
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ kk-ts partition delete --partition-id=2
+    KKTS command line password: 
+    [v] Deleted Partition Id: 2
+    [v] Partition configuration successfully deleted
+
+
+Application configuration
+-------------------------
+
+These commands are used to manage application access to the tokenization service. Applications must be added
+first before they can access the tokenization service.
+
+
+``kk-ts appconfig add``
+~~~~~~~~~~~~~~~~~~~~~~
+
+Create a new application configuration.
+
+This command requires the application's certificate file.
+
+**Flags**:
+
+--certificate-file=<path to certificate file>
+    The absolute path to the application's certificate file, in PEM format.
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+--key-id=<key ID>
+    The identifier of the key. The key must be suitable for tokenization.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ kk-ts appconfig add --app-name=AppOne --certificate-file=/path/to/appCertificate.pem --partition-id=1 --key-id=AESKey
+    KKTS command line password: 
+    [v] Registered Application SKI: 2bf4a5d6696fac53f44a44dbb5dd44239768dhi
+    [v] Application configuration successfully added
+
+
+``kk-ts appconfig list``
+~~~~~~~~~~~~~~~~~~~~~~~
+
+List all available application configurations associated with a given partition.
+
+**Flags**:
+
+--partition-id=<partition ID>
+    The identifier of the partition.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ kk-ts appconfig list --partition-id=1
+    KKTS command line password: 
+    +--------------+------------------------------------------+--------+
+    | Partition Id | Application SKI                          | Key Id |
+    +--------------+------------------------------------------+--------+
+    | 1            | 2bf4a5d6696fac53f44a44dbb5dd44239768dhi  | AESKey |     
+    +--------------+------------------------------------------+--------+
+
+
+``kk-ts appconfig info``
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Retrieve information about an application's configuration.
+
+**Flags**:
+
+--app-ski=<application SKI>
+    The subject key identifier of the application.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ kk-ts appconfig info --app-ski=2bf4a5d6696fac53f44a44dbb5dd44239768dhi
+    KKTS command line password: 
+    [-] Partition Id: 1
+    [-] Key Id: AESKey
+    [-] Application SKI: 2bf4a5d6696fac53f44a44dbb5dd44239768dhi
+
+
+``kk-ts appconfig acl-add``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Associate a client application to another client application as a master and slave application. Slave application has privilege to access the data configuration owned by its 
+master application. 
+
+**Flags**:
+
+--master-app-ski=<application SKI>
+    The subject key identifier of the master application.
+
+--slave--app-ski=<application SKI>
+    The subject key identifier of the slave application.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ kk-ts appconfig acl-add --master-app-ski=72bf4a5d6696fac53f44a44dbb5dd44239768dhi --slave-app-ski=jy98676sdf78957tdi8544a44dbb5dd4479687446t
+    KKTS command line password: 
+    [v] ACL between master and slave app successfully created.
+    [v] Slave app can now use master app config id for detokenization.
+
+
+``kk-ts appconfig acl-masterlist``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List the master applications associated with a specific slave application. 
+
+**Flags**:
+
+--slave--app-ski=<application SKI>
+    The subject key identifier of the slave application.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ kk-ts appconfig acl-masterlist --slave-app-ski=jy98676sdf78957tdi8544a44dbb5dd4479687446t
+    KKTS command line password: 
+    +--------------------------------------------+---------------------------------------------+
+    | Master Application                         | Slave Application                           |
+    +--------------------------------------------+---------------------------------------------+
+    | AppOne                                     | AppTwo                                      |
+    | (72bf4a5d6696fac53f44a44dbb5dd44239768dhi) | (jy98676sdf78957tdi8544a44dbb5dd4479687446t)|
+    +--------------------------------------------+---------------------------------------------+
+
+
+``kk-ts appconfig acl-slavelist``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List the slave applications associated with a specific master application. 
+
+**Flags**:
+
+--master-app-ski=<application SKI>
+    The subject key identifier of the master application.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ kk-ts appconfig acl-slavelist --master-app-ski=72bf4a5d6696fac53f44a44dbb5dd44239768dhi
+    KKTS command line password: 
+    +--------------------------------------------+---------------------------------------------+
+    | Master Application                         | Slave Application                           |
+    +--------------------------------------------+---------------------------------------------+
+    | AppOne                                     | AppTwo                                      |
+    | (72bf4a5d6696fac53f44a44dbb5dd44239768dhi) | (jy98676sdf78957tdi8544a44dbb5dd4479687446t)|
+    +--------------------------------------------+---------------------------------------------+
+
+
+Data configuration
+------------------
+
+These commands are used to configure how sensitive data are tokenized, with each data field associated to
+a specific application.
+
+
+``kk-ts dataconfig add``
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Create a new data configuration.
+
+**Flags**:
+
+--app-ski=<application SKI>
+    The subject key identifier of the application.
+
+--config-id=<config ID>
+    The identifier of the data configuration.
+
+--token-type=<token type index>
+    The tokenization type index of the data configuration. Refer to :ref:`kkts-guide/domain-configuration:data configuration`
+    for the tokenization type index.
+
+--tokenized-with=<tokenization charset index>
+    The tokenization character set index of the data configuration. Refer to :ref:`kkts-guide/domain-configuration:data configuration`
+    for the tokenization character set index.
+
+--formatting-char=<format string>
+    The format string of the data configuration. Only applicable if the tokenization type is ``FORMAT_CHAR``.
+
+--minimum-length=<minimum length>
+    The minimum number of characters to be tokenized.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ kk-ts dataconfig add --app-ski=2bf4a5d6696fac53f44a44dbb5dd44239768dhi --config-id=CONF_ALPHA_CHAR_TEN --token-type=0 --tokenized-with=2 --minimum-length=10 --formatting-char='$$$$$$$$%%'
+    KKTS command line password:
+    [v] Data configuration successfully added
+
+
+``kk-ts dataconfig list``
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+List all available data configurations for a specific application.
+
+**Flags**:
+
+--app-ski=<application SKI>
+    The subject key identifier of the application.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ kk-ts dataconfig list --app-ski=2bf4a5d6696fac53f44a44dbb5dd44239768dhi
+    KKTS command line password:
+    +------------------------------------------+-------------------------+
+    | Application SKI                          | Config Id               |
+    +------------------------------------------+-------------------------+
+    | 2bf4a5d6696fac53f44a44dbb5dd44239768dhi  | CONF_ALPHANUM_FIRST_TEN |
+    +------------------------------------------+-------------------------+
+
+
+``kk-ts dataconfig info``
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Retrieve information about a data configuration.
+
+**Flags**:
+
+--app-ski=<application SKI>
+    The subject key identifier of the application.
+
+--config-id=<config ID>
+    The identifier of the data configuration.
+
+**Usage example**:
+
+.. code-block:: console
+
+    $ kk-ts dataconfig info --app-ski=2bf4a5d6696fac53f44a44dbb5dd44239768dhi --config-id=CONF_ALPHANUM_FIRST_TEN
+    KKTS command line password:
+    [-] Application SKI: 2bf4a5d6696fac53f44a44dbb5dd44239768dhi
+    [-] Config Id: CONF_ALPHANUM_FIRST_TEN
+    [-] Formatting Characters: $$$*$$$
+    [-] Minimum Length: 10
+    [-] Tokenized With: TOKENIZE_WITH_ALPHANUM
+    [-] Token Type: TOKEN_TYPE_FORMAT_CHAR
+
+
+

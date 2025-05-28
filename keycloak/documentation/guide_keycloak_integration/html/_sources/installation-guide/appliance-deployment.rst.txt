@@ -1,0 +1,18 @@
+Appliance model
+===============
+
+The appliance model provides the customer with several machines --- one machine with KK-Auditor and KK-Manager pre-installed, and the remaining machines with KK-Cryptoservice pre-installed. Follow these steps to get Kripta Key
+up and running:
+
+#.  Install CLIKK on a device the administrators will be using, following :doc:`/clikk-installation-guide/installing-clikk`.
+
+#.  Set up and configure KK-Auditor, following :ref:`installation-guide/kripta-key-installation:kk-auditor setup and configuration`.
+
+#.  Set up and configure KK-Manager, following :ref:`installation-guide/kripta-key-installation:kk-manager setup and configuration`.
+
+#.  Perform key ceremony, initializing the main KK-Manager instance and registering the KK-Auditor instance to it,
+    following :ref:`installation-guide/kripta-key-installation:key ceremony`.
+
+#.  Register each KK-Cryptoservice instance, following :ref:`installation-guide/cryptographic-service-installation:registering kk-cryptoservice`.
+
+Kripta Key is now ready to use.
