@@ -24,11 +24,13 @@ void setupWindow() {
     setWindowMinSize(const Size(windowWidth, windowHeight));
     setWindowMaxSize(const Size(windowWidth, windowHeight));
     getCurrentScreen().then((screen) {
-      setWindowFrame(Rect.fromCenter(
-        center: screen!.frame.center,
-        width: windowWidth,
-        height: windowHeight,
-      ));
+      setWindowFrame(
+        Rect.fromCenter(
+          center: screen!.frame.center,
+          width: windowWidth,
+          height: windowHeight,
+        ),
+      );
     });
   }
 }
@@ -64,21 +66,21 @@ class _LoginPageState extends State<LoginPage> {
   Map<String, dynamic>? _decodedIdToken;
 
   final FlutterAppAuth _appAuth = const FlutterAppAuth();
-  final String _clientId = 'mobile-client-auth';
+  final String _clientId = 'kki-rnd';
   final String _redirectUrl = 'org.openid.appauthdemo:/oauth4redirect';
-  final AuthorizationServiceConfiguration _serviceConfiguration =
-      const AuthorizationServiceConfiguration(
+  final AuthorizationServiceConfiguration
+  _serviceConfiguration = const AuthorizationServiceConfiguration(
     authorizationEndpoint:
-        'https://kki-auth.rafly-dev.my.id/realms/quickstart/protocol/openid-connect/auth',
+        'https://kki-auth.rafly-dev.my.id/realms/KKI-Batam/protocol/openid-connect/auth',
     tokenEndpoint:
-        'https://kki-auth.rafly-dev.my.id/realms/quickstart/protocol/openid-connect/token',
+        'https://kki-auth.rafly-dev.my.id/realms/KKI-Batam/protocol/openid-connect/token',
     endSessionEndpoint:
-        'https://kki-auth.rafly-dev.my.id/realms/quickstart/protocol/openid-connect/logout',
+        'https://kki-auth.rafly-dev.my.id/realms/KKI-Batam/protocol/openid-connect/logout',
   );
   final List<String> _scopes = <String>['openid', 'profile', 'email'];
   final String _postLogoutRedirectUrl =
       'org.openid.appauthdemo:/oauth4redirect';
-  final String _clientSecret = "ADjV3hsuw9CslDjViORuDBIm2K4rO7TF";
+  final String _clientSecret = "yhxhFp8kO73mGHQ81noLLYY1xmAV43Jb";
 
   @override
   Widget build(BuildContext context) {
@@ -93,13 +95,17 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 const SizedBox(height: 150),
                 Center(
-                  child: Text("Welcome back",
-                      style: Theme.of(context).textTheme.headlineLarge),
+                  child: Text(
+                    "Welcome back",
+                    style: Theme.of(context).textTheme.headlineLarge,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Center(
-                  child: Text("Login to your account",
-                      style: Theme.of(context).textTheme.bodyMedium),
+                  child: Text(
+                    "Login to your account",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                 ),
                 // Username or person id
                 const SizedBox(height: 60),
@@ -136,9 +142,11 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void> _signInWithAutoCodeExchange(BuildContext context,
-      {ExternalUserAgent externalUserAgent =
-          ExternalUserAgent.asWebAuthenticationSession}) async {
+  Future<void> _signInWithAutoCodeExchange(
+    BuildContext context, {
+    ExternalUserAgent externalUserAgent =
+        ExternalUserAgent.asWebAuthenticationSession,
+  }) async {
     try {
       _setBusyState();
 
@@ -146,15 +154,18 @@ class _LoginPageState extends State<LoginPage> {
         This shows that we can also explicitly specify the endpoints rather than
         getting from the details from the discovery document.
       */
-      final AuthorizationTokenResponse result =
-          await _appAuth.authorizeAndExchangeCode(
-        AuthorizationTokenRequest(_clientId, _redirectUrl,
-            serviceConfiguration: _serviceConfiguration,
-            scopes: _scopes,
-            externalUserAgent: externalUserAgent,
-            allowInsecureConnections: true,
-            clientSecret: _clientSecret),
-      );
+      final AuthorizationTokenResponse result = await _appAuth
+          .authorizeAndExchangeCode(
+            AuthorizationTokenRequest(
+              _clientId,
+              _redirectUrl,
+              serviceConfiguration: _serviceConfiguration,
+              scopes: _scopes,
+              externalUserAgent: externalUserAgent,
+              allowInsecureConnections: true,
+              clientSecret: _clientSecret,
+            ),
+          );
 
       print("Access token: ${result.accessToken!}");
       print("Id token: ${result.idToken}");
@@ -166,17 +177,19 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (_) => ShowTokenScreen(
-                    clientId: _decodedIdToken!['aud'],
-                    name: _decodedIdToken!['name'],
-                    preferredUsername: _decodedIdToken!['preferred_username'],
-                    givenName: _decodedIdToken!['given_name'],
-                    familyName: _decodedIdToken!['family_name'],
-                    email: _decodedIdToken!['email'],
-                    appAuth: _appAuth,
-                    idToken: result.idToken,
-                    postLogoutRedirectUri: _postLogoutRedirectUrl,
-                    serviceConfiguration: _serviceConfiguration)),
+              builder: (_) => ShowTokenScreen(
+                clientId: _decodedIdToken!['aud'],
+                name: _decodedIdToken!['name'],
+                preferredUsername: _decodedIdToken!['preferred_username'],
+                givenName: _decodedIdToken!['given_name'],
+                familyName: _decodedIdToken!['family_name'],
+                email: _decodedIdToken!['email'],
+                appAuth: _appAuth,
+                idToken: result.idToken,
+                postLogoutRedirectUri: _postLogoutRedirectUrl,
+                serviceConfiguration: _serviceConfiguration,
+              ),
+            ),
           );
         }
       } else {
@@ -185,8 +198,9 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (_) =>
-                    const ErrorScreen(error: "Alert: Id token is null")),
+              builder: (_) =>
+                  const ErrorScreen(error: "Alert: Id token is null"),
+            ),
           );
         }
       }
@@ -195,7 +209,8 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (_) => ErrorScreen(error: "Error: ${e.toString()}")),
+            builder: (_) => ErrorScreen(error: "Error: ${e.toString()}"),
+          ),
         );
       }
       _handleError(e);
@@ -215,7 +230,8 @@ class _LoginPageState extends State<LoginPage> {
       });
     } else if (e is PlatformException) {
       setState(() {
-        _error = 'Error\n\nCode: ${e.code}\nMessage: ${e.message}\n'
+        _error =
+            'Error\n\nCode: ${e.code}\nMessage: ${e.message}\n'
             'Details: ${e.details}';
       });
     } else {
@@ -241,16 +257,18 @@ class _LoginPageState extends State<LoginPage> {
   void getAlert(String message) {
     if (!context.mounted) return;
     // Notify user that session creation is failed
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message),
-      duration: const Duration(seconds: 5),
-      action: SnackBarAction(
-        label: 'OK',
-        onPressed: () {
-          SystemNavigator.pop();
-        },
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 5),
+        action: SnackBarAction(
+          label: 'OK',
+          onPressed: () {
+            SystemNavigator.pop();
+          },
+        ),
+        backgroundColor: Colors.red[400],
       ),
-      backgroundColor: Colors.red[400],
-    ));
+    );
   }
 }

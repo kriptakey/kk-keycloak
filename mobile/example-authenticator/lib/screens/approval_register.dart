@@ -17,10 +17,12 @@ class ApprovalRegister extends StatefulWidget {
     Key? key,
     this.scannedData,
     this.username,
+    this.initialLink,
   }) : super(key: key);
 
   final String? scannedData;
   final String? username;
+  final String? initialLink;
 
   @override
   State<ApprovalRegister> createState() => _ApprovalRegisterState();
@@ -37,33 +39,36 @@ class _ApprovalRegisterState extends State<ApprovalRegister> {
   void getAlert(String message) {
     if (!context.mounted) return;
     // Notify user that session creation is failed
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message),
-      duration: const Duration(seconds: 5),
-      action: SnackBarAction(
-        label: 'OK',
-        onPressed: () {
-          // Switch to main builder
-          Navigator.push(
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 5),
+        action: SnackBarAction(
+          label: 'OK',
+          onPressed: () {
+            // Switch to main builder
+            Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) => const ApprovalRegister()));
-        },
+              MaterialPageRoute(builder: (context) => const ApprovalRegister()),
+            );
+          },
+        ),
+        backgroundColor: Colors.red[400],
       ),
-      backgroundColor: Colors.red[400],
-    ));
+    );
   }
 
   Future<void> _processRegistration(dynamic preAuthenticationData) async {
     // Generate key pair and CSR
     // CertificateInformation: CN (Common Name), C (Country), L (Location), ST (State), O (Organization), OU (Organizational Unit)
     final DistinguishedName distinguishedName = DistinguishedName(
-        "www.example.com",
-        "ID",
-        "Jakarta",
-        "South Jakarta",
-        "Company A",
-        "Core Banking");
+      "www.example.com",
+      "ID",
+      "Jakarta",
+      "South Jakarta",
+      "Company A",
+      "Core Banking",
+    );
 
     // 1. Call API generate key pair in secure storage and return CSR
     String? applicationCsr;
@@ -76,8 +81,10 @@ class _ApprovalRegisterState extends State<ApprovalRegister> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => ErrorScreen(
-                  error: "Error: ${e.message}, error code: ${e.code}")),
+            builder: (context) => ErrorScreen(
+              error: "Error: ${e.message}, error code: ${e.code}",
+            ),
+          ),
         );
       }
       // rethrow;
@@ -89,15 +96,18 @@ class _ApprovalRegisterState extends State<ApprovalRegister> {
     // Call API e2eeEncrypt to encrypt CSR before sending to user
     Uint8List csrUint8List = Uint8List.fromList(utf8.encode(applicationCsr!));
     final RequestE2eeEncrypt requestE2eeEncrypt = RequestE2eeEncrypt(
-        preAuthenticationData['publicKey'],
-        preAuthenticationData['oaepLabel'],
-        [csrUint8List]);
+      preAuthenticationData['publicKey'],
+      preAuthenticationData['oaepLabel'],
+      [csrUint8List],
+    );
     ResponseE2eeEncrypt? responseE2eeEncrypt;
     try {
-      responseE2eeEncrypt =
-          await E2eeSdkPackage().e2eeEncrypt(requestE2eeEncrypt);
+      responseE2eeEncrypt = await E2eeSdkPackage().e2eeEncrypt(
+        requestE2eeEncrypt,
+      );
       print(
-          "Response ciphertext: ${responseE2eeEncrypt.encryptedDataBlockList[0]}");
+        "Response ciphertext: ${responseE2eeEncrypt.encryptedDataBlockList[0]}",
+      );
       print("Response metadata: ${responseE2eeEncrypt.metadata}");
     } on KKException catch (e) {
       // print("Error: ${e.message}, error code: ${e.code}");
@@ -106,8 +116,10 @@ class _ApprovalRegisterState extends State<ApprovalRegister> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => ErrorScreen(
-                  error: "Error: ${e.message}, error code: ${e.code}")),
+            builder: (context) => ErrorScreen(
+              error: "Error: ${e.message}, error code: ${e.code}",
+            ),
+          ),
         );
       }
     }
@@ -116,37 +128,68 @@ class _ApprovalRegisterState extends State<ApprovalRegister> {
     // Send request to app server to sign the CSR
     final RequestEncryptedSecretObject requestSecretObject =
         RequestEncryptedSecretObject(
-            preAuthenticationData['e2eeSessionId'],
-            "AES",
-            "HMAC-SHA512",
-            responseE2eeEncrypt!.encryptedDataBlockList[0],
-            responseE2eeEncrypt.metadata);
+          preAuthenticationData['e2eeSessionId'],
+          "AES",
+          "HMAC-SHA512",
+          responseE2eeEncrypt!.encryptedDataBlockList[0],
+          responseE2eeEncrypt.metadata,
+        );
     Map<String, dynamic> certificateRequestData = {
       "username": widget.username!,
-      "sessionMetadata": requestSecretObject
+      "sessionMetadata": requestSecretObject,
     };
 
-    dynamic certificateSigningResponse =
-        await _apiClient.processQRCodeRegister(certificateRequestData);
+    dynamic certificateSigningResponse = await _apiClient.processQRCodeRegister(
+      certificateRequestData,
+    );
     print("Certificate signing response: ${certificateSigningResponse}");
     print("Success response: ${certificateSigningResponse['success']}");
     if (certificateSigningResponse['success'] != true) {
       print("Get into failure fallback.");
       // final String errorMessage = certificateSigningResponse['message'];
       getAlert("Alert: ${certificateSigningResponse}");
-    } else {
+    } else if (certificateSigningResponse['success'] == true && widget.initialLink != null) {
       try {
-        await E2eeSdkPackage()
-            .storeSecretInSecureStorage("username", widget.username!);
         await E2eeSdkPackage().storeSecretInSecureStorage(
-            "certificate", certificateSigningResponse['certificate']);
+          "username",
+          widget.username!,
+        );
+        await E2eeSdkPackage().storeSecretInSecureStorage(
+          "certificate",
+          certificateSigningResponse['certificate'],
+        );
+        SystemNavigator.pop();
       } on KKException catch (e) {
         if (context.mounted) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => ErrorScreen(
-                    error: "Error: ${e.message}, error code: ${e.code}")),
+              builder: (context) => ErrorScreen(
+                error: "Error: ${e.message}, error code: ${e.code}",
+              ),
+            ),
+          );
+        }
+      }
+    } else {
+      try {
+        await E2eeSdkPackage().storeSecretInSecureStorage(
+          "username",
+          widget.username!,
+        );
+        await E2eeSdkPackage().storeSecretInSecureStorage(
+          "certificate",
+          certificateSigningResponse['certificate'],
+        );
+      } on KKException catch (e) {
+        if (context.mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ErrorScreen(
+                error: "Error: ${e.message}, error code: ${e.code}",
+              ),
+            ),
           );
         }
       }
@@ -168,8 +211,9 @@ class _ApprovalRegisterState extends State<ApprovalRegister> {
 
     try {
       print("E2EE session metadata: ${widget.scannedData!}");
-      final parsedData =
-          widget.scannedData!.isNotEmpty ? widget.scannedData! : null;
+      final parsedData = widget.scannedData!.isNotEmpty
+          ? widget.scannedData!
+          : null;
       if (parsedData != null) {
         // Deserialize scanned data to get pre-authentication data
         final response = jsonDecode(parsedData) as Map<String, dynamic>;
@@ -177,7 +221,8 @@ class _ApprovalRegisterState extends State<ApprovalRegister> {
         // Authenticate user
         final bool canAuthenticateWithBiometrics =
             await _localAuthentication.canCheckBiometrics;
-        final bool canAuthenticate = canAuthenticateWithBiometrics ||
+        final bool canAuthenticate =
+            canAuthenticateWithBiometrics ||
             await _localAuthentication.isDeviceSupported();
 
         // The following authentication prompt is only for Android sample.
@@ -186,10 +231,11 @@ class _ApprovalRegisterState extends State<ApprovalRegister> {
         // You need to test iOS use case in actual device.
         if (canAuthenticate && Platform.isAndroid) {
           try {
-            final bool didAuthenticate =
-                await _localAuthentication.authenticate(
-                    localizedReason: _authenticationMessage,
-                    options: const AuthenticationOptions(stickyAuth: true));
+            final bool didAuthenticate = await _localAuthentication
+                .authenticate(
+                  localizedReason: _authenticationMessage,
+                  options: const AuthenticationOptions(stickyAuth: true),
+                );
             if (didAuthenticate) {
               print("DEBUG: Device is authenticated!");
               await _processRegistration(response);
@@ -222,9 +268,11 @@ class _ApprovalRegisterState extends State<ApprovalRegister> {
             children: [
               const SizedBox(height: 150),
               Center(
-                child: Text("Are you sure to register your device?",
-                    style: Theme.of(context).textTheme.headlineMedium,
-                    textAlign: TextAlign.center),
+                child: Text(
+                  "Are you sure to register your device?",
+                  style: Theme.of(context).textTheme.headlineMedium,
+                  textAlign: TextAlign.center,
+                ),
               ),
               const SizedBox(height: 50),
               Column(
@@ -242,15 +290,18 @@ class _ApprovalRegisterState extends State<ApprovalRegister> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: const Text("Yes",
-                            style: TextStyle(color: Colors.white)),
+                        child: const Text(
+                          "Yes",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                       MaterialButton(
                         onPressed: () async {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const MainScreen()),
+                              builder: (context) => const MainScreen(),
+                            ),
                           );
                         },
                         height: 45,
@@ -259,13 +310,15 @@ class _ApprovalRegisterState extends State<ApprovalRegister> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: const Text("No",
-                            style: TextStyle(color: Colors.white)),
+                        child: const Text(
+                          "No",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ],
-                  )
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),

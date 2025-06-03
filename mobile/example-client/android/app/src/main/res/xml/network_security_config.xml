@@ -1,8 +1,5 @@
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">keycloak-msi.vuevo.space</domain>
-        <trust-anchors>
-            <certificates src="@raw/kc_auth_root_ca" />
-        </trust-anchors>
+        <domain includeSubdomains="true">kki-auth.rafly-dev.my.id</domain>
     </domain-config>
 </network-security-config>

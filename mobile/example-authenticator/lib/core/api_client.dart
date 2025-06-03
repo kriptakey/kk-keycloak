@@ -28,10 +28,10 @@ class ApiClient {
     // dio.httpClientAdapter = adapter;
 
     // Custom adapter to override cert validation
-    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (HttpClient client) {
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) {
+    (dio.httpClientAdapter as DefaultHttpClientAdapter)
+        .onHttpClientCreate = (HttpClient client) {
+      client
+          .badCertificateCallback = (X509Certificate cert, String host, int port) {
         // 🔥 This skips ALL certificate validation, including IP/domain mismatch
         return true;
       };
@@ -42,7 +42,8 @@ class ApiClient {
   }
 
   Future<Map<String, dynamic>> processQRCodeRegister(
-      Map<String, dynamic>? certificateRequestData) async {
+    Map<String, dynamic>? certificateRequestData,
+  ) async {
     try {
       print("Inside processQR API");
       print("Certificate request data: ${jsonEncode(certificateRequestData)}");
@@ -51,28 +52,34 @@ class ApiClient {
 
       if (Config().getAddress() != null) {
         response = await dio.post(
-            '${Config().getAddress()}/realms/${Config().getRealmName()}/kki-e2ee-qrcode-res/process/register-csr',
-            data: {
-              "username": certificateRequestData!['username'],
-              "sessionMetadata": certificateRequestData['sessionMetadata']
-            },
-            options: Options(headers: {
+          '${Config().getAddress()}/realms/${Config().getRealmName()}/kki-e2ee-qrcode-res/process/register-csr',
+          data: {
+            "username": certificateRequestData!['username'],
+            "sessionMetadata": certificateRequestData['sessionMetadata'],
+          },
+          options: Options(
+            headers: {
               'content-type': 'application/json',
               'Access-Control-Allow-Origin':
                   '${Config().getAddress()}/realms/${Config().getRealmName()}/kki-e2ee-qrcode-res/process/register-csr',
-            }));
+            },
+          ),
+        );
       } else {
         response = await dio.post(
-            'https://kki-auth.rafly-dev.my.id/realms/quickstart/kki-e2ee-qrcode-res/process/register-csr',
-            data: {
-              "username": certificateRequestData!['username'],
-              "sessionMetadata": certificateRequestData['sessionMetadata']
-            },
-            options: Options(headers: {
+          'https://kki-auth.rafly-dev.my.id/realms/KKI-Batam/kki-e2ee-qrcode-res/process/register-csr',
+          data: {
+            "username": certificateRequestData!['username'],
+            "sessionMetadata": certificateRequestData['sessionMetadata'],
+          },
+          options: Options(
+            headers: {
               'content-type': 'application/json',
               'Access-Control-Allow-Origin':
-                  'https://kki-auth.rafly-dev.my.id/realms/quickstart/kki-e2ee-qrcode-res/process/register-csr',
-            }));
+                  'https://kki-auth.rafly-dev.my.id/realms/KKI-Batam/kki-e2ee-qrcode-res/process/register-csr',
+            },
+          ),
+        );
       }
       return response.data;
     } on DioException catch (e) {
@@ -89,7 +96,8 @@ class ApiClient {
           break;
         case DioExceptionType.badResponse:
           print(
-              "Bad response: ${e.response?.statusCode} - ${e.response?.data}");
+            "Bad response: ${e.response?.statusCode} - ${e.response?.data}",
+          );
           break;
         case DioExceptionType.cancel:
           print("Request to server was cancelled.");
@@ -114,15 +122,13 @@ class ApiClient {
       print("Unexpected error: $e");
       print("Stacktrace: $stacktrace");
 
-      return {
-        'success': false,
-        'error': e.toString(),
-      };
+      return {'success': false, 'error': e.toString()};
     }
   }
 
   Future<Map<String, dynamic>> processQRCodeLogin(
-      Map<String, dynamic>? signatureRequestData) async {
+    Map<String, dynamic>? signatureRequestData,
+  ) async {
     try {
       print("Inside processQR API");
       print("Signature request data: ${jsonEncode(signatureRequestData)}");
@@ -130,28 +136,34 @@ class ApiClient {
       Response? response;
       if (Config().getAddress() != null) {
         response = await dio.post(
-            '${Config().getAddress()}/realms/${Config().getRealmName()}/kki-e2ee-qrcode-res/process/login',
-            data: {
-              "username": signatureRequestData!['username'],
-              "signatureMetadata": signatureRequestData['signatureMetadata']
-            },
-            options: Options(headers: {
+          '${Config().getAddress()}/realms/${Config().getRealmName()}/kki-e2ee-qrcode-res/process/login',
+          data: {
+            "username": signatureRequestData!['username'],
+            "signatureMetadata": signatureRequestData['signatureMetadata'],
+          },
+          options: Options(
+            headers: {
               'content-type': 'application/json',
               'Access-Control-Allow-Origin':
                   '${Config().getAddress()}/realms/${Config().getRealmName()}/kki-e2ee-qrcode-res/process/login',
-            }));
+            },
+          ),
+        );
       } else {
         response = await dio.post(
-            'https://kki-auth.rafly-dev.my.id/realms/quickstart/kki-e2ee-qrcode-res/process/login',
-            data: {
-              "username": signatureRequestData!['username'],
-              "signatureMetadata": signatureRequestData['signatureMetadata']
-            },
-            options: Options(headers: {
+          'https://kki-auth.rafly-dev.my.id/realms/KKI-Batam/kki-e2ee-qrcode-res/process/login',
+          data: {
+            "username": signatureRequestData!['username'],
+            "signatureMetadata": signatureRequestData['signatureMetadata'],
+          },
+          options: Options(
+            headers: {
               'content-type': 'application/json',
               'Access-Control-Allow-Origin':
-                  'https://kki-auth.rafly-dev.my.id/realms/quickstart/kki-e2ee-qrcode-res/process/login',
-            }));
+                  'https://kki-auth.rafly-dev.my.id/realms/KKI-Batam/kki-e2ee-qrcode-res/process/login',
+            },
+          ),
+        );
       }
       return response!.data;
     } on DioException catch (e) {

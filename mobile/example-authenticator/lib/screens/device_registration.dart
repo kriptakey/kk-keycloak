@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 
 import 'package:e2ee_device_binding_demo_flutter/screens/mobile_scanner_register.dart';
+import 'package:e2ee_device_binding_demo_flutter/screens/approval_register.dart';
 import 'package:e2ee_device_binding_demo_flutter/main.dart';
 
 class DeviceRegistrationScreen extends StatefulWidget {
   static String id = "register_screen";
-  const DeviceRegistrationScreen({Key? key}) : super(key: key);
+  const DeviceRegistrationScreen({Key? key, this.scannedData, this.initialLink})
+    : super(key: key);
+
+  final String? scannedData;
+  final String? initialLink;
 
   @override
   State<DeviceRegistrationScreen> createState() =>
@@ -28,13 +33,17 @@ class _DeviceRegistrationScreenState extends State<DeviceRegistrationScreen> {
             children: [
               const SizedBox(height: 120),
               Center(
-                child: Text("Register",
-                    style: Theme.of(context).textTheme.headlineLarge),
+                child: Text(
+                  "Register",
+                  style: Theme.of(context).textTheme.headlineLarge,
+                ),
               ),
               const SizedBox(height: 10),
               Center(
-                child: Text("Register your device",
-                    style: Theme.of(context).textTheme.bodyMedium),
+                child: Text(
+                  "Register your device",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               ),
               const SizedBox(height: 5),
 
@@ -75,12 +84,27 @@ class _DeviceRegistrationScreenState extends State<DeviceRegistrationScreen> {
                       ),
                     ),
                     onPressed: () async {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
+                      if (widget.initialLink != null) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ApprovalRegister(
+                              scannedData: widget.scannedData!,
+                              username: _controllerUsername.text,
+                              initialLink: widget.initialLink!,
+                            ),
+                          ),
+                        );
+                      } else {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
                             builder: (context) => MobileScannerRegisterScreen(
-                                username: _controllerUsername.text)),
-                      );
+                              username: _controllerUsername.text,
+                            ),
+                          ),
+                        );
+                      }
                     },
                     child: const Text(
                       "Register",
@@ -96,16 +120,19 @@ class _DeviceRegistrationScreenState extends State<DeviceRegistrationScreen> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const MainScreen()),
+                              builder: (context) => const MainScreen(),
+                            ),
                           );
                         },
-                        child: const Text("Cancel",
-                            style: TextStyle(color: Colors.deepPurple)),
-                      )
+                        child: const Text(
+                          "Cancel",
+                          style: TextStyle(color: Colors.deepPurple),
+                        ),
+                      ),
                     ],
-                  )
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),
