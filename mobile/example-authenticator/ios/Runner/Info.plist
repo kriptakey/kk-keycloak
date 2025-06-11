@@ -47,11 +47,30 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>AllowPermissionToOpenGallery</string>
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs camera access to scan QR codes</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app needs photo library access to scan QR codes from photos</string>
+	<string>AllowPermissionToOpenGallery</string>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+      <key>UIApplicationSupportsMultipleScenes</key>
+      <false/>
+      <key>UISceneConfigurations</key>
+      <dict>
+        <key>UIWindowSceneSessionRoleApplication</key>
+        <array>
+          <dict>
+            <key>UISceneClassName</key>
+            <string>UIWindowScene</string>
+            <key>UISceneDelegateClassName</key>
+            <string>FlutterSceneDelegate</string>
+            <key>UISceneConfigurationName</key>
+            <string>flutter</string>
+            <key>UISceneStoryboardFile</key>
+            <string>Main</string>
+          </dict>
+        </array>
+      </dict>
+    </dict>
 </dict>
 </plist>

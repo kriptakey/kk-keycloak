@@ -15,26 +15,16 @@ import 'package:e2ee_device_binding_demo_flutter/screens/set_address.dart';
 
 void main() async {
   setupWindow();
-
   WidgetsFlutterBinding.ensureInitialized();
-  const platform = MethodChannel('app.linking.channel');
-  String? initialLink;
-  try {
-    initialLink = await platform.invokeMethod<String>('getLaunchUri');
-  } on KKException catch (e) {
-    print("Error: ${e.message}, error code: ${e.code}");
-    rethrow;
-  }
 
   // Get username from secure storage
   try {
     _username = await E2eeSdkPackage().getSecretFromSecureStorage("username");
   } on KKException catch (e) {
-    print("Error: ${e.message}, error code: ${e.code}");
-    rethrow;
+    throw ("Error: ${e.message}, error code: ${e.code}");
   }
 
-  runApp(MainScreen(initialLink: initialLink));
+  runApp(const MainScreen());
 }
 
 const double windowWidth = 480;
@@ -60,36 +50,48 @@ void setupWindow() {
 }
 
 class MainScreen extends StatelessWidget {
-  final String? initialLink;
-
-  const MainScreen({super.key, this.initialLink});
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'App Link Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: HomePage(initialLink: initialLink),
+      home: const HomePage(),
     );
   }
 }
 
 class HomePage extends StatefulWidget {
-  final String? initialLink;
-  const HomePage({super.key, this.initialLink});
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  String? _initialLink;
+
+  Future<String?> _getInitialLink() async {
+    const MethodChannel _channel = MethodChannel('app.linking.channel');
+    try {
+      final uri = await _channel.invokeMethod<String>('getLaunchUri');
+      return uri;
+    } on KKException catch (e) {
+      print("Error: ${e.message}, error code: ${e.code}");
+      return null;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
 
-    if (widget.initialLink != null) {
-      Future.microtask(() {
-        final uri = Uri.tryParse(widget.initialLink!);
+    Future.microtask(() async {
+      _initialLink = await _getInitialLink();
+      if (_initialLink != null) {
+        print("Non zero initial link: $_initialLink");
+        final uri = Uri.tryParse(_initialLink!);
         String? extractedData;
         String? jsonData;
         Uint8List? decodedData;
@@ -110,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                   sessionId: response['sessionId'],
                   nonce: response['nonce'],
                   username: _username,
-                  initialLink: widget.initialLink,
+                  initialLink: _initialLink,
                 ),
               ),
             );
@@ -130,14 +132,16 @@ class _HomePageState extends State<HomePage> {
               MaterialPageRoute(
                 builder: (_) => DeviceRegistrationScreen(
                   scannedData: jsonData,
-                  initialLink: widget.initialLink,
+                  initialLink: _initialLink,
                 ),
               ),
             );
           }
         }
-      });
-    }
+      } else {
+        print("Initial link: null");
+      }
+    });
   }
 
   @override

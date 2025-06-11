@@ -71,11 +71,11 @@ class _LoginPageState extends State<LoginPage> {
   final AuthorizationServiceConfiguration
   _serviceConfiguration = const AuthorizationServiceConfiguration(
     authorizationEndpoint:
-        'https://kki-auth.rafly-dev.my.id/realms/KKI-Batam/protocol/openid-connect/auth',
+        'https://raihan-keycloak.com:8443/realms/KKI-Batam/protocol/openid-connect/auth',
     tokenEndpoint:
-        'https://kki-auth.rafly-dev.my.id/realms/KKI-Batam/protocol/openid-connect/token',
+        'https://raihan-keycloak.com:8443/realms/KKI-Batam/protocol/openid-connect/token',
     endSessionEndpoint:
-        'https://kki-auth.rafly-dev.my.id/realms/KKI-Batam/protocol/openid-connect/logout',
+        'https://raihan-keycloak.com:8443/realms/KKI-Batam/protocol/openid-connect/logout',
   );
   final List<String> _scopes = <String>['openid', 'profile', 'email'];
   final String _postLogoutRedirectUrl =

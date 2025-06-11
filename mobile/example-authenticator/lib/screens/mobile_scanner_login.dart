@@ -91,6 +91,7 @@ class _MobileScannerLoginScreenState extends State<MobileScannerLoginScreen> {
                   });
                 }
               },
+              fit: BoxFit.contain,
             ),
           ),
         ],

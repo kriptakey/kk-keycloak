@@ -67,7 +67,7 @@ class ApiClient {
         );
       } else {
         response = await dio.post(
-          'https://kki-auth.rafly-dev.my.id/realms/KKI-Batam/kki-e2ee-qrcode-res/process/register-csr',
+          'https://raihan-keycloak.com:8443/realms/KKI-Batam/kki-e2ee-qrcode-res/process/register-csr',
           data: {
             "username": certificateRequestData!['username'],
             "sessionMetadata": certificateRequestData['sessionMetadata'],
@@ -76,7 +76,7 @@ class ApiClient {
             headers: {
               'content-type': 'application/json',
               'Access-Control-Allow-Origin':
-                  'https://kki-auth.rafly-dev.my.id/realms/KKI-Batam/kki-e2ee-qrcode-res/process/register-csr',
+                  'https://raihan-keycloak.com:8443/realms/KKI-Batam/kki-e2ee-qrcode-res/process/register-csr',
             },
           ),
         );
@@ -151,7 +151,7 @@ class ApiClient {
         );
       } else {
         response = await dio.post(
-          'https://kki-auth.rafly-dev.my.id/realms/KKI-Batam/kki-e2ee-qrcode-res/process/login',
+          'https://raihan-keycloak.com:8443/realms/KKI-Batam/kki-e2ee-qrcode-res/process/login',
           data: {
             "username": signatureRequestData!['username'],
             "signatureMetadata": signatureRequestData['signatureMetadata'],
@@ -160,7 +160,7 @@ class ApiClient {
             headers: {
               'content-type': 'application/json',
               'Access-Control-Allow-Origin':
-                  'https://kki-auth.rafly-dev.my.id/realms/KKI-Batam/kki-e2ee-qrcode-res/process/login',
+                  'https://raihan-keycloak.com:8443/realms/KKI-Batam/kki-e2ee-qrcode-res/process/login',
             },
           ),
         );

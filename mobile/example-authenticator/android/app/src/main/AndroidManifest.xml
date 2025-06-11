@@ -34,7 +34,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data 
                     android:scheme="https"
-                    android:host="kki-auth.rafly-dev.my.id"
+                    android:host="raihan-keycloak.com"
+                    android:port="8443"
                     android:pathPrefix="/qrcode-mobile-login" />
             </intent-filter>
 
@@ -44,7 +45,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data 
                     android:scheme="https"
-                    android:host="kki-auth.rafly-dev.my.id"
+                    android:host="raihan-keycloak.com"
+                    android:port="8443"
                     android:pathPrefix="/qrcode-mobile-register-csr" />
             </intent-filter>
         </activity>
