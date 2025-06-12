@@ -16,14 +16,6 @@ import 'package:e2ee_device_binding_demo_flutter/screens/set_address.dart';
 void main() async {
   setupWindow();
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Get username from secure storage
-  try {
-    _username = await E2eeSdkPackage().getSecretFromSecureStorage("username");
-  } on KKException catch (e) {
-    throw ("Error: ${e.message}, error code: ${e.code}");
-  }
-
   runApp(const MainScreen());
 }
 
@@ -88,6 +80,13 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     Future.microtask(() async {
+      // Get username from secure storage
+      try {
+        _username = await E2eeSdkPackage().getSecretFromSecureStorage("username");
+      } on KKException catch (e) {
+        throw ("Error: ${e.message}, error code: ${e.code}");
+      }
+
       _initialLink = await _getInitialLink();
       if (_initialLink != null) {
         print("Non zero initial link: $_initialLink");
