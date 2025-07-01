@@ -35,7 +35,6 @@
                 <data 
                     android:scheme="https"
                     android:host="raihan-keycloak.com"
-                    android:port="8443"
                     android:pathPrefix="/qrcode-mobile-login" />
             </intent-filter>
 
@@ -46,7 +45,6 @@
                 <data 
                     android:scheme="https"
                     android:host="raihan-keycloak.com"
-                    android:port="8443"
                     android:pathPrefix="/qrcode-mobile-register-csr" />
             </intent-filter>
         </activity>
