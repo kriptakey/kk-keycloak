@@ -63,9 +63,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String? _initialLink;
+  static const MethodChannel _channel = MethodChannel('app.linking.channel');
 
   Future<String?> _getInitialLink() async {
-    const MethodChannel _channel = MethodChannel('app.linking.channel');
     try {
       final uri = await _channel.invokeMethod<String>('getLaunchUri');
       return uri;
@@ -82,7 +82,9 @@ class _HomePageState extends State<HomePage> {
     Future.microtask(() async {
       // Get username from secure storage
       try {
-        _username = await E2eeSdkPackage().getSecretFromSecureStorage("username");
+        _username = await E2eeSdkPackage().getSecretFromSecureStorage(
+          "username",
+        );
       } on KKException catch (e) {
         throw ("Error: ${e.message}, error code: ${e.code}");
       }
