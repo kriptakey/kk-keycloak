@@ -145,9 +145,7 @@ class Crypto {
                         )
                         setDigests(
                             KeyProperties.DIGEST_NONE,
-                            KeyProperties.DIGEST_SHA256,
-                            KeyProperties.DIGEST_SHA384,
-                            KeyProperties.DIGEST_SHA512
+                            KeyProperties.DIGEST_SHA256
                         )
                         if (requireAuth) {
                             when {

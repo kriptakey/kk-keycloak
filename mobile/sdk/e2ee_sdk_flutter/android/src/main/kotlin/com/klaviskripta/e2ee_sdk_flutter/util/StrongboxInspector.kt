@@ -37,9 +37,7 @@ class StrongboxInspector {
                                         ECGenParameterSpec(Constants.EC_GEN_PARAMETER_SPEC)
                                 )
                                 setDigests(
-                                        KeyProperties.DIGEST_SHA256,
-                                        KeyProperties.DIGEST_SHA384,
-                                        KeyProperties.DIGEST_SHA512
+                                        KeyProperties.DIGEST_SHA256
                                 )
                                 when {
                                     // Android lower than 9

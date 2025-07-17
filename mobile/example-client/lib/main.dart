@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
 
   final FlutterAppAuth _appAuth = const FlutterAppAuth();
   final String _clientId = 'kki-rnd';
-  final String _redirectUrl = 'org.openid.appauthdemo:/oauth4redirect';
+  final String _redirectUrl = 'http://192.168.88.246:3000/redirect.html?redirect=org.openid.appauthdemo:/oauth4redirect';
   final AuthorizationServiceConfiguration
   _serviceConfiguration = const AuthorizationServiceConfiguration(
     authorizationEndpoint:
@@ -79,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
   );
   final List<String> _scopes = <String>['openid', 'profile', 'email'];
   final String _postLogoutRedirectUrl =
-      'org.openid.appauthdemo:/oauth4redirect';
+      'http://192.168.88.246:3000/redirect.html?redirect=org.openid.appauthdemo:/oauth4redirect';
   final String _clientSecret = "yhxhFp8kO73mGHQ81noLLYY1xmAV43Jb";
 
   @override

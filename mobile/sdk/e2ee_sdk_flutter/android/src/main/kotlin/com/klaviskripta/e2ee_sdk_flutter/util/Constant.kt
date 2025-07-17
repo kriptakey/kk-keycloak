@@ -4,7 +4,7 @@ class Constants {
     companion object {
         const val ANDROID_KEY_STORE : String = "AndroidKeyStore"
         const val SAMPLE_KEY_PAIR : String = "SampleKeyPair"
-        const val SIGNATURE_ALGORITHM = "SHA512withECDSA"
+        const val SIGNATURE_ALGORITHM = "SHA256withECDSA"
         const val AES_CIPHER_MODE = "AES/GCM/NoPadding"
         const val RSA_CIPHER_MODE = "RSA/ECB/OAEPPadding"
         const val EC_GEN_PARAMETER_SPEC = "secp256r1"
